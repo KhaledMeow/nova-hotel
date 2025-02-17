@@ -1,0 +1,35 @@
+.about-page {
+    padding: 7rem;
+    background-color: #fca53a;
+}
+
+.about-page h1 {
+    font-size: 4rem;
+    text-align: center;
+    margin-bottom: 1rem;
+    color: black;
+}
+
+.about-page h2 {
+    font-size: 2.5rem;
+    margin: 2rem;
+    color: #ffffff;
+    box-shadow: 0 0 10px 10px #000000;
+    border-radius: 150px;
+}
+
+.about-page p,
+.about-page ul {
+    font-size: 1.5rem;
+    line-height: 1.5;
+    color: #000000;
+}
+
+.about-values ul {
+    list-style-type: disc;
+    margin-left: 1.5rem;
+}
+
+.about-page section {
+    margin-bottom: 2rem;
+}

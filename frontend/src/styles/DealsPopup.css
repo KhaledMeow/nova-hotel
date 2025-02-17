@@ -1,0 +1,117 @@
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    pointer-events: auto;
+}
+
+.popup-content {
+    background-color: rgb(0, 0, 0);
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgb(0, 0, 0);
+    max-width: 300px;
+    width: 90%;
+    text-align: left;
+    animation: fadeIn 0.5s ease-out;
+    touch-action: none;
+}
+
+.popup-header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    min-height: 32px;
+}
+
+.title-container {
+    flex: 1;
+    text-align: center;
+}
+
+.popup-header h2 {
+    color: #ffffff;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.close-button {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    padding: 0;
+    color: #fca53ad1;
+    font-size: 50px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+    width: 34px;
+    height: 34px;
+}
+
+
+.deals-content {
+    transition: all 0.2s ease;
+    padding: 0.5rem;
+    margin: -0.5rem;
+    border-radius: 8px;
+}
+
+.deals-content:hover {
+    background-color: rgba(149, 149, 149, 0.293);
+}
+
+.deals-content p {
+    color: #666;
+    margin-bottom: 1rem;
+    line-height: 1.4;
+    font-size: 0.95rem;
+}
+
+.view-deals {
+    color: #fca53a !important;
+    font-size: 0.9rem !important;
+    font-weight: 500;
+    margin-top: 0.5rem;
+}
+
+.popup-content button {
+    background-color: #ffffff00;
+    color: rgb(255, 255, 255);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.9rem;
+    transition: all 0.2s;
+    font-weight: 500;
+}
+
+
+.popup-content p {
+    color: #b8b8b8;
+    margin-bottom: 1rem;
+    line-height: 1.4;
+    font-size: 0.95rem;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}

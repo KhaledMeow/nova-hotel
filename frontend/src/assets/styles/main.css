@@ -1,0 +1,215 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+.App {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-image: url('../images/background-home1.jpg');
+    background-size: cover;
+    background-color: transparent;
+    color: white;
+    margin: 0;
+    padding: 0;
+    /* Change text color for better visibility */
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: rgba(51, 51, 51, 0.5);
+    /* Semi-transparent background */
+}
+
+nav img {
+    width: 75px;
+    /* Adjust as needed */
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    /* Space between links */
+}
+
+nav a {
+    text-decoration: none;
+    color: white;
+    /* Change link color for better visibility */
+}
+
+.App-header {
+    text-align: center;
+    margin-top: -110px;
+    /* Adjust spacing below the header */
+    color: #ffffff;
+    background-color: #00000026;
+    padding: 20px;
+    border-radius: 80px;
+}
+
+.App-header h1 {
+    font-size: 60px;
+}
+
+.App-header p {
+    font-size: 40px;
+    margin: 0px 0;
+    /* Add some margin for spacing */
+}
+
+.main-content {
+    margin-top: 100px;
+    /* Adjust this value to the height of your header */
+    padding: 20px;
+    /* Optional: Add padding for spacing */
+}
+
+.booking-container {
+    background-color: rgba(0, 0, 0, 0.9);
+    border-radius: 10px;
+    padding: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.booking-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input,
+textarea {
+    padding: 10px;
+    border: 1px solid #000000;
+    border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+input:focus,
+textarea:focus {
+    border-color: #fca53a;
+    outline: none;
+}
+
+.submit-button {
+    padding: 10px 20px;
+    background-color: #fca53a;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.submit-button:hover {
+    background-color: #fca53a;
+}
+
+@media (max-width: 1025px) {
+    nav ul {
+        gap: 10px;
+    }
+
+    .App-header h1 {
+
+        font-size: 40px;
+    }
+
+    .App-header p {
+        font-size: 32px;
+        /* Adjust the paragraph font size */
+    }
+
+    .main-content {
+        margin-top: 80px;
+        padding: 15px;
+    }
+}
+
+/* For mobile phones */
+@media (max-width: 412px) {
+    nav {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px;
+    }
+
+    nav img {
+        width: 60px;
+        /* Smaller logo */
+        height: auto;
+    }
+
+    nav ul {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+    }
+
+    .App-header {
+        margin-top: 0;
+        padding: 10px;
+        /* Added padding for better spacing */
+        border-radius: 20px;
+        /* Softer corner radius for mobile */
+        margin: 10px;
+        /* Adjusted to avoid cut-off issues */
+        background-color: #ff000000;
+        /* Optional: Light background for clarity */
+        max-width: 900px;
+    }
+
+    .App-header h1 {
+        margin-left: 0;
+        /* Align to avoid overflow */
+        font-size: 18px;
+        /* Slightly larger for readability */
+        text-align: center;
+    }
+
+    .App-header p {
+        margin-left: 150px;
+        /* Align consistently */
+        font-size: 14px;
+        text-align: center;
+    }
+
+    .main-content {
+        margin-top: 20px;
+        /* Reduce margin for better spacing */
+        padding: 10px;
+        text-align: center;
+    }
+
+    .menu-toggle {
+        margin-left: 50px;
+
+    }
+}

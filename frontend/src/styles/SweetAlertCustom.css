@@ -1,0 +1,128 @@
+/* Custom styles for SweetAlert2 popups */
+.swal2-popup {
+    background-color: #000000 !important;
+    /* Background color */
+    border-radius: 1rem;
+    /* Rounded corners */
+    color: #ffffff !important;
+    /* Text color */
+    font-family: 'Arial', sans-serif;
+    /* Font style */
+    box-shadow: 0 0.625rem 2rem rgba(0, 0, 0, 0.5);
+    /* Shadow for depth */
+}
+
+.swal2-title {
+    color: #fca53a !important;
+    /* Title color */
+    font-size: 2.5rem !important;
+    /* Title font size */
+    margin: 0 0 1rem;
+    /* Margin for spacing */
+}
+
+.swal2-content {
+    color: #ffffff !important;
+    /* Content text color */
+    font-size: 1.6rem;
+    /* Content font size */
+    margin-bottom: 1.5rem;
+    /* Margin for spacing */
+}
+
+.swal2-confirm {
+    background-color: #ffffff !important;
+    /* Confirm button background */
+    color: #000000 !important;
+    /* Confirm button text color */
+    border-radius: 2.5rem;
+    /* Rounded corners for button */
+    padding: 0.625rem 1.25rem;
+    /* Padding for button */
+    font-weight: bold;
+    /* Font weight for button */
+    box-shadow: 0 0.3125rem 0.625rem rgba(0, 0, 0, 0.3);
+    /* Button shadow */
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    /* Button transition */
+}
+
+.swal2-cancel {
+    background-color: transparent;
+    /* Cancel button background */
+    color: #fca53a !important;
+    /* Cancel button text color */
+    border: 2px solid #fca53a;
+    /* Border for cancel button */
+    border-radius: 2.5rem;
+    /* Rounded corners for button */
+    padding: 0.625rem 1.25rem;
+    /* Padding for button */
+    font-weight: bold;
+    /* Font weight for button */
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    /* Button transition */
+}
+
+.swal2-confirm:hover {
+    background-color: #fca53a !important;
+    /* Hover effect for confirm button */
+    color: #ffffff !important;
+    /* Text color change on hover */
+    transform: translateY(-0.125rem);
+    /* Lift effect on hover */
+}
+
+.swal2-cancel:hover {
+    background-color: rgba(252, 165, 58, 0.1);
+    /* Light background on hover */
+    transform: translateY(-0.125rem);
+    /* Lift effect on hover */
+}
+
+.swal2-actions {
+    display: flex;
+    /* Flex display for action buttons */
+    justify-content: space-between;
+    /* Space between buttons */
+    margin-top: 1rem;
+    /* Margin for spacing */
+}
+
+.swal2-styled {
+    box-shadow: none !important;
+    /* Remove default shadow */
+}
+
+.swal2-loader {
+    border: 0.25rem solid #fca53a !important;
+    /* Loader color */
+}
+
+/* Additional styles for the popup */
+.swal2-header {
+    border-bottom: none;
+    /* Remove bottom border */
+}
+
+.swal2-close {
+    color: #fca53a;
+    /* Close button color */
+    font-size: 1.5rem;
+    /* Close button font size */
+}
+
+.swal2-footer {
+    padding: 1rem;
+    /* Padding for footer */
+}
+
+/* Custom styles for SweetAlert2 icons */
+.swal2-icon {
+    border: none;
+    /* No border for icons */
+    width: 4rem;
+    /* Icon width */
+    height: 4rem;
+    /* Icon height */
+}

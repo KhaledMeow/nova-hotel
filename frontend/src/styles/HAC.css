@@ -1,0 +1,279 @@
+.main-content {
+    padding: 0px;
+    text-align: center;
+    color: #ffffff;
+    background: none;
+
+}
+
+.features {
+    margin-top: 430px;
+    background-color: rgba(255, 6, 6, 0);
+    padding: 10px;
+}
+
+
+
+.feature-list {
+    display: flex;
+    justify-content: left;
+    flex-wrap: wrap;
+}
+
+.feature {
+
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 50px;
+    padding: 40px;
+    margin-left: 24.3px;
+    margin-right: 24.3px;
+    margin-top: 50px;
+    flex: 1 1 30%;
+    box-shadow: 0px 0px 10px 10px #ffffff;
+    transition: transform 0.7s;
+}
+
+.feature:hover {
+    transform: scale(1.20);
+}
+
+.feature h3,
+.feature p {
+    color: #000000;
+}
+
+.photo-gallery {
+    text-align: center;
+    margin-bottom: 100px;
+}
+
+.photo-row {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+}
+
+.photo {
+    flex: 1;
+    margin: 40px 30px;
+    overflow: hidden;
+    margin-bottom: 30px;
+    border-radius: 90px;
+    box-shadow: 0px 0px 25px #ffffff;
+}
+
+.photo img {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    transition: transform 0.5s;
+    margin-bottom: 50px;
+}
+
+.photo img:hover {
+    transform: scale(1.1);
+}
+
+.menu {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    margin: 20px 0;
+}
+
+.menu-item {
+    padding: 10px;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+
+body {
+    font-family: 'Poppins', sans-serif;
+    color: white;
+}
+
+.vip-link {
+    color: #fca53a;
+    cursor: pointer;
+    text-decoration: underline;
+    font-weight: bold;
+    transition: 0.9s;
+
+}
+
+.vip-link:hover {
+    color: #ffffff;
+    transform: scale(1.15);
+}
+
+.text-background {
+
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 40px;
+    max-width: auto;
+    margin: auto;
+    margin-top: 50px;
+    box-shadow: 0 0 50px 50px rgba(0, 0, 0, 0.5);
+
+}
+
+h1 {
+    font-size: 2.5rem;
+    /* 40px */
+    margin-bottom: 0.625rem;
+    /* 10px */
+    line-height: 1.5;
+    text-align: center;
+    border-bottom: 0.3125rem solid #ffffff;
+    /* 5px */
+}
+
+h2 {
+    font-size: 1.875rem;
+    margin-bottom: 15px;
+    color: #fca53a;
+    text-align: center;
+}
+
+p {
+    text-align: center;
+    font-size: 1.2rem;
+    line-height: 2;
+    margin: 0.75rem 0;
+    /* 12px */
+}
+
+
+.contact-section {
+    padding: 1.25rem;
+    /* 20px */
+    font-family: 'Poppins', sans-serif;
+    background: rgba(255, 255, 255, 0);
+    color: white;
+    margin-top: 5.625rem;
+    /* 90px */
+}
+
+h1 {
+    text-align: center;
+    margin-top: 1.25rem;
+    /* 20px */
+    font-size: 2.5rem;
+    /* 40px */
+}
+
+.contact-info {
+    margin: 1.25rem 0;
+    /* 20px */
+    text-align: center;
+}
+
+.contact-info h3 {
+    font-size: 1.5rem;
+    /* 24px */
+    margin-bottom: 0.625rem;
+    /* 10px */
+    text-align: center;
+}
+
+.contact-info p {
+    font-size: 1.2rem;
+    /* 19.2px */
+}
+
+.key-persons {
+    margin: 1.25rem 0;
+    /* 20px */
+    text-align: center;
+}
+
+.key-persons h3 {
+    font-size: 1.5rem;
+    /* 24px */
+    margin-bottom: 0.625rem;
+    /* 10px */
+}
+
+.key-persons ul {
+    list-style: none;
+    padding: 0;
+}
+
+.key-persons li {
+    margin: 0.3125rem 0;
+    /* 5px */
+}
+
+.message-form {
+    margin: 1.25rem auto;
+    /* 20px */
+    max-width: 37.5rem;
+    /* 600px */
+    text-align: center;
+}
+
+.message-form label {
+    display: block;
+    margin: 0.625rem 0 0.3125rem;
+    /* 10px 0 5px */
+}
+
+.message-form input,
+.message-form textarea {
+    resize: vertical;
+    width: 100%;
+    max-width: 100%;
+    max-height: 12.5rem;
+    /* 200px */
+    padding: 0.625rem;
+    /* 10px */
+    border: 1px solid #fca53a;
+    border-radius: 1.5625rem;
+    /* 25px */
+    overflow: auto;
+}
+
+.message-form button {
+    margin-top: 0.625rem;
+    /* 10px */
+    padding: 0.625rem 0.9375rem;
+    /* 10px 15px */
+    background-color: #fca53a;
+    color: black;
+    border: none;
+    border-radius: 2.5rem;
+    /* 50px */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.message-form button:hover {
+    background-color: #f98b0d;
+    /* Changed hover color for better UX */
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+@media (max-width:480px) {
+
+    .photo-row {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column;
+        margin: 10px 0;
+    }
+
+    .photo img {
+        width: 100%;
+        height: 300px;
+        border-radius: 8px;
+        transition: transform 0.5s;
+        margin-bottom: 50px;
+    }
+
+}

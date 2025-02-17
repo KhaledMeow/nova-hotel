@@ -1,0 +1,145 @@
+.special-offer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+}
+
+.special-offer-content {
+  background: linear-gradient(135deg, #1d1307 0%, #2a1d0f 100%);
+  color: #fff;
+  padding: 3rem;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 800px;
+  position: relative;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  border: 1px solid #fca53a;
+}
+
+.close-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: none;
+  border: none;
+  color: #fca53a;
+  font-size: 24px;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.close-button:hover {
+  background-color: #fca53a;
+  color: #1d1307;
+}
+
+h2 {
+  color: #fca53a;
+  margin-bottom: 1rem;
+  font-size: 2rem;
+  text-align: center;
+  font-family: 'Playfair Display', serif;
+}
+
+.offer-description {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #e0e0e0;
+  line-height: 1.6;
+}
+
+.benefits-section {
+  background-color: rgba(252, 165, 58, 0.1);
+  padding: 1.5rem;
+  border-radius: 10px;
+  margin-bottom: 2rem;
+}
+
+.benefits-section h3 {
+  color: #fca53a;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.benefits-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.benefits-section li {
+  margin-bottom: 0.8rem;
+  padding-left: 1.5rem;
+  position: relative;
+  color: #e0e0e0;
+}
+
+.benefits-section li::before {
+  content: "•";
+  color: #fca53a;
+  position: absolute;
+  left: 0;
+}
+
+.price-section {
+  text-align: center;
+}
+
+.price {
+  color: #fca53a;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  font-weight: bold;
+}
+
+.book-now-button {
+  background-color: #fca53a;
+  color: #1d1307;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 25px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.book-now-button:hover {
+  background-color: #e89428;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(252, 165, 58, 0.3);
+}
+
+@media (max-width: 768px) {
+  .special-offer-content {
+    width: 95%;
+    padding: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  .benefits-section {
+    padding: 1rem;
+  }
+
+  .price {
+    font-size: 1.2rem;
+  }
+}

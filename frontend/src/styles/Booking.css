@@ -1,0 +1,151 @@
+.booking-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    background-color: #1d1307;
+    min-height: 100vh;
+    width: 100%;
+}
+
+.booking-form {
+    width: 100%;
+    max-width: 800px;
+    padding: 2.5rem;
+    background-color: #2a1d0f;
+    border-radius: 20px;
+    color: white;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-size: 1rem;
+    color: #fca53a;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid #3a2815;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #ffffff;
+    background-color: #1d1307;
+    transition: all 0.3s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: #fca53a;
+    box-shadow: 0 0 0 3px rgba(252, 165, 58, 0.2);
+    outline: none;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.submit-button {
+    background-color: #fca53a;
+    color: #1d1307;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: none;
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.submit-button:hover {
+    background-color: #ffb857;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(252, 165, 58, 0.3);
+}
+
+.submit-button:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+.booking-dates {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    background-color: #3a2815;
+    padding: 1.5rem;
+    border-radius: 12px;
+}
+
+.booking-date-item {
+    text-align: left;
+}
+
+.booking-date-item h3 {
+    color: #fca53a;
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.required-asterisk {
+    color: #ff4444;
+    margin-left: 5px;
+    font-size: 1.2em;
+}
+
+.date-input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid #3a2815;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #ffffff;
+    background-color: #1d1307;
+    transition: all 0.3s ease;
+}
+
+.date-input:focus {
+    border-color: #fca53a;
+    box-shadow: 0 0 0 3px rgba(252, 165, 58, 0.2);
+    outline: none;
+}
+
+.date-input:invalid {
+    border-color: #ff4444;
+}
+
+@media (max-width: 768px) {
+    .booking-container {
+        padding: 1rem;
+    }
+    
+    .booking-form {
+        padding: 1.5rem;
+    }
+    
+    .booking-dates {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .submit-button {
+        padding: 0.8rem 1.5rem;
+    }
+}
