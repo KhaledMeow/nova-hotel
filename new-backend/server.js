@@ -1,18 +1,14 @@
 const express = require("express");
 const cors = require("cors");
-const OpenAI = require("openai");
 const { BsCalendarDate } = require("react-icons/bs");
 require("dotenv").config();
+const Llama2 = require('llama2'); // Import Llama 2
 
 const app = express();
 const PORT = process.env.PORT || 5432;
 
 app.use(cors());
 app.use(express.json());
-
-const openai = new OpenAI({
-  apiKey: process.env.REACT_APP_OPENAI_API_KEY,
-});
 
 let bookingCounter = 1;
 let bookings = [];
@@ -39,17 +35,11 @@ const formatDate = (date) => {
 };
 
 function getRoomAvailability(date) {
-  // Convert date string to Date object if it's a string
   const checkDate = typeof date === 'string' ? new Date(date) : date;
-  
-  // Set time to midnight for consistent comparison
   checkDate.setHours(0, 0, 0, 0);
-  
-  // Get today's date at midnight
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  // If date is in the past, return 0 available rooms
   if (checkDate < today) {
     return {
       availableRooms: 0,
@@ -57,7 +47,6 @@ function getRoomAvailability(date) {
     };
   }
 
-  // Count booked rooms for the specific date
   const bookedRoomsCount = bookings.filter(booking => {
     const checkIn = new Date(booking.check_in_date);
     const checkOut = new Date(booking.check_out_date);
@@ -65,11 +54,9 @@ function getRoomAvailability(date) {
     checkIn.setHours(0, 0, 0, 0);
     checkOut.setHours(0, 0, 0, 0);
 
-    // Check if the date is within the booking range
     return checkDate >= checkIn && checkDate <= checkOut;
   }).length;
 
-  // Calculate available rooms
   const availableRooms = Math.max(0, 20 - bookedRoomsCount);
   return {
     availableRooms: availableRooms,
@@ -83,27 +70,6 @@ const bookingRoutes = require('./routes/bookingRoutes');
 
 app.use('/api', complaintRoutes);
 app.use('/api', bookingRoutes);
-
-app.post("/api/chat", async (req, res) => {
-  const { userInput } = req.body;
-
-  if (!userInput) {
-    return res.status(400).json({ response: "User input is required." });
-  }
-
-  try {
-    const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo", 
-      messages: [{ role: "user", content: userInput }],
-    });
-
-    const botResponse = response.choices[0].message.content;
-    res.json({ response: botResponse });
-  } catch (error) {
-    console.error("Error communicating with OpenAI:", error);
-    return res.status(500).json({ response: "Error processing your request.", error: error.message });
-  }
-});
 
 app.get("/api/availability", (req, res) => {
   const { startDate, endDate } = req.query;
@@ -225,9 +191,9 @@ app.get("/complaints", (req, res) => {
         <span><strong>Timestamp:</strong> ${complaint.timestamp}</span>
       </div>
     </div>
-  `).join('') : "<p>No complaints found.</p>";
+  `).join('') : "<p>No complaints yet.</p>";
 
-  const complaintsHTML = `
+  const htmlContent = `
     <!DOCTYPE html>
     <html lang="en">
       <head>
@@ -277,68 +243,43 @@ app.get("/complaints", (req, res) => {
             color: #fca53a;
             margin-right: 5px;
           }
-          p {
-            text-align: center;
-            color: #f4f4f4;
-          }
         </style>
       </head>
       <body>
         <div class="container">
           <h1>Current Complaints</h1>
-          ${complaintsList}
+          <div>${complaintsList}</div>
         </div>
       </body>
     </html>
   `;
 
-  res.send(complaintsHTML);
+  res.send(htmlContent);
 });
 
-app.post("/api/save-dates", (req, res) => {
-  const { startDate, endDate } = req.body;
+app.post('/api/chat', async (req, res) => {
+  const { userInput } = req.body;
 
-  if (!startDate || !endDate) {
-    return res.status(400).json({ 
-      message: "Both start and end dates are required" 
-    });
+  if (!userInput) {
+    return res.status(400).json({ response: 'User input is required.' });
   }
 
-  const dateEntry = {
-    startDate: new Date(startDate),
-    endDate: new Date(endDate),
-    timestamp: new Date()
-  };
+  console.log('User input:', userInput); // Log user input
 
-  selectedDates.push(dateEntry);
-
-  res.status(200).json({ 
-    message: "Dates saved successfully",
-    savedDates: dateEntry
-  });
-});
-
-app.get("/api/saved-dates", (req, res) => {
-  res.json(selectedDates);
-});
-
-app.get("/api/room-availability", (req, res) => {
-  const { date } = req.query;
-  
-  if (!date) {
-    return res.status(400).json({ 
-      message: "Date parameter is required" 
+  try {
+    const response = await llama2.chat({
+      model: 'llama2',
+      messages: [{ role: 'user', content: userInput }],
     });
+
+    console.log('Llama 2 response:', response); // Log Llama 2 response
+
+    const botResponse = response.choices[0].message.content;
+    res.json({ response: botResponse });
+  } catch (error) {
+    console.error('Error communicating with Llama 2:', error);
+    res.status(500).json({ response: 'An error occurred while processing the request.' });
   }
-
-  const roomAvailability = getRoomAvailability(date);
-
-  res.json({
-    date: date,
-    availableRooms: roomAvailability.availableRooms,
-    totalRooms: roomAvailability.totalRooms,
-    bookedRooms: roomAvailability.bookedRooms
-  });
 });
 
 app.listen(PORT, () => {

@@ -35,7 +35,7 @@ const ChatBotComponent = () => {
       ]);
 
       try {
-        const response = await fetch("http://localhost:5000/api/chat", {
+        const response = await fetch("http://localhost:5432/api/chat", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -51,13 +51,10 @@ const ChatBotComponent = () => {
           { text: botResponse, bot: true },
         ]);
       } catch (error) {
-        console.error("Error fetching from backend:", error);
+        console.error("Error:", error);
         setMessages((prevMessages) => [
           ...prevMessages,
-          {
-            text: "I'm having trouble responding at the moment. Please try again later.",
-            bot: true,
-          },
+          { text: "Error communicating with the bot.", bot: true },
         ]);
       }
 
