@@ -1,7 +1,9 @@
 module.exports = function override(config, env) {
-  // Example: Modify the Webpack config here
-  // config.devServer.onBeforeSetupMiddleware = function (devServer) {
-  //   // Your middleware setup
-  // };
+  if (config.devServer) {
+    config.devServer.setupMiddlewares = (middlewares, devServer) => {
+      // Your middleware logic can go here
+      return middlewares;
+    };
+  }
   return config;
 };

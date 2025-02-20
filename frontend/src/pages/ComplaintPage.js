@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../styles/ContactUsPage.css";
 
-const ContactUsPage = () => {
+const ComplaintPage = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -77,7 +77,7 @@ const ContactUsPage = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/api/complaints", {
+      const response = await fetch("http://localhost:5432/api/complaints", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -91,7 +91,7 @@ const ContactUsPage = () => {
         // Handle validation errors from backend
         if (data.errors) {
           setErrors(data.errors);
-          alert(Object.values(data.errors).join(", "));
+          alert(Object.values(data.errors).join(", ")); 
           return;
         }
         throw new Error(data.message || 'Failed to send message');
@@ -200,7 +200,7 @@ const ContactUsPage = () => {
             </button>
 
             {submitStatus.message && (
-              <div className={`status-message ${submitStatus.isError ? 'error' : 'success'}`}>
+              <div className={`status-message ${submitStatus.isError ? 'error' : 'success'}`}> 
                 {submitStatus.message}
               </div>
             )}
@@ -211,4 +211,4 @@ const ContactUsPage = () => {
   );
 };
 
-export default ContactUsPage;
+export default ComplaintPage;

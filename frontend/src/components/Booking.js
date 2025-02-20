@@ -14,12 +14,42 @@ const formatDate = (dateString) => {
     day: 'numeric'
   });
 };
+
+const validateForm = (key, value) => {
+  switch (key) {
+    case "name":
+      if (!value) return "Name is required";
+      break;
+    case "email":
+      if (!value) return "Email is required";
+      if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value)) return "Invalid email address";
+      break;
+    case "phone":
+      if (!value) return "Phone number is required";
+      if (!/^[0-9]{11}$/.test(value)) return "Invalid phone number";
+      break;
+    case "num_of_people":
+      if (!value) return "Number of people is required";
+      if (isNaN(parseInt(value, 10)) || parseInt(value, 10) < 1) return "Number of people must be a positive number";
+      break;
+    default:
+      break;
+  }
+  return "";
+};
+
 const Booking = () => {
   const location = useLocation();
   const room = location.state?.room || {};
   const navigate = useNavigate();
   const [showPayment, setShowPayment] = useState(false);
   const [bookingData, setBookingData] = useState(null);
+  const [errors, setErrors] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    num_of_people: ""
+  });
 
   const [formData, setFormData] = useState({
     name: "",
@@ -42,10 +72,30 @@ const Booking = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+    const errorMessage = validateForm(name, value);
+    setErrors(prev => ({ ...prev, [name]: errorMessage }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Validate all fields
+    const newErrors = {};
+    Object.keys(formData).forEach(key => {
+        const errorMessage = validateForm(key, formData[key]);
+        if (errorMessage) {
+            newErrors[key] = errorMessage;
+        }
+    });
+
+    // Update errors
+    setErrors(newErrors);
+
+    // Check if form is valid
+    if (Object.values(newErrors).some(error => error !== "")) {
+        alert("Please correct the errors before submitting");
+        return;
+    }
 
     // Validate check-in and check-out dates
     if (!formData.check_in_date || !formData.check_out_date) {
@@ -72,16 +122,10 @@ const Booking = () => {
       return;
     }
 
-    // Validate other required fields
-    if (!formData.name || !formData.email || !formData.phone || !formData.num_of_people) {
-      alert("Please fill in all required fields.");
-      return;
-    }
-
     const numOfPeople = parseInt(formData.num_of_people, 10);
     if (isNaN(numOfPeople) || numOfPeople < 1) {
-      alert("Number of people must be a positive number.");
-      return;
+        alert("Number of people must be a positive number.");
+        return;
     }
 
     const submissionData = {
@@ -176,6 +220,7 @@ const Booking = () => {
                 required
                 placeholder="Your Full Name"
               />
+              {errors.name && <p style={{color: 'red'}}>{errors.name}</p>}
             </div>
 
             <div className="form-group">
@@ -189,6 +234,7 @@ const Booking = () => {
                 required
                 placeholder="Your Email Address"
               />
+              {errors.email && <p style={{color: 'red'}}>{errors.email}</p>}
             </div>
 
             <div className="form-group">
@@ -204,6 +250,7 @@ const Booking = () => {
                 title="Please enter an 11-digit phone number"
                 placeholder="Your Phone Number"
               />
+              {errors.phone && <p style={{color: 'red'}}>{errors.phone}</p>}
             </div>
 
             <div className="form-group">
@@ -219,6 +266,7 @@ const Booking = () => {
                 max="4"
                 placeholder="Number of Guests"
               />
+              {errors.num_of_people && <p style={{color: 'red'}}>{errors.num_of_people}</p>}
             </div>
 
             <div className="form-group">
