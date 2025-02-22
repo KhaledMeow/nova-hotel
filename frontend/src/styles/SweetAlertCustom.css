@@ -122,7 +122,7 @@
 .swal2-close:hover {
     color: var(--text) !important;
     /* Close button color on hover */
-    transform: scale(1.1);
+    transform: scale(1.6);
     /* Scale effect on hover */
 }
 

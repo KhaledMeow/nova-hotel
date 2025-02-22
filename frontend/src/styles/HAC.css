@@ -119,12 +119,14 @@ body {
     text-decoration: underline;
     font-weight: bold;
     transition: 0.9s;
-
+    background-color: transparent;
+    border-radius: 50px;
 }
 
 .vip-link:hover {
     color: var(--text);
-    transform: scale(1.15);
+    transform: scale(1.5);
+    background-color: transparent;
 }
 
 .text-background {
