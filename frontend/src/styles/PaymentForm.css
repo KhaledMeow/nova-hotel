@@ -34,7 +34,7 @@
 
 .form-row input {
   padding: 10px;
-  border: 1px solid #ffffff;
+  border: 1px solid var(--text);
   border-radius: 4px;
   font-size: 16px;
   transition: border-color 0.3s ease;
@@ -42,7 +42,7 @@
 
 .form-row input:focus {
   outline: none;
-  border-color: #fca53a;
+  border-color: var(--primary);
   box-shadow: 0 0 5px rgba(252, 165, 58, 0.3);
 }
 
@@ -59,7 +59,7 @@
 .payment-button {
   width: 100%;
   padding: 12px;
-  background-color: #fca53a;
+  background-color: var(--primary);
   color: white;
   border: none;
   border-radius: 4px;
@@ -95,7 +95,7 @@
 }
 
 .confirmation-header h2 {
-  color: #fca53a;
+  color: var(--primary);
   font-size: 2.2rem;
   margin-bottom: 0.5rem;
   font-weight: 600;
@@ -121,7 +121,7 @@
 }
 
 .confirmation-section h3 {
-  color: #fca53a;
+  color: var(--primary);
   font-size: 1.3rem;
   margin-bottom: 1.5rem;
   font-weight: 500;
@@ -149,7 +149,7 @@
 }
 
 .detail-value {
-  color: #ffffff;
+  color: var(--text);
   font-size: 1.1rem;
   font-weight: 500;
 }
@@ -204,7 +204,7 @@
   margin-top: 0.5rem;
   padding-top: 1rem;
   font-weight: 600;
-  color: #fca53a;
+  color: var(--primary);
   font-size: 1.3rem;
 }
 
@@ -223,7 +223,7 @@
 }
 
 .home-btn {
-  background: linear-gradient(135deg, #fca53a 0%, #ff8a00 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, #ff8a00 100%);
   color: #1d1307;
   padding: 1rem 3rem;
   border: none;
@@ -237,7 +237,7 @@
 }
 
 .home-btn:hover {
-  background: linear-gradient(135deg, #ff8a00 0%, #fca53a 100%);
+  background: linear-gradient(135deg, #ff8a00 0%, var(--primary) 100%);
   transform: translateY(-2px);
   box-shadow: 0 10px 20px rgba(252, 165, 58, 0.2);
 }

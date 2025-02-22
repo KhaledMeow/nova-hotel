@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../styles/ContactUsPage.css";
+import "../styles/ComplaintPage.css";
 
 const ComplaintPage = () => {
   const [formData, setFormData] = useState({
@@ -77,7 +77,7 @@ const ComplaintPage = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:5432/api/complaints", {
+      const response = await fetch("http://localhost:5432/api/v1/complaints", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -1,27 +1,15 @@
 const express = require('express');
-const Complaint = require('../models/complaintModel'); 
 const router = express.Router();
+const {
+  createComplaint,
+  getComplaints,
+  resolveComplaint
+} = require('../controllers/complaintController');
+const auth = require('../middleware/auth');
+const adminCheck = require('../middleware/adminCheck');
 
-// Get all complaints
-router.get('/complaints', async (req, res) => {
-    try {
-        const complaints = await Complaint.find();
-        res.json(complaints);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-});
-
-// Create a new complaint
-router.post('/', async (req, res) => {
-  try {
-    const newComplaint = new Complaint(req.body);
-    await newComplaint.save();
-    res.status(201).json(newComplaint);
-  } catch (error) {
-    console.error("Error saving complaint:", error);
-    res.status(500).json({ message: "Failed to save complaint" });
-  }
-});
+router.post('/', auth, createComplaint);
+router.get('/', auth, adminCheck, getComplaints);
+router.patch('/:id/resolve', auth, adminCheck, resolveComplaint);
 
 module.exports = router;

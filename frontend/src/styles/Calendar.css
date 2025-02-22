@@ -23,7 +23,7 @@
     background-color: rgba(0, 0, 0, 0.9);
     border-radius: 0.5rem;
     /* 8px converted to rem */
-    box-shadow: 0 3.125rem 0.625rem #fca53a;
+    box-shadow: 0 3.125rem 0.625rem var(--primary);
     /* 50px to rem */
     padding: 1.25rem;
     /* 20px converted to rem */
@@ -48,7 +48,7 @@
 }
 
 .nav-button:hover {
-  color: #000000;
+  color: var(--background);
 }
 
 .current-month {
@@ -60,7 +60,7 @@
     font-size: 2.5rem;
     /* 40px converted to rem */
     font-weight: 900;
-    color: #ffffff;
+    color: var(--text);
 }
 
 .calendar-grid {
@@ -79,8 +79,8 @@
 }
 .day-header {
     font-weight: bold;
-    background-color: #ffffff;
-    color: #fca53a;
+    background-color: var(--text);
+    color: var(--primary);
     padding: 0.625rem;
     /* 10px converted to rem */
     border-radius: 0.3125rem;
@@ -88,11 +88,11 @@
 }
 
 .day-cell {
-    color: #000000;
+    color: var(--background);
     position: relative;
     min-height: 60px;
     padding: 5px;
-    border: 1px solid #ffffff;
+    border: 1px solid var(--text);
     cursor: pointer;
     display: flex;
     flex-direction: column;
@@ -101,7 +101,7 @@
 }
 .day-cell:past-day {
     background-color: rgba(0, 0, 0, 0.9);
-    color: #ffffff;
+    color: var(--text);
 }
 .day-cell:hover:not(.fully-booked):not(.past-day) {
 
@@ -118,28 +118,28 @@
     font-size: 0.8em;
     padding: 2px 4px;
     border-radius: 3px;
-    background-color: #ffffff00;
-    color: #000000;
+    background-color: var(--text)00;
+    color: var(--background);
 }
 
 .low-rooms {
-    background-color: #ffffff;
+    background-color: var(--text);
     color: #e65100;
 }
 
 .no-rooms {
-    background-color: #ffffff00;
-    color: #ffffff;
+    background-color: var(--text)00;
+    color: var(--text);
 }
 
 .fully-booked {
-    background-color: #000000;
+    background-color: var(--background);
     cursor: not-allowed;
     opacity: 0.8;
 }
 
 .past-day {
-    color: #ffffff;
+    color: var(--text);
     background-color: rgba(0, 0, 0, 0.9);
     cursor: not-allowed;
     opacity: 0.5;
@@ -148,9 +148,9 @@
 
 .today {
     color: black;
-    background-color: #fca53a;
+    background-color: var(--primary);
     font-weight: bold;
-    border: 1px solid #fca53a;
+    border: 1px solid var(--primary);
 }
 
 button {
@@ -159,18 +159,18 @@ button {
     cursor: pointer;
     border: none;
     border-radius: 4px;
-    background-color: #000000;
+    background-color: var(--background);
     color: white;
     transition: background-color 0.3s;
 }
 
 button:hover {
-    background-color: #fca53a;
+    background-color: var(--primary);
 }
 
 .empty-cell {
     background-color: rgba(0, 0, 0, 0.9);
-    color: #ffffff;
+    color: var(--text);
     cursor: not-allowed;
     opacity: 0.5
 }
@@ -180,7 +180,7 @@ button:hover {
     /* 20px converted to rem */
     font-size: 1.875rem;
     /* 30px converted to rem */
-    color: #000000;
+    color: var(--background);
 }
 
 .booked-x {

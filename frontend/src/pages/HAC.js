@@ -57,19 +57,19 @@ const featuresData = [
     title: "Exquisite Accommodations",
     description:
       "Immerse yourself in a seamless blend of comfort and elegance in our beautifully designed rooms, where every detail has been thoughtfully crafted to offer a refined and relaxing experience.",
-    backgroundColor: "#ffffff",
+    backgroundColor: "var(--text)",
   },
   {
     title: "Gourmet Dining",
     description:
       "Savor an extraordinary dining experience with exquisite culinary creations, expertly crafted by our renowned chefs, using the finest ingredients.",
-    backgroundColor: "#ffffff",
+    backgroundColor: "var(--text)",
   },
   {
     title: "Outstanding Service",
     description:
       "Our dedicated team is passionately committed to providing exceptional hospitality, ensuring personalized service and attention to every detail throughout your stay.",
-    backgroundColor: "#ffffff",
+    backgroundColor: "var(--text)",
   },
 ];
 
@@ -107,40 +107,40 @@ const About = () => {
   return (
     <div className="text-background">
       <h1>News & Events</h1>
-      <p>
+      <div className="event-item">
         <h2>
           <strong>Cultural Heritage Festival</strong>
         </h2>
         Celebrate our local culture with traditional dance performances, art
         exhibits, and craft workshops.
-      </p>
-      <p>
+      </div>
+      <div className="event-item">
         <h2>
           <strong>Outdoor Movie Night</strong>
         </h2>
         Enjoy a classic film under the stars in our garden. Bring your blankets
         and enjoy popcorn and snacks with family and friends.
-      </p>
+      </div>
       <h1>Exceptional Discounts</h1>
       <h2>
         <strong>
-          <span className="vip-link" onClick={handleVIPOffersClick}>
+          <button className="vip-link" onClick={handleVIPOffersClick}>
             VIP Offers
-          </span>
+          </button>
         </strong>
       </h2>
       <h2>
         <strong>
-          <span className="vip-link" onClick={handleWeekendGetawayClick}>
+          <button className="vip-link" onClick={handleWeekendGetawayClick}>
             Weekend Getaway Package
-          </span>
+          </button>
         </strong>
       </h2>
       <h2>
         <strong>
-          <span className="vip-link" onClick={handleRomanticEscapeClick}>
+          <button className="vip-link" onClick={handleRomanticEscapeClick}>
             Romantic Escape
-          </span>
+          </button>
         </strong>
       </h2>
       {currentOffer && (
@@ -238,7 +238,7 @@ const ContactUs = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:5432/api/complaints", {
+      const response = await fetch("http://localhost:5432/api/v1/complaints", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -65,16 +65,16 @@
 .room-info h2 {
     font-size: 1.8rem;
     margin: 0 0 0.5rem 0;
-    color: #fca53a;
+    color: var(--primary);
     font-weight: 600;
 }
 
 .room-info p {
-    color: #ffffff;
+    color: var(--text);
 }
 
 .room-info p strong {
-    color: #ffffff;
+    color: var(--text);
     font-size: 1.1rem;
     display: block;
     margin-bottom: 1rem;
@@ -85,7 +85,7 @@
     list-style-type: none;
     padding: 0;
     margin: 1rem 0;
-    color: #ffffff;
+    color: var(--text);
 }
 
 .room-info ul li {
@@ -93,7 +93,7 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    color: #ffffff;
+    color: var(--text);
 }
 
 .room-info ul li:before {
@@ -112,26 +112,26 @@
 }
 
 .regular-price {
-    color: #fca53a;
+    color: var(--primary);
     font-size: 1.3rem;
     font-weight: 600;
 }
 
 .original-price {
-    color: #ffffff;
+    color: var(--text);
     text-decoration: line-through;
     opacity: 0.7;
     font-size: 1.1rem;
 }
 
 .discounted-price {
-    color: #fca53a;
+    color: var(--primary);
     font-size: 1.3rem;
     font-weight: 600;
 }
 
 .discount-badge {
-    background-color: #fca53a;
+    background-color: var(--primary);
     color: #1d1307;
     padding: 0.3rem 0.6rem;
     border-radius: 4px;
@@ -140,7 +140,7 @@
 }
 
 .book-button {
-    background-color: #fca53a;
+    background-color: var(--primary);
     color: #1d1307;
     padding: 0.8rem 1.5rem;
     border: none;

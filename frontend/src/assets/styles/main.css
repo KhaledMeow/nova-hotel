@@ -51,8 +51,8 @@ nav a {
     text-align: center;
     margin-top: -110px;
     /* Adjust spacing below the header */
-    color: #ffffff;
-    background-color: #00000026;
+    color: var(--text);
+    background-color: var(--background)26;
     padding: 20px;
     border-radius: 80px;
 }
@@ -100,7 +100,7 @@ label {
 input,
 textarea {
     padding: 10px;
-    border: 1px solid #000000;
+    border: 1px solid var(--background);
     border-radius: 5px;
     width: 100%;
     box-sizing: border-box;
@@ -108,13 +108,13 @@ textarea {
 
 input:focus,
 textarea:focus {
-    border-color: #fca53a;
+    border-color: var(--primary);
     outline: none;
 }
 
 .submit-button {
     padding: 10px 20px;
-    background-color: #fca53a;
+    background-color: var(--primary);
     color: black;
     border: none;
     border-radius: 5px;
@@ -124,7 +124,7 @@ textarea:focus {
 }
 
 .submit-button:hover {
-    background-color: #fca53a;
+    background-color: var(--primary);
 }
 
 @media (max-width: 1025px) {

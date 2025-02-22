@@ -25,7 +25,7 @@
 .form-group label {
     display: block;
     font-size: 1rem;
-    color: #fca53a;
+    color: var(--primary);
     margin-bottom: 0.5rem;
     font-weight: 500;
 }
@@ -38,7 +38,7 @@ textarea {
     border: 2px solid #3a2815;
     border-radius: 8px;
     font-size: 1rem;
-    color: #ffffff;
+    color: var(--text);
     background-color: #1d1307;
     transition: all 0.3s ease;
 }
@@ -46,7 +46,7 @@ textarea {
 input:focus,
 select:focus,
 textarea:focus {
-    border-color: #fca53a;
+    border-color: var(--primary);
     box-shadow: 0 0 0 3px rgba(252, 165, 58, 0.2);
     outline: none;
 }
@@ -57,7 +57,7 @@ textarea {
 }
 
 .submit-button {
-    background-color: #fca53a;
+    background-color: var(--primary);
     color: #1d1307;
     padding: 1rem 2rem;
     border-radius: 12px;
@@ -96,7 +96,7 @@ textarea {
 }
 
 .booking-date-item h3 {
-    color: #fca53a;
+    color: var(--primary);
     font-weight: 600;
     font-size: 1.1rem;
     margin-bottom: 0.5rem;
@@ -116,13 +116,13 @@ textarea {
     border: 2px solid #3a2815;
     border-radius: 8px;
     font-size: 1rem;
-    color: #ffffff;
+    color: var(--text);
     background-color: #1d1307;
     transition: all 0.3s ease;
 }
 
 .date-input:focus {
-    border-color: #fca53a;
+    border-color: var(--primary);
     box-shadow: 0 0 0 3px rgba(252, 165, 58, 0.2);
     outline: none;
 }

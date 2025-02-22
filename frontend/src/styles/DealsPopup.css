@@ -34,7 +34,7 @@
 }
 
 .popup-header h2 {
-    color: #ffffff;
+    color: var(--text);
     font-size: 1.3rem;
     font-weight: 600;
     margin: 0;
@@ -48,7 +48,7 @@
     background: none;
     border: none;
     padding: 0;
-    color: #fca53ad1;
+    color: var(--primary)d1;
     font-size: 50px;
     cursor: pointer;
     display: flex;
@@ -79,14 +79,14 @@
 }
 
 .view-deals {
-    color: #fca53a !important;
+    color: var(--primary) !important;
     font-size: 0.9rem !important;
     font-weight: 500;
     margin-top: 0.5rem;
 }
 
 .popup-content button {
-    background-color: #ffffff00;
+    background-color: var(--text)00;
     color: rgb(255, 255, 255);
     border: none;
     padding: 0.5rem 1rem;

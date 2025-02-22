@@ -4,7 +4,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: var(--overlay);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -13,15 +13,15 @@
 }
 
 .special-offer-content {
-  background: linear-gradient(135deg, #1d1307 0%, #2a1d0f 100%);
-  color: #fff;
+  background: linear-gradient(135deg, var(--background) 0%, var(--background-secondary) 100%);
+  color: var(--text);
+  border: 1px solid var(--primary);
   padding: 3rem;
   border-radius: 15px;
   width: 90%;
   max-width: 800px;
   position: relative;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-  border: 1px solid #fca53a;
+  box-shadow: 0 0.625rem 2rem rgba(0, 0, 0, 0.5);
 }
 
 .close-button {
@@ -30,7 +30,7 @@
   right: 0;
   background: none;
   border: none;
-  color: #fca53a;
+  color: var(--primary);
   font-size: 24px;
   cursor: pointer;
   width: 30px;
@@ -43,16 +43,17 @@
 }
 
 .close-button:hover {
-  background-color: #fca53a;
-  color: #1d1307;
+  color: #ffffff !important;
+  background-color: transparent;
+
 }
 
 h2 {
-  color: #fca53a;
+  color: var(--primary);
   margin-bottom: 1rem;
   font-size: 2rem;
   text-align: center;
-  font-family: 'Playfair Display', serif;
+  font-family: 'Poppins', sans-serif;
 }
 
 .offer-description {
@@ -70,7 +71,7 @@ h2 {
 }
 
 .benefits-section h3 {
-  color: #fca53a;
+  color: var(--primary);
   margin-bottom: 1rem;
   font-size: 1.2rem;
 }
@@ -89,7 +90,7 @@ h2 {
 
 .benefits-section li::before {
   content: "•";
-  color: #fca53a;
+  color: var(--primary);
   position: absolute;
   left: 0;
 }
@@ -99,18 +100,18 @@ h2 {
 }
 
 .price {
-  color: #fca53a;
+  color: var(--primary);
   font-size: 1.5rem;
   margin-bottom: 1rem;
   font-weight: bold;
 }
 
 .book-now-button {
-  background-color: #fca53a;
+  background-color: var(--primary);
   color: #1d1307;
   border: none;
-  padding: 12px 30px;
-  border-radius: 25px;
+  border-radius: 2.5rem; 
+  padding: 0.625rem 1.25rem; 
   font-size: 1.1rem;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -120,7 +121,7 @@ h2 {
 }
 
 .book-now-button:hover {
-  background-color: #e89428;
+  background-color: #f98b0d;
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(252, 165, 58, 0.3);
 }

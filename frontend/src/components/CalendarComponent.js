@@ -152,7 +152,7 @@ const CalendarComponent = () => {
   // Function to fetch booked dates from the backend
   const fetchBookedDates = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/bookings');
+      const response = await axios.get('http://localhost:5432/api/v1/bookings');
       const bookings = response.data;
 
       // Create a Set to store all booked dates

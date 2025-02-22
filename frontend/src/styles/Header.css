@@ -23,7 +23,7 @@
     margin-left: auto;
     font-weight: 600;
     text-decoration: none;
-    background-color: #ffffff;
+    background-color: var(--text);
     color: rgb(0, 0, 0);
     padding: 20px 40px;
     border-radius: 50px;
@@ -31,8 +31,8 @@
 }
 
 .availability-button:hover {
-    background-color: #000000;
-    color: #ffffff;
+    background-color: var(--background);
+    color: var(--text);
 }
 
 .header-nav.scrolled {
@@ -44,14 +44,14 @@
     height: 135px;
     width: auto;
     transform: scale(0.75);
-    box-shadow: 0px 0px 10px #fca53a;
+    box-shadow: 0px 0px 10px var(--primary);
     border-radius: 10px;
     transition: 0.5s;
 }
 
 .header-logo:hover {
     transform: scale(0.95);
-    box-shadow: 0 0 95px #fca53a;
+    box-shadow: 0 0 95px var(--primary);
 }
 
 .header-links {
@@ -102,7 +102,7 @@
     text-transform: uppercase;
     font-weight: 600;
     text-decoration: none;
-    background-color: #fca53a;
+    background-color: var(--primary);
     /* Background color for links */
     color: white;
     /* Text color */
@@ -120,7 +120,7 @@
 .header-links li a:hover {
     background-color: rgb(255, 255, 255);
     /* Background on hover */
-    color: #000000;
+    color: var(--background);
     /* Text color on hover */
 }
 
@@ -131,7 +131,7 @@
     display: block;
     /* Ensure button is visible */
     background-color: rgba(255, 255, 255, 0);
-    color: #ffffff;
+    color: var(--text);
     padding: 20px;
     border: none;
     cursor: pointer;
@@ -141,7 +141,7 @@
 
 .menu-toggle:hover {
     color: #2b2e4a;
-    background-color: #00000000;
+    background-color: var(--background)00;
     transition: color 0.4s ease;
 }
 
@@ -211,8 +211,8 @@
 }
 
 .close-menu:hover {
-    color: #fca53a;
-    background-color: #00000000;
+    color: var(--primary);
+    background-color: var(--background)00;
     transition: color 0.4s ease;
 }
 
@@ -226,7 +226,7 @@
 }
 
 .offer-link {
-  background-color: #fca53a;
+  background-color: var(--primary);
   color: #1d1307;
   border: none;
   padding: 12px 20px;
@@ -321,7 +321,7 @@
         text-transform: uppercase;
         font-weight: 600;
         text-decoration: none;
-        background-color: #fca53a;
+        background-color: var(--primary);
         /* Background color for links */
         color: white;
         /* Text color */
@@ -339,7 +339,7 @@
     .header-links li a:hover {
         background-color: rgb(255, 255, 255);
         /* Background on hover */
-        color: #000000;
+        color: var(--background);
         /* Text color on hover */
     }
 
@@ -350,7 +350,7 @@
         display: block;
         /* Ensure button is visible */
         background-color: rgba(255, 255, 255, 0);
-        color: #ffffff;
+        color: var(--text);
         padding: 20px;
         border: none;
         cursor: pointer;
@@ -358,8 +358,8 @@
     }
 
     .menu-toggle:hover {
-        color: #fca53a;
-        background-color: #00000000;
+        color: var(--primary);
+        background-color: var(--background)00;
         transition: color 0.4s ease;
     }
 
@@ -431,8 +431,8 @@
     }
 
     .close-menu:hover {
-        color: #fca53a;
-        background-color: #00000000;
+        color: var(--primary);
+        background-color: var(--background)00;
         transition: color 0.4s ease;
     }
 

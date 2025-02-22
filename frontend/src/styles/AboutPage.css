@@ -1,6 +1,6 @@
 .about-page {
     padding: 7rem;
-    background-color: #fca53a;
+    background-color: var(--primary);
 }
 
 .about-page h1 {
@@ -13,8 +13,8 @@
 .about-page h2 {
     font-size: 2.5rem;
     margin: 2rem;
-    color: #ffffff;
-    box-shadow: 0 0 10px 10px #000000;
+    color: var(--text);
+    box-shadow: 0 0 10px 10px var(--background);
     border-radius: 150px;
 }
 
@@ -22,7 +22,7 @@
 .about-page ul {
     font-size: 1.5rem;
     line-height: 1.5;
-    color: #000000;
+    color: var(--background);
 }
 
 .about-values ul {

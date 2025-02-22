@@ -73,8 +73,8 @@ const DealsPopup = ({ onClose }) => {
           left: `${position.x}px`,
           top: `${position.y}px`,
           cursor: isDragging ? 'grabbing' : 'grab',
-          borderLeft: '4px solid #fca53a',
-          borderRight: '4px solid #fca53a'
+          borderLeft: '4px solid var(--primary)',
+          borderRight: '4px solid var(--primary)'
         }}
         onMouseDown={handleMouseDown}
       >

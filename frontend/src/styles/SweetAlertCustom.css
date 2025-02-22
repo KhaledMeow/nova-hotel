@@ -1,19 +1,21 @@
 /* Custom styles for SweetAlert2 popups */
 .swal2-popup {
-    background-color: #000000 !important;
+    background-color: var(--background) !important;
     /* Background color */
     border-radius: 1rem;
     /* Rounded corners */
-    color: #ffffff !important;
+    width: 80% !important; 
+    /* Width */
+    color: var(--text) !important;
     /* Text color */
-    font-family: 'Arial', sans-serif;
+    font-family: 'Poppins', sans-serif;
     /* Font style */
     box-shadow: 0 0.625rem 2rem rgba(0, 0, 0, 0.5);
     /* Shadow for depth */
 }
 
 .swal2-title {
-    color: #fca53a !important;
+    color: var(--primary) !important;
     /* Title color */
     font-size: 2.5rem !important;
     /* Title font size */
@@ -22,7 +24,7 @@
 }
 
 .swal2-content {
-    color: #ffffff !important;
+    color: var(--text) !important;
     /* Content text color */
     font-size: 1.6rem;
     /* Content font size */
@@ -31,9 +33,9 @@
 }
 
 .swal2-confirm {
-    background-color: #ffffff !important;
+    background-color: var(--text) !important;
     /* Confirm button background */
-    color: #000000 !important;
+    color: var(--background) !important;
     /* Confirm button text color */
     border-radius: 2.5rem;
     /* Rounded corners for button */
@@ -50,9 +52,11 @@
 .swal2-cancel {
     background-color: transparent;
     /* Cancel button background */
-    color: #fca53a !important;
+    color: var(--primary) !important;
     /* Cancel button text color */
-    border: 2px solid #fca53a;
+    text-shadow: 0 0 2px rgba(0,0,0,0.5);  
+    /* Text shadow for depth */
+    border: 2px solid var(--primary);
     /* Border for cancel button */
     border-radius: 2.5rem;
     /* Rounded corners for button */
@@ -65,13 +69,17 @@
 }
 
 .swal2-confirm:hover {
-    background-color: #fca53a !important;
+    background-color: var(--primary) !important;
     /* Hover effect for confirm button */
-    color: #ffffff !important;
+    color: var(--text) !important;
     /* Text color change on hover */
     transform: translateY(-0.125rem);
     /* Lift effect on hover */
 }
+
+.swal2-confirm:focus-visible {  
+    outline: 2px solid  var(--primary) !important;  
+  }  
 
 .swal2-cancel:hover {
     background-color: rgba(252, 165, 58, 0.1);
@@ -95,7 +103,7 @@
 }
 
 .swal2-loader {
-    border: 0.25rem solid #fca53a !important;
+    border: 0.25rem solid var(--primary) !important;
     /* Loader color */
 }
 
@@ -106,10 +114,16 @@
 }
 
 .swal2-close {
-    color: #fca53a;
+    color: var(--primary);
     /* Close button color */
     font-size: 1.5rem;
     /* Close button font size */
+}
+.swal2-close:hover {
+    color: var(--text) !important;
+    /* Close button color on hover */
+    transform: scale(1.1);
+    /* Scale effect on hover */
 }
 
 .swal2-footer {
@@ -126,3 +140,9 @@
     height: 4rem;
     /* Icon height */
 }
+@media (max-width: 480px) {  
+    .swal2-popup {  
+      width: 95% !important;  
+      padding: 1rem !important;  
+    }  
+  }  
