@@ -79,6 +79,12 @@ const Booking = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('Please login first');
+      return navigate('/login');
+    }
+
     // Validate all fields
     const newErrors = {};
     Object.keys(formData).forEach(key => {
@@ -127,7 +133,7 @@ const Booking = () => {
         alert("Number of people must be a positive number.");
         return;
     }
-
+    
     const submissionData = {
       ...formData,
       num_guests: numOfPeople
@@ -147,12 +153,27 @@ const Booking = () => {
           num_guests: formData.num_of_people
         })
       });
-      if (!response.ok) throw new Error('Booking failed');
+      if (!response.ok){
+        if (response.status === 401) {
+          localStorage.removeItem('token');
+          alert('Session expired - Please login again');
+          navigate('/login');
+          return;
+        }
+        const errorData = await response.json();
+        throw new Error(errorData.error) || 'Booking failed';
+      }
       const booking = await response.json();
-      setBookingData(booking); // Use server-generated booking
+      setBookingData(booking);
       setShowPayment(true);
+
     } catch (error) {
+      if (error.message.includes('401')) {
+        localStorage.removeItem('token');
+        navigate('/login');
+      }
       alert(error.message);
+      console.error('Booking Error:', error);
     }
   };
 

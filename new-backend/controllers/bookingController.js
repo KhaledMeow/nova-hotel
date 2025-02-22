@@ -7,8 +7,12 @@ exports.createBooking = async (req, res) => {
   session.startTransaction();
 
   try {
-    const { roomId, check_in_date, check_out_date } = req.body;
-    
+    const { roomId, check_in_date, check_out_date, num_guests } = req.body;
+
+    if (!roomId || !check_in_date || !check_out_date || !num_guests) {
+      throw new Error('Missing required booking fields');
+    }
+
     // 1. Check room availability
     const room = await Room.findById(roomId).session(session);
     const isAvailable = !room.bookedDates.some(booking => 
@@ -38,7 +42,10 @@ exports.createBooking = async (req, res) => {
     res.status(201).json(booking[0]);
   } catch (error) {
     await session.abortTransaction();
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ 
+      error: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+     });
   } finally {
     session.endSession();
   }

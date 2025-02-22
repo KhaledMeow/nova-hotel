@@ -89,32 +89,53 @@ const PaymentForm = ({
     }
 
     try {
+      // Keep your existing simulation
       await new Promise(resolve => setTimeout(resolve, 2000));
-
-      const paymentGatewaySimulation = () => {
-        const scenarios = [
-          { success: true, message: 'Payment Successful' },
-          { success: true, message: 'Payment Processed' },
-          { success: true, message: 'Payment Successful' },
-          { success: true, message: 'Payment Processed' },
-          { success: false, message: 'Payment Failed - Please try again' }
-        ];
-        return scenarios[Math.floor(Math.random() * scenarios.length)];
-      };
-
+      
       const paymentResult = paymentGatewaySimulation();
-
+  
       if (paymentResult.success) {
+        // Only call backend if simulation succeeds
+        const response = await fetch('/api/v1/payments', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          },
+          body: JSON.stringify({
+            bookingId: bookingData._id,
+            method: 'mock'
+          })
+        });
+  
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Payment recording failed');
+        }
+  
+        const paymentData = await response.json();
         setPaymentSuccess(true);
+        onSuccess(paymentData);
       } else {
         alert(paymentResult.message);
+        onError(paymentResult.message);
       }
     } catch (error) {
       console.error('Payment processing error:', error);
-      alert('Payment processing failed');
+      alert(error.message);
     } finally {
       setProcessing(false);
     }
+  };
+  const paymentGatewaySimulation = () => {
+    const scenarios = [
+      { success: true, message: 'Payment Successful' },
+      { success: true, message: 'Payment Processed' },
+      { success: true, message: 'Payment Successful' },
+      { success: true, message: 'Payment Processed' },
+      { success: false, message: 'Payment Failed - Please try again' }
+    ];
+    return scenarios[Math.floor(Math.random() * scenarios.length)];
   };
 
   if (paymentSuccess) {

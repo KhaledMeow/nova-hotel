@@ -37,8 +37,8 @@ const Login = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        const backendError = data.error || 'Login failed';
-        setErrors({ general: backendError });
+        const errorMessage = data?.error || 'Login failed';
+        setErrors({ general: errorMessage });
         return;
       }
 
@@ -47,6 +47,7 @@ const Login = () => {
       
     } catch (error) {
       setErrors({ general: 'Network error. Please try again.' });
+      console.error('Login Error:', error);
     }
   };
 
