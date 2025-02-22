@@ -4,19 +4,26 @@ const bcrypt = require('bcryptjs');
 
 exports.register = async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { email, password, first_name, last_name, phone } = req.body;
     
     // Check if user exists
-    const exists = await User.findOne({ username });
-    if (exists) return res.status(400).json({ error: 'Username taken' });
+    const exists = await User.findOne({ email });
+    if (exists) return res.status(400).json({ error: 'Email already registered' });
+   
+    // Add default role assignment
+     const defaultRole = await Role.findOne({ name: 'guest' }); 
 
     // Hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 16);
     
     // Create user
     const user = await User.create({ 
-      username, 
-      password: hashedPassword 
+      email,
+      password: hashedPassword,
+      first_name,
+      last_name,
+      phone,
+      role: defaultRole._id
     });
 
     // Generate JWT
@@ -30,10 +37,10 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
     
     // Find user
-    const user = await User.findOne({ username });
+    const user = await User.findOne({ email });
     if (!user) throw new Error('Invalid credentials');
 
     // Check password

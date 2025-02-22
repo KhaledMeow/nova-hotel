@@ -1,6 +1,5 @@
 .header-nav {
     display: flex;
-
     justify-content: space-between;
     background-color: rgba(0, 0, 0, 0);
     padding: 0;
@@ -11,14 +10,13 @@
     right: 0;
     z-index: 99;
     transition: background-color 0.4s ease;
-}
-
-.nav-buttons {
-    display: flex;
-    gap: 1rem;
-}
-
-.availability-button {
+  }
+  
+  .header-nav.scrolled {
+    background-color: rgb(0, 0, 0);
+  }
+  
+  .availability-button {
     font-size: 20px;
     margin-left: auto;
     font-weight: 600;
@@ -28,412 +26,141 @@
     padding: 20px 40px;
     border-radius: 50px;
     transition: background-color 0.3s ease;
-}
-
-.availability-button:hover {
+  }
+  
+  .availability-button:hover {
     background-color: var(--background);
     color: var(--text);
-}
-
-.header-nav.scrolled {
-    background-color: rgb(0, 0, 0);
-
-}
-
-.header-logo {
+  }
+  
+  .header-logo {
     height: 135px;
     width: auto;
     transform: scale(0.75);
     box-shadow: 0px 0px 10px var(--primary);
     border-radius: 10px;
     transition: 0.5s;
-}
-
-.header-logo:hover {
+  }
+  
+  .header-logo:hover {
     transform: scale(0.95);
     box-shadow: 0 0 95px var(--primary);
-}
-
-.header-links {
+  }
+  
+  .header-links {
     display: flex;
     flex-direction: column;
-    /* Align items in a column */
     list-style: none;
-
-    padding: 0px;
-    /* Add some padding for better spacing */
+    padding: 0;
     background-color: rgb(0, 0, 0);
-    /* Background color for the menu */
     position: fixed;
-    /* Keep the menu fixed in place */
     top: 0;
-    /* Start from the top */
     left: 0;
-    /* Align to the left */
     right: 0;
-    /* Align to the right */
     bottom: 0;
-    /* Stretch to the bottom */
     transform: translateX(100%);
-    /* Initially hidden */
     transition: transform 0.3s ease;
-    /* Smooth transition */
     z-index: 99;
-    /* Ensure it's above the overlay */
     align-items: center;
-    /* Center items horizontally */
     justify-content: center;
-    /* Center items vertically */
-}
-
-.header-links.open {
+  }
+  
+  .header-links.open {
     transform: translateY(0);
-    /* Show menu when open */
-
-}
-
-.header-links li {
+  }
+  
+  .header-links li {
     margin: 20px 0;
-    /* Vertical margin for spacing between links */
-
-}
-
-.header-links li a {
+  }
+  
+  .header-links li a,
+  .nav-link-button {
     text-transform: uppercase;
     font-weight: 600;
     text-decoration: none;
     background-color: var(--primary);
-    /* Background color for links */
     color: white;
-    /* Text color */
     padding: 20px 40px;
-    /* Increased padding for larger clickable area */
     border-radius: 10px;
-    /* Rounded corners */
     transition: background-color 0.3s ease;
-    /* Transition effect */
     font-size: 24px;
-    /* Increased font size */
-    flex-direction: column;
-}
-
-.header-links li a:hover {
+    border: none;
+    cursor: pointer;
+    display: inline-block;
+  }
+  
+  .header-links li a:hover,
+  .nav-link-button:hover {
     background-color: rgb(255, 255, 255);
-    /* Background on hover */
     color: var(--background);
-    /* Text color on hover */
-}
-
-.menu-toggle {
+  }
+  
+  .menu-toggle {
     font-size: 70px;
     font-weight: bolder;
-    /* Adjust font size for visibility */
-    display: block;
-    /* Ensure button is visible */
-    background-color: rgba(255, 255, 255, 0);
+    background-color: transparent;
     color: var(--text);
     padding: 20px;
     border: none;
     cursor: pointer;
     border-radius: 10px;
     z-index: 100;
-}
-
-.menu-toggle:hover {
-    color: #2b2e4a;
-    background-color: var(--background)00;
-    transition: color 0.4s ease;
-}
-
-.menu-toggle .header-links ul {
-    justify-content: space-between;
-    list-style: none;
-    /* Remove list style */
-    margin: 0;
-    /* Remove margin */
-    padding: 0;
-    /* Remove padding */
-}
-
-.menu-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5);
-    /* Semi-transparent background */
-    opacity: 0;
-    /* Initially hidden */
-    pointer-events: none;
-    /* Prevent interactions when not open */
-    transition: opacity 0.3s ease;
-    /* Smooth transition */
-    z-index: 98;
-    /* Below header but above content */
-}
-
-.menu-overlay.open {
-    opacity: 1;
-    /* Show overlay when menu is open */
-    pointer-events: auto;
-    /* Allow interactions */
-}
-
-.menu-logo {
+  }
+  
+  .menu-toggle:hover {
+    color: var(--primary);
+    background-color: transparent;
+  }
+  
+  .menu-logo {
     width: 100px;
     height: auto;
     position: absolute;
     top: 20px;
     left: 20px;
-    margin: 0;
-}
-
-.close-menu {
-    position: absolute;
-    /* Position it relative to the menu */
-    top: 20px;
-    /* Distance from the top */
-    right: 20px;
-    /* Distance from the right */
-    background-color: transparent;
-    /* No background color */
-    color: white;
-    /* Text color */
-    border: none;
-    /* No border */
-    font-size: 80px;
-    /* Font size */
-    cursor: pointer;
-    /* Pointer cursor on hover */
-    margin-bottom: 20px;
-    /* Space below the button */
-}
-
-.close-menu:hover {
-    color: var(--primary);
-    background-color: var(--background)00;
-    transition: color 0.4s ease;
-}
-
-.special-offers-section {
-  margin-top: 2rem;
-  border-top: 1px solid rgba(252, 165, 58, 0.2);
-  padding-top: 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.offer-link {
-  background-color: var(--primary);
-  color: #1d1307;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 25px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
-  font-weight: bold;
-  letter-spacing: 1px;
-  margin: 0.5rem 0; /* Add some vertical spacing between buttons */
-}
-
-.offer-link:hover {
-  background-color: #e89428;
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(252, 165, 58, 0.3);
-}
-
-@media (max-width:480px) {
-
-    .header-nav {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        background-color: rgba(0, 0, 0, 0);
-        /* Transparent background */
-        padding: 0;
-        color: rgb(0, 0, 0);
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 1099;
-        transition: background-color 0.4s ease;
-    }
-
+  }
+  
+  @media (max-width: 480px) {
     .header-nav.scrolled {
-        background-color: rgb(0, 0, 0);
-        /* Dark background on scroll */
+      background-color: rgb(0, 0, 0);
     }
-
+  
     .header-logo {
-        height: 50px;
-        width: auto;
+      height: 50px;
     }
-
-    .header-links {
-        display: flex;
-        flex-direction: column;
-        /* Align items in a column */
-        list-style: none;
-
-        padding: 20px;
-        /* Add some padding for better spacing */
-        background-color: rgb(0, 0, 0);
-        /* Background color for the menu */
-        position: fixed;
-        /* Keep the menu fixed in place */
-        top: 0;
-        /* Start from the top */
-        left: 0;
-        /* Align to the left */
-        right: 0;
-        /* Align to the right */
-        bottom: 0;
-        /* Stretch to the bottom */
-        transform: translateY(-100%);
-        /* Initially hidden */
-        transition: transform 0.3s ease;
-        /* Smooth transition */
-        z-index: 99;
-        /* Ensure it's above the overlay */
-        align-items: center;
-        /* Center items horizontally */
-        justify-content: center;
-        /* Center items vertically */
-    }
-
+  
     .header-links.open {
-        transform: translateY(0);
-        padding-top: 100px; /* Increased to make room for the logo */
+      padding-top: 100px;
     }
-
-    .header-links li {
-        margin: 20px 0;
-        /* Vertical margin for spacing between links */
-
+  
+    .header-links li a,
+    .nav-link-button {
+      font-size: 20px;
+      padding: 15px 30px;
     }
-
-    .header-links li a {
-        text-transform: uppercase;
-        font-weight: 600;
-        text-decoration: none;
-        background-color: var(--primary);
-        /* Background color for links */
-        color: white;
-        /* Text color */
-        padding: 20px 40px;
-        /* Increased padding for larger clickable area */
-        border-radius: 10px;
-        /* Rounded corners */
-        transition: background-color 0.3s ease;
-        /* Transition effect */
-        font-size: 24px;
-        /* Increased font size */
-        flex-direction: column;
-    }
-
-    .header-links li a:hover {
-        background-color: rgb(255, 255, 255);
-        /* Background on hover */
-        color: var(--background);
-        /* Text color on hover */
-    }
-
+  
     .menu-toggle {
-        font-size: 70px;
-        font-weight: bolder;
-        /* Adjust font size for visibility */
-        display: block;
-        /* Ensure button is visible */
-        background-color: rgba(255, 255, 255, 0);
-        color: var(--text);
-        padding: 20px;
-        border: none;
-        cursor: pointer;
-        border-radius: 10px;
+      font-size: 50px;
     }
-
-    .menu-toggle:hover {
-        color: var(--primary);
-        background-color: var(--background)00;
-        transition: color 0.4s ease;
-    }
-
-    .menu-toggle .header-links ul {
-        list-style: none;
-        /* Remove list style */
-        margin: 0;
-        /* Remove margin */
-        padding: 0;
-        /* Remove padding */
-    }
-
-
-    /* Overlay styles */
-    .menu-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        background-color: rgba(0, 0, 0, 0.5);
-        /* Semi-transparent background */
-        opacity: 0;
-        /* Initially hidden */
-        pointer-events: none;
-        /* Prevent interactions when not open */
-        transition: opacity 0.3s ease;
-        /* Smooth transition */
-        z-index: 98;
-        /* Below header but above content */
-    }
-
-    .menu-overlay.open {
-        opacity: 1;
-        /* Show overlay when menu is open */
-        pointer-events: auto;
-        /* Allow interactions */
-    }
-
-
-    .menu-logo {
-        height: 150px;
-        /* Increase the height to make the logo bigger */
-        width: auto;
-        /* Maintain aspect ratio */
-        margin-bottom: 20px;
-        /* Space below the logo */
-    }
-
-    .close-menu {
-        position: absolute;
-        /* Position it relative to the menu */
-        top: 20px;
-        /* Distance from the top */
-        right: 20px;
-        /* Distance from the right */
-        background-color: transparent;
-        /* No background color */
-        color: white;
-        /* Text color */
-        border: none;
-        /* No border */
-        font-size: 80px;
-        /* Font size */
-        cursor: pointer;
-        /* Pointer cursor on hover */
-        margin-bottom: 20px;
-        /* Space below the button */
-    }
-
-    .close-menu:hover {
-        color: var(--primary);
-        background-color: var(--background)00;
-        transition: color 0.4s ease;
-    }
-
-}
+  }
+  
+  /* Error Handling Styles */
+  .login-error-general {
+    color: #ff4444;
+    text-align: center;
+    padding: 10px;
+    margin: 15px 0;
+    border-radius: 5px;
+    background: rgba(255, 68, 68, 0.1);
+  }
+  
+  .input-error {
+    border: 2px solid #ff4444 !important;
+    animation: shake 0.5s ease-in-out;
+  }
+  
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+  }

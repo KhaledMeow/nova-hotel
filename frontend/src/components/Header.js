@@ -16,6 +16,13 @@ const Header = () => {
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const [currentOffer, setCurrentOffer] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // Check login status on mount
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    setIsLoggedIn(!!token);
+  }, []);
 
   const handleScroll = () => {
     const currentScrollY = window.scrollY;
@@ -25,49 +32,31 @@ const Header = () => {
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  const handleHomeClick = (e) => {
-    if (location.pathname === "/") {
-      e.preventDefault();
-      scrollToTop();
-    }
-  };
 
   const navItems = [
     { name: "Home", path: "/" },
     { name: "About Us", path: "/About" },
-    { name: "Contact Us", path: "/Contact-Us" },
+    isLoggedIn 
+      ? { name: "Logout", path: "/logout" }
+      : { name: "Login", path: "/login" }
   ];
 
-  const specialOffers = [];
-
-  const handleOfferClick = (offer) => {
-    setCurrentOffer(offer);
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setIsLoggedIn(false);
+    handleLinkClick();
+    window.location.reload();
   };
 
   const handleLinkClick = () => {
     setIsOpen(false);
   };
 
-  // Lock or unlock body scroll when menu opens/closes
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
-    // Clean up when the component unmounts or isOpen changes
-    return () => {
-      document.body.style.overflow = "auto";
-    };
+    document.body.style.overflow = isOpen ? "hidden" : "auto";
+    return () => document.body.style.overflow = "auto";
   }, [isOpen]);
 
   return (
@@ -80,7 +69,6 @@ const Header = () => {
     >
       <img src={logo} alt="Hotel Logo" className="header-logo" />
 
-      {/* Check Availability Button */}
       <Link to="/Calendar" className="availability-button">
         Check Availability
       </Link>
@@ -95,31 +83,26 @@ const Header = () => {
             <img src={logo} alt="Hotel Logo" className="menu-logo" />
             {navItems.map((item) => (
               <li key={item.name}>
-                <Link
-                  to={item.path}
-                  onClick={(e) => {
-                    handleLinkClick();
-                    if (item.name === "Home") {
-                      handleHomeClick(e);
-                    }
-                  }}
-                >
-                  <span>{item.name}</span>
-                </Link>
+                {item.name === 'Logout' ? (
+                  <button 
+                    className="nav-link-button" 
+                    onClick={handleLogout}
+                  >
+                    <span>{item.name}</span>
+                  </button>
+                ) : (
+                  <Link
+                    to={item.path}
+                    onClick={() => {
+                      handleLinkClick();
+                      if (item.name === "Home") window.scrollTo(0, 0);
+                    }}
+                  >
+                    <span>{item.name}</span>
+                  </Link>
+                )}
               </li>
             ))}
-            <div className="special-offers-section">
-              {specialOffers.map((offer) => (
-                <li key={offer}>
-                  <button
-                    className="offer-link"
-                    onClick={() => handleOfferClick(offer)}
-                  >
-                    {offer}
-                  </button>
-                </li>
-              ))}
-            </div>
           </>
         )}
       </ul>
