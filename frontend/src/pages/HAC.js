@@ -154,19 +154,19 @@ const About = () => {
       <h2>
         <strong>Check-in/Check-out</strong>
       </h2>
-      <p>After 3:00 PM , Before 12:00 PM.</p>
+      <div className="event-item">After 3:00 PM , Before 12:00 PM.</div>
       <h2>
         <strong>Pets</strong>
       </h2>
-      <p>Only assistance animals allowed.</p>
+      <div className="event-item">Only assistance animals allowed.</div>
       <h2>
         <strong>Fitness Center</strong>
       </h2>
-      <p>Exclusive for VIP guests.</p>
+      <div className="event-item">Exclusive for VIP guests.</div>
       <h2>
         <strong>Wi-Fi</strong>
       </h2>
-      <p>Complimentary for all guests.</p>
+      <div className="event-item">Complimentary for all guests.</div>
     </div>
   );
 };
@@ -350,10 +350,7 @@ const ContactUs = () => {
       <div className="key-persons">
         <h3>Examples</h3>
         <ul>
-          <li className="key-person">
-            Name: <strong>Khaled Xo</strong> - CEO
-          </li>
-          <li className="key-person">Email: kal.xo@example.com</li>
+          
           <li className="key-person">
             Name: <strong>Maya Xin</strong> - Manager
           </li>

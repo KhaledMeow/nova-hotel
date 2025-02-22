@@ -14,7 +14,7 @@
 
 }
 .event-item {
-
+    font-size: 1.3rem;
     text-align: center; 
     margin: 2rem 0;
   }
@@ -121,11 +121,12 @@ body {
     transition: 0.9s;
     background-color: transparent;
     border-radius: 50px;
+    transform: scale(2.0);
 }
 
 .vip-link:hover {
     color: var(--text);
-    transform: scale(1.5);
+    transform: scale(2.25);
     background-color: transparent;
 }
 
