@@ -1,6 +1,6 @@
 import React from "react";
-import CalendarComponent from "./CalendarComponent"; // Assuming this is the calendar
-import RoomList from "./RoomList"; // Adjusted to use relative path
+import CalendarComponent from "./CalendarComponent"; 
+import RoomList from "./RoomList"; 
 
 const CheckAvailability = () => {
   return (
