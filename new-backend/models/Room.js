@@ -41,8 +41,8 @@ const roomSchema = new mongoose.Schema({
     min: [0, 'Price cannot be negative']
   },
   booked_dates: [{
-    start: Date,
-    end: Date
+    startDate: Date,
+    endDate: Date
   }]
 }, { timestamps: true });
 

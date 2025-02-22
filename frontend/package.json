@@ -2,8 +2,9 @@
   "name": "frontend",
   "version": "1.0.0",
   "private": true,
+  "proxy": "http://localhost:5432",
   "scripts": {
-    "start": "react-app-rewired start",
+    "start": "HTTPS=true react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject"
@@ -24,6 +25,7 @@
     "concurrently": "^9.0.1",
     "react-app-rewired": "^2.2.1"
   },
+  
   "browserslist": {
     "production": [
       ">0.2%",

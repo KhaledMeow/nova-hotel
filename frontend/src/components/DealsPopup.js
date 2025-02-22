@@ -41,7 +41,7 @@ const DealsPopup = ({ onClose }) => {
 
   const handleDealsClick = () => {
     if (!isDragging) {
-      navigate('/Room-List');
+      navigate('/Calendar');
       onClose();
     }
   };

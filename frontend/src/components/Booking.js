@@ -130,16 +130,29 @@ const Booking = () => {
 
     const submissionData = {
       ...formData,
-      num_of_people: numOfPeople
+      num_guests: numOfPeople
     };
 
     try {
-      // Store the booking data and show payment form
-      setBookingData(submissionData);
+      const response = await fetch('/api/v1/bookings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({
+          roomId: room._id,
+          check_in_date: formData.check_in_date,
+          check_out_date: formData.check_out_date,
+          num_guests: formData.num_of_people
+        })
+      });
+      if (!response.ok) throw new Error('Booking failed');
+      const booking = await response.json();
+      setBookingData(booking); // Use server-generated booking
       setShowPayment(true);
     } catch (error) {
-      console.error("Booking submission error:", error);
-      alert("Network error. Please try again.");
+      alert(error.message);
     }
   };
 
