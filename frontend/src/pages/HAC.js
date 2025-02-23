@@ -252,29 +252,30 @@ const ContactUs = () => {
           message: formData.message
         }),
       });
-
+  
       const data = await response.json();
-
+  
       if (!response.ok) {
         // Handle backend validation errors
         if (data.errors) {
           const backendErrors = Object.entries(data.errors).reduce((acc, [key, value]) => ({
             ...acc,
-            [key]: typeof value === 'string' ? value : value.message
+            [key]: value
           }), {});
           setErrors(backendErrors);
-          throw new Error("Validation errors occurred");
+          return;  // Critical fix - exit after setting errors
         }
         throw new Error(data.error || "Submission failed");
       }
-
+  
       // Success handling
       alert("Complaint submitted successfully!");
       setFormData({ name: "", email: "", message: "" });
       setErrors({});
-
+  
     } catch (error) {
       console.error("Submission Error:", error);
+      // Only show alert for non-validation errors
       if (!error.message.includes("Validation")) {
         alert(error.message || "An unexpected error occurred");
       }
