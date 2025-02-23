@@ -62,6 +62,12 @@ const Booking = () => {
     num_of_people: "",
   });
 
+  useEffect(() => {  if (!location.state?.room?._id) {
+    alert("Invalid room selection");
+    navigate("/room-list");
+  }
+}, [location.state, navigate]);
+
   useEffect(() => {
     if (!room.type) {
       alert("Please select a room first.");
@@ -148,9 +154,10 @@ const Booking = () => {
         },
         body: JSON.stringify({
           roomId: room._id,
-          check_in_date: formData.check_in_date,
-          check_out_date: formData.check_out_date,
-          num_guests: formData.num_of_people
+          check_in_date: new Date(formData.check_in_date).toISOString(), // Proper date formatting
+          check_out_date: new Date(formData.check_out_date).toISOString(),
+          num_guests: parseInt(formData.num_of_people), // Ensure numeric type
+          special_requests: formData.special_requests // Add missing field
         })
       });
       if (!response.ok){

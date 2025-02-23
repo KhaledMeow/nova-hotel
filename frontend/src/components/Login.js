@@ -54,7 +54,7 @@ const Login = () => {
   return (
     <div className="login-container">
       <form onSubmit={handleSubmit} className="login-form">
-        <h2 className="login-title">Guest Login</h2>
+        <h2 className="login-title">Login</h2>
         
         {errors.general && (
           <div className="login-error-general">{errors.general}</div>

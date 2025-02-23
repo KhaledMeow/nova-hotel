@@ -6,37 +6,49 @@ const bcrypt = require('bcryptjs');
 exports.register = async (req, res) => {
   try {
     const { email, password, first_name, last_name, phone } = req.body;
-    
-    // Check if user exists
+
+    // Add validation for required fields
+    if (!email || !password || !first_name || !last_name) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+
     const exists = await User.findOne({ email });
     if (exists) return res.status(400).json({ error: 'Email already registered' });
 
-    // Get default role
-    const defaultRole = await Role.findOne({ name: 'guest' });
-    if (!defaultRole) return res.status(500).json({ error: 'Default role not configured' });
+    // Auto-create guest role if missing
+    let defaultRole = await Role.findOne({ name: 'guest' });
+    if (!defaultRole) {
+      defaultRole = await Role.create({
+        name: 'guest',
+        permissions: ['create_booking']
+      });
+    }
 
-    // Create user
-    const user = await User.create({ 
+    // Let Mongoose handle password hashing
+    const user = await User.create({
       email,
-      password: await bcrypt.hash(password, 16),
+      password, // Plain text - will be hashed by pre-save hook
       first_name,
       last_name,
       phone,
       role: defaultRole._id
     });
 
-    // Generate and store token
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
     user.tokens.push(token);
     await user.save();
 
-    res.status(201).json({ 
+    res.status(201).json({
       user: user.toJSON(),
-      token 
+      token
     });
 
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    console.error('Registration Error:', error);
+    res.status(400).json({
+      error: 'Registration failed',
+      systemError: process.env.NODE_ENV === 'development' ? error.message : null
+    });
   }
 };
 
@@ -77,5 +89,23 @@ exports.logout = async (req, res) => {
     res.json({ message: 'Logged out successfully' });
   } catch (error) {
     res.status(500).json({ error: 'Logout failed' });
+  }
+};
+
+exports.getCurrentUser = async (req, res) => {
+  try {
+    // User is already attached to req by your auth middleware
+    const user = await User.findById(req.user._id)
+      .select('-password -tokens')
+      .lean();
+
+    res.json({
+      ...user,
+      // If you need role details
+      role: await Role.findById(user.role).select('name permissions')
+    });
+    
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch user data' });
   }
 };

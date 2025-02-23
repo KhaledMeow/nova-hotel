@@ -117,9 +117,12 @@ const rooms = [
 
 const RoomList = () => {
   const navigate = useNavigate();
+  
 
   const handleBookNowClick = (room) => {
-    navigate("/Confirm-details", { state: { room } });
+    navigate("/Confirm-details", { state: {
+      selectedRoom: room
+    } });
   };
 
   return (

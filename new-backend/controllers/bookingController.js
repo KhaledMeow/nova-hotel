@@ -7,7 +7,8 @@ exports.createBooking = async (req, res) => {
   session.startTransaction();
 
   try {
-    const { roomId, check_in_date, check_out_date, num_guests } = req.body;
+    console.log('Received booking request:', req.body);
+       const { roomId, check_in_date, check_out_date, num_guests } = req.body;
 
     if (!roomId || !check_in_date || !check_out_date || !num_guests) {
       throw new Error('Missing required booking fields');

@@ -11,12 +11,54 @@ const navVariants = {
 };
 
 const Header = () => {
+  const [userData, setUserData] = useState(null);
+  const [loadingUser, setLoadingUser] = useState(true);
   const [scrollingDown, setScrollingDown] = useState(false);
   const [headerClass, setHeaderClass] = useState("");
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const [currentOffer, setCurrentOffer] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token || !isLoggedIn) {
+          setUserData(null);
+          return;
+        }
+
+        const response = await fetch('/api/v1/auth/me', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch user data');
+        }
+
+        const data = await response.json();
+        setUserData(data);
+      } catch (error) {
+        console.error('User data fetch error:', error);
+        // Auto-logout if invalid token
+        if (error.message.includes('401')) {
+          handleLogout();
+        }
+      } finally {
+        setLoadingUser(false);
+      }
+    };
+
+    if (isLoggedIn) {
+      fetchUserData();
+    } else {
+      setUserData(null);
+      setLoadingUser(false);
+    }
+  }, [isLoggedIn]);
 
   // Check login status on mount
   useEffect(() => {
@@ -69,7 +111,7 @@ const Header = () => {
     >
       <img src={logo} alt="Hotel Logo" className="header-logo" />
 
-      <Link to="/Calendar" className="availability-button">
+      <Link to="/room-list" className="availability-button">
         Check Availability
       </Link>
 
@@ -81,6 +123,11 @@ const Header = () => {
         {isOpen && (
           <>
             <img src={logo} alt="Hotel Logo" className="menu-logo" />
+            {isLoggedIn && userData && (
+              <div className="user-greeting-menu">
+                Welcome back, {userData.first_name} {userData.last_name}
+              </div>
+            )}
             {navItems.map((item) => (
               <li key={item.name}>
                 {item.name === 'Logout' ? (
@@ -90,6 +137,7 @@ const Header = () => {
                   >
                     <span>{item.name}</span>
                   </button>
+                  
                 ) : (
                   <Link
                     to={item.path}
@@ -113,6 +161,7 @@ const Header = () => {
           onClose={() => setCurrentOffer(null)}
         />
       )}
+
     </motion.nav>
   );
 };
