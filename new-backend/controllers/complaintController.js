@@ -3,15 +3,36 @@ const Complaint = require('../models/Complaint');
 exports.createComplaint = async (req, res) => {
   try {
     const complaint = await Complaint.create({
-      user: req.user.userId,
-      ...req.body
+      user: req.user._id,
+      name: req.body.name,
+      email: req.body.email,
+      message: req.body.message
     });
+
     res.status(201).json(complaint);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    let errors = {};
+    
+    // Handle Mongoose validation errors
+    if (error.name === 'ValidationError') {
+      Object.keys(error.errors).forEach((key) => {
+        errors[key] = error.errors[key].message;
+      });
+      return res.status(400).json({ errors });
+    }
+
+    // Handle other errors
+    const response = {
+      error: error.message,
+      ...(process.env.NODE_ENV === 'development' && { 
+        stack: error.stack,
+        fullError: error 
+      })
+    };
+    
+    res.status(400).json(response);
   }
 };
-
 exports.getComplaints = async (req, res) => {
   try {
     const complaints = await Complaint.find()

@@ -32,7 +32,7 @@ const ComplaintPage = () => {
           return;
         }
 
-        const response = await fetch("http://localhost:5432/api/v1/bookings", {
+        const response = await fetch("http://localhost:5000/api/v1/bookings", {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -99,7 +99,7 @@ const ComplaintPage = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:5432/api/v1/complaints", {
+      const response = await fetch("http://localhost:5000/api/v1/complaints", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

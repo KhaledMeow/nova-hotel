@@ -183,17 +183,23 @@ const ContactUs = () => {
     email: "",
     message: "",
   });
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submissionError, setSubmissionError] = useState("");
   const validateForm = (name, value) => {
     switch (name) {
       case "name":
-        return value.trim() === "" ? "Name is required" : "";
+        if (value.trim() === "") return "Name is required";
+        if (value.length > 50) return "Max 50 characters";
+        return "";
       case "email":
         if (value.trim() === "") return "Email is required";
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return !emailRegex.test(value) ? "Invalid email address" : "";
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return "Invalid email address";
+        return "";
       case "message":
-        return value.trim() === "" ? "Message is required" : "";
+        if (value.trim() === "") return "Message is required";
+        if (value.length < 20) return "Minimum 20 characters";
+        if (value.length > 500) return "Maximum 500 characters";
+        return "";
       default:
         return "";
     }
@@ -218,63 +224,62 @@ const ContactUs = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    setSubmissionError("");
 
-    // Validate all fields
-    const newErrors = {};
-    Object.keys(formData).forEach((key) => {
-      const errorMessage = validateForm(key, formData[key]);
-      if (errorMessage) {
-        newErrors[key] = errorMessage;
-      }
-    });
+    // Frontend validation
+    const newErrors = Object.keys(formData).reduce((acc, key) => {
+      acc[key] = validateForm(key, formData[key]);
+      return acc;
+    }, {});
 
-    // Update errors
-    setErrors(newErrors);
-
-    // Check if form is valid
-    if (Object.values(newErrors).some((error) => error !== "")) {
-      alert("Please correct the errors before submitting");
+    if (Object.values(newErrors).some(error => error)) {
+      setErrors(newErrors);
+      setIsSubmitting(false);
       return;
     }
 
     try {
-      const response = await fetch("http://localhost:5432/api/v1/complaints", {
+      const response = await fetch("http://localhost:5000/api/v1/complaints", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem('token')}`
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          message: formData.message
+        }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        // Handle validation errors from backend
+        // Handle backend validation errors
         if (data.errors) {
-          setErrors(data.errors);
-          alert(Object.values(data.errors).join(", "));
-          return;
+          const backendErrors = Object.entries(data.errors).reduce((acc, [key, value]) => ({
+            ...acc,
+            [key]: typeof value === 'string' ? value : value.message
+          }), {});
+          setErrors(backendErrors);
+          throw new Error("Validation errors occurred");
         }
-        throw new Error(data.message || "Failed to send message");
+        throw new Error(data.error || "Submission failed");
       }
 
-      // Success
-      alert("Complaint Submitted: Thank you for your message. We will get back to you soon!");
+      // Success handling
+      alert("Complaint submitted successfully!");
+      setFormData({ name: "", email: "", message: "" });
+      setErrors({});
 
-      // Reset form
-      setFormData({
-        name: "",
-        email: "",
-        message: "",
-      });
-      setErrors({
-        name: "",
-        email: "",
-        message: "",
-      });
     } catch (error) {
-      console.error("Error submitting form:", error);
-      alert(error.message || "Failed to send message. Please try again.");
+      console.error("Submission Error:", error);
+      if (!error.message.includes("Validation")) {
+        alert(error.message || "An unexpected error occurred");
+      }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -341,18 +346,17 @@ const ContactUs = () => {
             {errors.message && <span className="error-message">{errors.message}</span>}
           </div>
 
-          <button type="submit" className="submit-button">
-            Submit 
+          <button type="submit" className="submit-button" disabled={isSubmitting}>
+            {isSubmitting ? <div className="loading-indicator"><span className="spinner"></span> Submitting</div> : "Submit"}
           </button>
         </form>
       </div>
 
       <div className="key-persons">
-        <h3>Examples</h3>
+        <h3>Example</h3>
         <ul>
-          
           <li className="key-person">
-            Name: <strong>Maya Xin</strong> - Manager
+            Name: <strong>Maya Xin</strong>
           </li>
           <li className="key-person">Email: maya.xin@example.com</li>
         </ul>
