@@ -67,7 +67,7 @@ const SpecialOfferPopup = ({ offer, onClose }) => {
         
         <div className="price-section">
           <p className="price">{currentOffer.price}</p>
-          <button className="book-now-button" onClick={() => window.location.href = '/Calendar'}>
+          <button className="book-now-button" onClick={() => window.location.href = '/room-list'}>
             Book Now
           </button>
         </div>

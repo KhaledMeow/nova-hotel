@@ -62,18 +62,19 @@ const Booking = () => {
     num_of_people: "",
   });
 
-  useEffect(() => {  if (!location.state?.room?._id) {
-    alert("Invalid room selection");
-    navigate("/room-list");
-  }
-}, [location.state, navigate]);
+  // useEffect(() => {  
+  //   if (!location.state?.room?._id) {  
+  //     alert("Invalid room selection");  
+  //     navigate("/room-list");  
+  //   }  
+  // }, [location.state, navigate]);
 
-  useEffect(() => {
-    if (!room.type) {
-      alert("Please select a room first.");
-      navigate("/room-list");
-    }
-  }, [room.type, navigate]);
+  //useEffect(() => {
+  //  if (!room.type) {
+  //    alert("Please select a room first.");
+  //    navigate("/room-list");
+  //  }
+  //}, [room.type, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -141,9 +142,13 @@ const Booking = () => {
     }
     
     const submissionData = {
-      ...formData,
-      num_guests: numOfPeople
+      roomId: room._id, // Ensure room ID is included
+      check_in_date: new Date(formData.check_in_date).toISOString(),
+      check_out_date: new Date(formData.check_out_date).toISOString(),
+      num_guests: parseInt(formData.num_of_people),
+      special_requests: formData.special_requests // Include if needed
     };
+    console.log('Booking data:', submissionData);
 
     try {
       const response = await fetch('/api/v1/bookings', {
@@ -152,13 +157,7 @@ const Booking = () => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
-        body: JSON.stringify({
-          roomId: room._id,
-          check_in_date: new Date(formData.check_in_date).toISOString(), // Proper date formatting
-          check_out_date: new Date(formData.check_out_date).toISOString(),
-          num_guests: parseInt(formData.num_of_people), // Ensure numeric type
-          special_requests: formData.special_requests // Add missing field
-        })
+        body: JSON.stringify(submissionData)
       });
       if (!response.ok){
         if (response.status === 401) {
