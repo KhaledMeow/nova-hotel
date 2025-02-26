@@ -8,7 +8,7 @@ exports.createBooking = async (req, res) => {
   session.startTransaction();
 
   try {
-    const { roomId, check_in_date, check_out_date, num_guests } = req.body;
+    const { room, check_in_date, check_out_date, num_guests } = req.body;
     const startDate = new Date(check_in_date);
     const endDate = new Date(check_out_date);
 
@@ -16,7 +16,7 @@ exports.createBooking = async (req, res) => {
     if (isNaN(startDate)) throw new Error('Invalid check-in date');
     if (isNaN(endDate)) throw new Error('Invalid check-out date');
 
-    const roomData = await Room.findById(ObjectId(roomId)).session(session);
+    const roomData = await Room.findById(ObjectId(room)).session(session);
     const isAvailable = roomData.booked_dates.every(booking => 
       endDate <= booking.startDate || 
       startDate >= booking.endDate
@@ -26,7 +26,7 @@ exports.createBooking = async (req, res) => {
 
     const [booking] = await Booking.create([{
       user: req.user._id,
-      room: roomId,
+      room,
       check_in_date: startDate,
       check_out_date: endDate,
       num_guests,
@@ -34,7 +34,7 @@ exports.createBooking = async (req, res) => {
     }], { session });
 
     await Room.findByIdAndUpdate(
-      ObjectId(roomId),
+      ObjectId(room),
       { $push: { booked_dates: { startDate, endDate } } },
       { session }
     );
@@ -53,7 +53,7 @@ exports.createBooking = async (req, res) => {
 };
 exports.getUserBookings = async (req, res) => {
   try {
-    const bookings = await Booking.find({ user: req.user.userId })
+    const bookings = await Booking.find({ user: req.user._id })
       .populate('room', 'roomType price');
     res.json(bookings);
   } catch (error) {
@@ -76,9 +76,9 @@ exports.cancelBooking = async (req, res) => {
     // 2. Remove from room bookings
     await Room.findByIdAndUpdate(
       ObjectId(booking.room),
-      { $pull: { bookedDates: { 
-        startDate: booking.check_in_date,
-        endDate: booking.check_out_date
+      { $pull: { booked_dates: { 
+        startDate: Date,
+        endDate: Date
       }}},
       { session }
     );

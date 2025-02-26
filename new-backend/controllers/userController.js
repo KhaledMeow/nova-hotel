@@ -2,7 +2,7 @@ const User = require('../models/User');
 
 exports.getUserProfile = async (req, res) => {
   try {
-    const user = await User.findById(req.user.userId)
+    const user = await User.findById(req.user._id)
       .select('-password');
     res.json(user);
   } catch (error) {
@@ -13,7 +13,7 @@ exports.getUserProfile = async (req, res) => {
 exports.updateProfile = async (req, res) => {
   try {
     const user = await User.findByIdAndUpdate(
-      req.user.userId,
+      req.user._id,
       req.body,
       { new: true, runValidators: true }
     ).select('-password');
