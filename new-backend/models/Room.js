@@ -43,7 +43,11 @@ const roomSchema = new mongoose.Schema({
   booked_dates: [{
     startDate: Date,
     endDate: Date
-  }]
+  }],
+  _id: { // Add this explicit _id definition
+    type: mongoose.Schema.Types.ObjectId,
+    auto: true // Let MongoDB generate the ID
+  }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Room', roomSchema);

@@ -190,7 +190,7 @@ const CalendarComponent = () => {
       const firstDay = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
       const lastDay = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0);
       
-      const response = await axios.get(`http://localhost:5000/api/availability?startDate=${firstDay.toISOString()}&endDate=${lastDay.toISOString()}`);
+      const response = await axios.get(`http://localhost:5000/api/v1/availability?startDate=${firstDay.toISOString()}&endDate=${lastDay.toISOString()}`);
       setAvailability(response.data);
     } catch (error) {
       console.error('Error fetching availability:', error);

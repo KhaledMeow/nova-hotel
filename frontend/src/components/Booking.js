@@ -62,19 +62,24 @@ const Booking = () => {
     num_of_people: "",
   });
 
-  // useEffect(() => {  
-  //   if (!location.state?.room?._id) {  
-  //     alert("Invalid room selection");  
-  //     navigate("/room-list");  
-  //   }  
-  // }, [location.state, navigate]);
+  useEffect(() => {  
+    if (!location.state?.room?._id) {  
+      alert("Invalid room selection");  
+      navigate("/room-list");  
+    }  else {
+      setFormData(prev => ({
+        ...prev,
+        room_type: location.state.room.type
+      }));
+    }
+  }, [location.state, navigate]);
 
-  //useEffect(() => {
-  //  if (!room.type) {
-  //    alert("Please select a room first.");
-  //    navigate("/room-list");
-  //  }
-  //}, [room.type, navigate]);
+  useEffect(() => {
+    if (!room.type) {
+      alert("Please select a room first.");
+      navigate("/room-list");
+    }
+  }, [room.type, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -142,11 +147,12 @@ const Booking = () => {
     }
     
     const submissionData = {
-      roomId: room._id, // Ensure room ID is included
+      roomId: room._id,
       check_in_date: new Date(formData.check_in_date).toISOString(),
       check_out_date: new Date(formData.check_out_date).toISOString(),
       num_guests: parseInt(formData.num_of_people),
-      special_requests: formData.special_requests // Include if needed
+      special_requests: formData.special_requests
+
     };
     console.log('Booking data:', submissionData);
 

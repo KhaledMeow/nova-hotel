@@ -1,57 +1,56 @@
 const Booking = require('../models/Booking');
 const Room = require('../models/Room');
 const mongoose = require('mongoose');
+const { ObjectId } = require('mongoose');
 
 exports.createBooking = async (req, res) => {
   const session = await mongoose.startSession();
   session.startTransaction();
 
   try {
-    console.log('Received booking request:', req.body);
-       const { roomId, check_in_date, check_out_date, num_guests } = req.body;
+    const { roomId, check_in_date, check_out_date, num_guests } = req.body;
+    const startDate = new Date(check_in_date);
+    const endDate = new Date(check_out_date);
 
-    if (!roomId || !check_in_date || !check_out_date || !num_guests) {
-      throw new Error('Missing required booking fields');
-    }
+    // Validate date objects
+    if (isNaN(startDate)) throw new Error('Invalid check-in date');
+    if (isNaN(endDate)) throw new Error('Invalid check-out date');
 
-    // 1. Check room availability
-    const room = await Room.findById(roomId).session(session);
-    const isAvailable = !room.bookedDates.some(booking => 
-      new Date(check_out_date) > booking.startDate && 
-      new Date(check_in_date) < booking.endDate
+    const room = await Room.findById(ObjectId(roomId)).session(session);
+    const isAvailable = room.booked_dates.every(booking => 
+      endDate <= booking.startDate || 
+      startDate >= booking.endDate
     );
 
     if (!isAvailable) throw new Error('Room not available');
 
-    // 2. Create booking
-    const booking = await Booking.create([{
-      user: req.user.userId,
+    const [booking] = await Booking.create([{
+      user: req.user._id,
       room: roomId,
-      check_in_date,
-      check_out_date,
+      check_in_date: startDate,
+      check_out_date: endDate,
+      num_guests,
       status: 'confirmed'
     }], { session });
 
-    // 3. Update room
-    room.bookedDates.push({ 
-      startDate: check_in_date, 
-      endDate: check_out_date 
-    });
-    await room.save({ session });
+    await Room.findByIdAndUpdate(
+      ObjectId(roomId),
+      { $push: { booked_dates: { startDate, endDate } } },
+      { session }
+    );
 
     await session.commitTransaction();
-    res.status(201).json(booking[0]);
+    res.status(201).json(booking);
   } catch (error) {
     await session.abortTransaction();
     res.status(400).json({ 
       error: error.message,
-      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
-     });
+      ...(process.env.NODE_ENV === 'development' && { stack: error.stack })
+    });
   } finally {
     session.endSession();
   }
 };
-
 exports.getUserBookings = async (req, res) => {
   try {
     const bookings = await Booking.find({ user: req.user.userId })
@@ -76,7 +75,7 @@ exports.cancelBooking = async (req, res) => {
 
     // 2. Remove from room bookings
     await Room.findByIdAndUpdate(
-      booking.room,
+      ObjectId(booking.room),
       { $pull: { bookedDates: { 
         startDate: booking.check_in_date,
         endDate: booking.check_out_date
