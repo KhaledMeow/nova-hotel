@@ -147,7 +147,7 @@ const Booking = () => {
     }
     
     const submissionData = {
-      roomId: room._id,
+      room: room._id,
       check_in_date: new Date(formData.check_in_date).toISOString(),
       check_out_date: new Date(formData.check_out_date).toISOString(),
       num_guests: parseInt(formData.num_of_people),

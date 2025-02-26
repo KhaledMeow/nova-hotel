@@ -11,25 +11,12 @@ const bookingSchema = new mongoose.Schema({
     ref: 'Room',
     required: [true, 'Room reference is required']
   },
-  check_in_date: {
-    type: Date,
-    required: [true, 'Check-in date is required']
-  },
-  check_out_date: {
-    type: Date,
-    required: [true, 'Check-out date is required']
-  },
-  status: {
-    type: String,
-    enum: ['pending', 'confirmed', 'cancelled'],
-    default: 'pending'
-  },
-  num_guests: {
-    type: Number,
-    required: [true, 'Number of guests is required'],
-    min: [1, 'At least 1 guest required']
-  },
-  special_requests: String
+  check_in_date: Date,
+  check_out_date: Date,
+  num_guests: Number,
+  special_requests: String,
+
+  
 }, { timestamps: true });
 
 module.exports = mongoose.models.Booking || mongoose.model('Booking', bookingSchema);

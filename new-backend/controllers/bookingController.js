@@ -16,8 +16,8 @@ exports.createBooking = async (req, res) => {
     if (isNaN(startDate)) throw new Error('Invalid check-in date');
     if (isNaN(endDate)) throw new Error('Invalid check-out date');
 
-    const room = await Room.findById(ObjectId(roomId)).session(session);
-    const isAvailable = room.booked_dates.every(booking => 
+    const roomData = await Room.findById(ObjectId(roomId)).session(session);
+    const isAvailable = roomData.booked_dates.every(booking => 
       endDate <= booking.startDate || 
       startDate >= booking.endDate
     );
