@@ -28,7 +28,7 @@ const PaymentForm = ({
   const totalPrice =(room.price * nights).toFixed(2);
 
   useEffect(() => {
-    console.log('Room:', room);
+    console.log('Room:', room._id);
     console.log('Room Price:', room.price);
     console.log('Room Price Type:', typeof room.price);
     console.log('Nights:', nights);

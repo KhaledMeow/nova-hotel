@@ -2,7 +2,7 @@ const Room = require('../models/Room');
 
 exports.getAllRooms = async (req, res) => {
   try {
-    const rooms = await Room.find().select('-bookedDates');
+    const rooms = await Room.find().select('-booked_dates');
     res.json(rooms);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -14,7 +14,7 @@ exports.getRoomAvailability = async (req, res) => {
     const { startDate, endDate } = req.query;
     
     const rooms = await Room.find({
-      bookedDates: {
+      booked_dates: {
         $not: {
           $elemMatch: {
             startDate: { $lt: new Date(endDate) },

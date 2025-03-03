@@ -7,10 +7,10 @@ const Room = require('../models/Room');
 // Middleware to validate booking dates and availability
 const validateBooking = async (req, res, next) => {
   try {
-    const { roomId, check_in_date, check_out_date } = req.body;
+    const { room, check_in_date, check_out_date } = req.body;
     
     // Validate required fields
-    if (!roomId || !check_in_date || !check_out_date) {
+    if (!room || !check_in_date || !check_out_date) {
       return res.status(400).json({ error: 'Missing required booking fields' });
     }
 
@@ -24,8 +24,8 @@ const validateBooking = async (req, res, next) => {
     }
 
     // Find the room
-    const room = await Room.findById(roomId);
-    if (!room) {
+    const roomDoc = await Room.findById(room);
+    if (!roomDoc) {
       return res.status(404).json({ error: 'Room not found' });
     }
 
