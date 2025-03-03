@@ -40,13 +40,16 @@ const roomSchema = new mongoose.Schema({
     required: [true, 'Price is required'],
     min: [0, 'Price cannot be negative']
   },
-  booked_dates: [{
-    startDate: Date,
-    endDate: Date
-  }],
-  _id: { // Add this explicit _id definition
+  booked_dates: {
+    type: [{
+      startDate: Date,
+      endDate: Date
+    }],
+    default: []
+  },
+  _id: {
     type: mongoose.Schema.Types.ObjectId,
-    auto: true // Let MongoDB generate the ID
+    auto: true
   }
 }, { timestamps: true });
 

@@ -309,7 +309,7 @@ const Booking = () => {
                 onChange={handleChange}
                 required
                 min="1"
-                max="4"
+                max="6"
                 placeholder="Number of Guests"
               />
               {errors.num_of_people && <p style={{color: 'red'}}>{errors.num_of_people}</p>}
