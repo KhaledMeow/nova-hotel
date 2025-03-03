@@ -149,7 +149,6 @@ const PaymentForm = ({
     ];
     return scenarios[Math.floor(Math.random() * scenarios.length)];
   };
-
   if (paymentSuccess) {
     return (
       <div className="payment-success">
