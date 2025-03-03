@@ -6,6 +6,7 @@ const PaymentForm = ({
   room, 
   checkInDate, 
   checkOutDate, 
+  bookingData, 
   onSuccess, 
   onError 
 }) => {
@@ -25,16 +26,26 @@ const PaymentForm = ({
   };
 
     const nights = calculateNights();
-  const totalPrice =(room.price * nights).toFixed(2);
+  const totalPrice =Number((room.price * nights).toFixed(2));
 
   useEffect(() => {
     console.log('Room:', room._id);
     console.log('Room Price:', room.price);
     console.log('Room Price Type:', typeof room.price);
     console.log('Nights:', nights);
-    console.log('Total Price:', Number(room.price) * nights);
+    console.log('Total Price:', totalPrice);
   }, [room, nights]);
-
+  useEffect(() => {
+    if (isNaN(totalPrice)) {
+      console.error('Invalid price calculation:', {
+        roomPrice: room.price,
+        nights,
+        roomPriceType: typeof room.price
+      });
+      alert('Invalid room price configuration');
+      navigate('/');
+    }
+  }, [totalPrice]);
   const [cardNumber, setCardNumber] = useState('');
   const [expiryDate, setExpiryDate] = useState('');
   const [cvv, setCvv] = useState('');
@@ -104,7 +115,8 @@ const PaymentForm = ({
           },
           body: JSON.stringify({
             bookingId: bookingData._id,
-            method: 'mock'
+            amount: totalPrice,
+            method: 'credit_card'
           })
         });
   
@@ -278,7 +290,7 @@ const PaymentForm = ({
         disabled={processing}
         className="payment-button"
       >
-        {processing ? 'Processing...' : 'Pay $' + Math.floor(room.price.replace(/\$/g, '')*nights) }
+        {processing ? 'Processing...' : `Pay $${Math.floor(room.price.toString().replace(/\$/g, '')*nights)}`}
       </button>
     </form>
   );

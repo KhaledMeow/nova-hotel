@@ -103,10 +103,12 @@ const CalendarComponent = () => {
 
       // Redirect to the RoomList page
       setTimeout(() => {
+        const isoStart = startDate.toISOString().split('T')[0];
+        const isoEnd = endDate.toISOString().split('T')[0];
         navigate("/room-list", { 
           state: { 
-            checkInDate: startDate.toISOString().split('T')[0], 
-            checkOutDate: date.toISOString().split('T')[0] 
+            checkInDate: isoStart, 
+            checkOutDate: isoEnd 
           } 
         });
       }, 500);

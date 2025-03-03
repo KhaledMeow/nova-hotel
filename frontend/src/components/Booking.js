@@ -351,6 +351,7 @@ const Booking = () => {
             room={room}
             checkInDate={formData.check_in_date}
             checkOutDate={formData.check_out_date}
+            bookingData={bookingData}
             onSuccess={handlePaymentSuccess}
             onError={handlePaymentError}
           />

@@ -19,13 +19,12 @@ exports.createPayment = async (req, res) => {
     const payment = await Payment.create({
       booking: bookingId,
       user: req.user.id,
-      amount,
-      method,
-      status: 'completed' // Mock payment completion
+      amount: req.body.amount,
+      method: req.body.method,
     });
 
     // Update booking status
-    await Booking.findByIdAndUpdate(bookingId, { status: 'confirmed' });
+    await Booking.findByIdAndUpdate(req.body.bookingId, { status: 'confirmed' });
 
     res.status(201).json(payment);
   } catch (error) {

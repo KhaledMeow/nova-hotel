@@ -3,66 +3,47 @@ const Room = require('../models/Room');
 const mongoose = require('mongoose');
 
 exports.createBooking = async (req, res) => {
-  const session = await mongoose.startSession();
-  session.startTransaction();
-
   try {
     const roomDoc = req.room;
     const { check_in_date, check_out_date, num_guests } = req.body;
     
-    const startDate = new Date(check_in_date);
-    const endDate = new Date(check_out_date);
-
-    // Validate dates
-    if (isNaN(startDate.getTime())) throw new Error('Invalid check-in date');
-    if (isNaN(endDate.getTime())) throw new Error('Invalid check-out date');
-
-    // Ensure booked_dates exists
-    if (!roomDoc.booked_dates) {
-      roomDoc.booked_dates = [];
-      await roomDoc.save({ session });
-    }
-
-    const isAvailable = roomDoc.booked_dates.every(booking => 
-      endDate <= booking.startDate || 
-      startDate >= booking.endDate
+    // 1. Update room availability FIRST
+    const updatedRoom = await Room.findByIdAndUpdate(
+      roomDoc._id,
+      { 
+        $push: { 
+          booked_dates: {
+            startDate: new Date(check_in_date),
+            endDate: new Date(check_out_date)
+          }
+        }
+      },
+      { new: true }
     );
+    // In bookingController.js
+    const checkIn = new Date(req.body.check_in_date + "T00:00:00Z"); // UTC
+    const checkOut = new Date(req.body.check_out_date + "T23:59:59Z");
+    if (!updatedRoom) throw new Error("Failed to update room availability");
 
-    if (!isAvailable) throw new Error('Room not available');
-
-    const booking = await Booking.create([{
+    // 2. Create booking AFTER successful room update
+    const booking = await Booking.create({
       user: req.user._id,
       room: roomDoc._id,
-      check_in_date: startDate,
-      check_out_date: endDate,
+      check_in_date: new Date(check_in_date),
+      check_out_date: new Date(check_out_date),
       num_guests,
       status: 'confirmed'
-    }], { session });
+    });
 
-    await Room.findByIdAndUpdate(
-      roomDoc._id,
-      { $push: { 
-        booked_dates: {
-          startDate: startDate,
-          endDate: endDate
-        }
-      }},
-      { session }
-    );
-
-    await session.commitTransaction();
     res.status(201).json({
-      ...booking[0].toObject(),
+      ...booking.toObject(),
       message: "Booking successfully created"
     });
   } catch (error) {
-    await session.abortTransaction();
     res.status(400).json({ 
       error: error.message,
       ...(process.env.NODE_ENV === 'development' && { stack: error.stack })
     });
-  } finally {
-    session.endSession();
   }
 };
 

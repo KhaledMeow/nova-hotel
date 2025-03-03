@@ -18,8 +18,8 @@ const paymentSchema = new mongoose.Schema({
   },
   method: {
     type: String,
-    required: [true, 'Payment method is required'],
-    enum: ['credit_card', 'debit_card', 'cash', 'voucher']
+    enum: ['credit_card', 'debit_card', 'cash', 'voucher'],
+    required: [true, 'Payment method is required']
   },
   status: {
     type: String,

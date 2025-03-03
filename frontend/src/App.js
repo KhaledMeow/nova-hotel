@@ -42,6 +42,7 @@ const App = () => {
           <Route path="/calendar" element={<CalendarComponent />} />
           <Route path="/Room-List" element={<RoomList />} />
           <Route path="/Confirm-details" element={<Booking />} />
+          
         </Routes>
         <ChatBotComponent />
         {showDealsMessage && <DealsPopup onClose={() => setShowDealsMessage(false)} />}
