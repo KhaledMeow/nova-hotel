@@ -288,8 +288,12 @@ const PaymentForm = ({
         type="submit" 
         disabled={processing}
         className="payment-button"
+        onClick={() => {
+          onSuccess && onSuccess();
+          navigate('/', { replace: true });
+        }} 
       >
-        {processing ? 'Processing...' : `Pay $${Math.floor(room.price.toString().replace(/\$/g, '')*nights)}`}
+        {processing ? 'Processing...' : `Pay $${Math.floor(room.price.toString().replace(/\$/g, '')*nights)}`}        
       </button>
     </form>
   );
