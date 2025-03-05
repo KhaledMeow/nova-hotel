@@ -85,13 +85,23 @@ exports.handleChat = async (req, res) => {
                 2. For general questions:
                 - Keep answer under 1-2 sentences
                 - Never mention being AI unless directly asked
-                
+                # Hotel Basics section
+                - Parking: 
+                - 50 spaces ($15/night with in/out privileges)
+                - Oversized vehicles: $25/night
+                - Reservation required: Call +603-1234-5678
+                - Hours: 24/7 access
+                - Valet: Complimentary for Penthouse/VIP guests
 
+                // Add to # Response Rules
                 # Response Rules
                 1. Answer in 1-2 sentences MAX
                 2. Never mention being AI unless directly asked
                 3. Use hotel's exact address when directly asked
-                4. Mention current discounts when directly asked(⭐20% OFF)
+                4. For parking questions:
+                - Always mention fee and reservation requirement first
+                - Suggest valet for VIP guests
+                - Example: "Our parking fee is $15/night (24h access). Please call to reserve in advance as spaces are limited."
                 5. For unavailable services suggest:
                 "Please contact our Guest Relations team at +603-1234-5678"</s>
                 <|user|>
