@@ -13,6 +13,7 @@ const rateLimit = require('express-rate-limit');
 const errorHandler = require('./middleware/errorHandler');
 
 // Import route files
+const chatbotRoutes = require('./routes/chatbotRoutes');
 const authRoutes = require('./routes/authRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
 const complaintRoutes = require('./routes/complaintRoutes');
@@ -24,6 +25,13 @@ const adminRoutes = require('./routes/adminRoutes');
 // Initialize Express app
 const app = express();
 const server = http.createServer(app);
+
+const chatLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 50,
+  message: "Too many chat requests from this IP, please try again later"
+});
+app.use('/api/v1/chatbot', chatLimiter);
 
 // Configure Socket.io
 const io = socketIo(server, {
@@ -101,6 +109,7 @@ io.on('connection', (socket) => {
 });
 
 // API endpoints
+app.use('/api/v1/chatbot', chatbotRoutes);
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/bookings', bookingRoutes);
 app.use('/api/v1/complaints', complaintRoutes);

@@ -119,3 +119,44 @@
 .chatbot-send-button:hover {
     background-color: var(--text);
 }
+/* Add these to existing styles */
+.bot-message {
+    background-color: var(--background);
+    padding: 12px;
+    border-radius: 15px;
+    margin: 8px 0;
+    text-align: left;
+    max-width: 80%;
+    align-self: flex-start;
+}
+
+.user-message {
+    background-color: var(--primary);
+    color: #000;
+    padding: 12px;
+    border-radius: 15px;
+    margin: 8px 0;
+    text-align: right;
+    max-width: 80%;
+    align-self: flex-end;
+}
+
+.chatbot-messages {
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+}
+
+/* Add loading animation */
+@keyframes loadingDots {
+    0%, 20% { content: "•  "; }
+    40% { content: "• • "; }
+    60%, 100% { content: "• • •"; }
+}
+
+.bot-message:last-child:after {
+    content: "• • •";
+    animation: loadingDots 1.5s infinite;
+    display: inline-block;
+    width: 40px;
+}
