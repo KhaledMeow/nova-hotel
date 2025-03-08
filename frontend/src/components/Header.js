@@ -111,7 +111,7 @@ const Header = () => {
     >
       <img src={logo} alt="Hotel Logo" className="header-logo" />
 
-      <Link to="/room-list" className="availability-button">
+      <Link to="/calendar" className="availability-button">
         Check Availability
       </Link>
 

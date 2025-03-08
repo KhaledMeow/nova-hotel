@@ -13,7 +13,7 @@ import HAC from "./pages/HAC";
 import "./assets/styles/main.css";
 import ChatBotComponent from "./components/ChatBotComponent";
 import DealsPopup from "./components/DealsPopup";
-
+import Dashboard from "./components/Dashboard";
 const App = () => {
   const [showDealsMessage, setShowDealsMessage] = useState(false);
 
@@ -42,7 +42,7 @@ const App = () => {
           <Route path="/calendar" element={<CalendarComponent />} />
           <Route path="/Room-List" element={<RoomList />} />
           <Route path="/Confirm-details" element={<Booking />} />
-          
+          <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
         <ChatBotComponent />
         {showDealsMessage && <DealsPopup onClose={() => setShowDealsMessage(false)} />}

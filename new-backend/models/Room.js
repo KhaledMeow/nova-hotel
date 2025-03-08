@@ -42,15 +42,56 @@ const roomSchema = new mongoose.Schema({
   },
   booked_dates: {
     type: [{
-      startDate: Date,
-      endDate: Date
+      startDate: {
+        type: Date,
+        required: true,
+        validate: {
+          validator: function(v) {
+            return v < this.endDate;
+          },
+          message: 'Start date must be before end date'
+        }
+      },
+      endDate: {
+        type: Date,
+        required: true,
+        validate: {
+          validator: function(v) {
+            return v > this.startDate;
+          },
+          message: 'End date must be after start date'
+        }
+      }
     }],
-    default: []
-  },
-  _id: {
-    type: mongoose.Schema.Types.ObjectId,
-    auto: true
+    validate: {
+      validator: function(bookings) {
+        return bookings.every((booking, index) => 
+          bookings.slice(index + 1).every(other => 
+            booking.endDate <= other.startDate || 
+            booking.startDate >= other.endDate
+          )
+        );
+      },
+      message: 'Booking dates cannot overlap'
+    }
   }
-}, { timestamps: true });
+}, {
+  validationLevel: 'strict',
+  validationAction: 'error'
+})
+
+
+roomSchema.index({ 
+  'booked_dates.startDate': 1,
+  'booked_dates.endDate': 1,
+  type: 1
+});
+
+roomSchema.index({
+  name: 'text',
+  description: 'text',
+  amenities: 'text'
+});
+
 
 module.exports = mongoose.model('Room', roomSchema);

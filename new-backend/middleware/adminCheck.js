@@ -1,21 +1,11 @@
-module.exports = (req, res, next) => {
+module.exports = async (req, res, next) => {
   try {
-    if (!req.user) throw new Error('User not authenticated');
-    
-    if (req.user.role !== 'admin') {
-      return res.status(403).json({
-        success: false,
-        error: 'Access denied',
-        message: 'Admin privileges required'
-      });
+    const user = await User.findById(req.user._id).populate('role');
+    if (!user.role || user.role.name !== 'admin') {
+      throw new Error('Admin privileges required');
     }
-    
     next();
   } catch (error) {
-    res.status(403).json({
-      success: false,
-      error: 'Authorization failed',
-      message: error.message
-    });
+    res.status(403).json({ error: error.message });
   }
 };

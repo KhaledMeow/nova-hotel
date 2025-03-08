@@ -5,11 +5,10 @@ const {
   getRoomAvailability,
   updateRoom
 } = require('../controllers/roomController');
-const auth = require('../middleware/auth');
-const adminCheck = require('../middleware/adminCheck');
 
-router.get('/', getAllRooms);
+
 router.get('/availability', getRoomAvailability);
-router.put('/:id', auth, adminCheck, updateRoom);
+router.get('/', getAllRooms);
+router.put('/:id', updateRoom);
 
 module.exports = router;

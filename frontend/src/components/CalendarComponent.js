@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; // For redirection
-import axios from "axios"; // Import axios for API requests
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "E:/React/nova-hotel/frontend/src/styles/Calendar.css";
 
 const CalendarComponent = () => {
@@ -12,21 +12,18 @@ const CalendarComponent = () => {
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
-  // Function to get the number of days in the current month
   const daysInMonth = () => {
     const year = currentMonth.getFullYear();
     const month = currentMonth.getMonth();
     return new Date(year, month + 1, 0).getDate();
   };
 
-  // Function to get the starting day of the month
   const startOfMonth = () => {
     const date = new Date(currentMonth);
     date.setDate(1);
     return date.getDay();
   };
 
-  // Function to format date to dd-mm-yyyy
   const formatDate = (date) => {
     const day = String(date.getDate()).padStart(2, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -34,7 +31,6 @@ const CalendarComponent = () => {
     return `${day}-${month}-${year}`;
   };
 
-  // Handle the date click event
   const handleDateClick = (day) => {
     const date = new Date(
       currentMonth.getFullYear(),
@@ -46,24 +42,22 @@ const CalendarComponent = () => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
+    if (!dayAvailability?.available) {  // Changed from availableRooms
+      alert("Sorry, no rooms available for this date!");
+      return;
+    }
+
     if (date < today) {
       alert("You cannot select a date before today!");
       return;
     }
 
-    // Check room availability for the selected date
     const dateString = date.toISOString().split('T')[0];
     const dayAvailability = availability[dateString];
     
-    if (!dayAvailability || dayAvailability.availableRooms === 0) {
-      alert("Sorry, no rooms available for this date!");
-      return;
-    }
-
     if (!startDate) {
       setStartDate(date);
     } else if (!endDate && date >= startDate) {
-      // Check availability for all dates in the range
       let hasAvailability = true;
       let unavailableDate = null;
       
@@ -179,23 +173,30 @@ const CalendarComponent = () => {
     }
   };
 
-  // Fetch booked dates when the month changes
   useEffect(() => {
     fetchBookedDates();
   }, [currentMonth]);
 
-  // Function to fetch availability for the current month
   const fetchAvailability = async () => {
     setIsLoading(true);
     try {
-      // Get first and last day of current month
-      const firstDay = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
-      const lastDay = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0);
+      const response = await axios.get(`http://localhost:5000/api/v1/rooms/availability`, {
+        params: {
+          month: currentMonth.getMonth() + 1,
+          year: currentMonth.getFullYear()
+        }
+      });
       
-      const response = await axios.get(`http://localhost:5000/api/v1/availability?startDate=${firstDay.toISOString()}&endDate=${lastDay.toISOString()}`);
-      setAvailability(response.data);
+      // Transform the response data into a more usable format
+      const availabilityMap = response.data.reduce((acc, curr) => {
+        acc[curr.date] = { available: curr.available, count: curr.count };
+        return acc;
+      }, {});
+      
+      setAvailability(availabilityMap);
     } catch (error) {
       console.error('Error fetching availability:', error);
+      setAvailability({});
     }
     setIsLoading(false);
   };
@@ -231,6 +232,7 @@ const CalendarComponent = () => {
       days.push(<div key={`empty-${i}`} className="empty-cell"></div>);
     }
 
+    
     // Create the day cells
     for (let day = 1; day <= totalDays; day++) {
       const date = new Date(
@@ -270,7 +272,6 @@ const CalendarComponent = () => {
         </div>
       );
     }
-
     return days;
   };
 

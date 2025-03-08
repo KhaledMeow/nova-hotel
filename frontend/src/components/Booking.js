@@ -52,10 +52,6 @@ const Booking = () => {
   });
 
   const [formData, setFormData] = useState({
-    name: "",
-    phone: "",
-    email: "",
-    special_requests: "",
     room_type: room.type,
     check_in_date: location.state?.checkInDate,
     check_out_date: location.state?.checkOutDate,

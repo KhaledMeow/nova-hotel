@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import '../styles/PaymentForm.css';
+import PropTypes from 'prop-types';
 
 const PaymentForm = ({ 
   room, 
@@ -35,6 +36,14 @@ const PaymentForm = ({
     console.log('Nights:', nights);
     console.log('Total Price:', totalPrice);
   }, [room, nights]);
+
+useEffect(() => {
+  if (!room || typeof room.price !== 'number' || room.price <= 0) {
+    console.error('Invalid room data:', room);
+    navigate('/error', { state: { message: 'Invalid room configuration' } });
+  }
+}, [room, navigate]);
+
   useEffect(() => {
     if (isNaN(totalPrice)) {
       console.error('Invalid price calculation:', {
@@ -54,7 +63,6 @@ const PaymentForm = ({
   const [error, setError] = useState(null);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
 
-  // Test payment validation
   const validateCardNumber = (number) => {
     const testCardNumbers = [
       '4111111111111111',  // Visa
@@ -300,3 +308,16 @@ const PaymentForm = ({
 };
 
 export default PaymentForm;
+
+PaymentForm.propTypes = {
+  room: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
+    type: PropTypes.string.isRequired
+  }).isRequired,
+  checkInDate: PropTypes.string.isRequired,
+  checkOutDate: PropTypes.string.isRequired,
+  bookingData: PropTypes.object.isRequired,
+  onSuccess: PropTypes.func,
+  onError: PropTypes.func
+};

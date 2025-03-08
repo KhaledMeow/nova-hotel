@@ -3,6 +3,7 @@ const router = express.Router();
 const bookingController = require('../controllers/bookingController');
 const auth = require('../middleware/auth');
 const Room = require('../models/Room');
+const { body } = require('express-validator');
 
 
 const validateBooking = async (req, res, next) => {
@@ -45,7 +46,11 @@ const validateBooking = async (req, res, next) => {
     res.status(400).json({ error: error.message });
   }
 };
-router.post('/', auth, validateBooking, bookingController.createBooking);
+router.post('/', [ 
+  body('check_in_date').isISO8601(),
+  body('check_out_date').isISO8601(),
+  body('num_guests').isInt({ min: 1, max: 6 })
+], auth, validateBooking, bookingController.createBooking);
 
 router.get('/', auth, bookingController.getUserBookings);
 

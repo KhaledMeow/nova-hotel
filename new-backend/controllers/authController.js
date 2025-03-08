@@ -7,7 +7,6 @@ exports.register = async (req, res) => {
   try {
     const { email, password, first_name, last_name, phone } = req.body;
 
-    // Add validation for required fields
     if (!email || !password || !first_name || !last_name) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
@@ -15,7 +14,6 @@ exports.register = async (req, res) => {
     const exists = await User.findOne({ email });
     if (exists) return res.status(400).json({ error: 'Email already registered' });
 
-    // Auto-create guest role if missing
     let defaultRole = await Role.findOne({ name: 'guest' });
     if (!defaultRole) {
       defaultRole = await Role.create({
@@ -24,10 +22,9 @@ exports.register = async (req, res) => {
       });
     }
 
-    // Let Mongoose handle password hashing
     const user = await User.create({
       email,
-      password, // Plain text - will be hashed by pre-save hook
+      password,
       first_name,
       last_name,
       phone,
@@ -56,7 +53,7 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    
+
     // Find user with tokens
     const user = await User.findOne({ email }).select('+password +tokens');
     if (!user) throw new Error('Invalid credentials');
@@ -82,7 +79,7 @@ exports.login = async (req, res) => {
 
 exports.logout = async (req, res) => {
   try {
-    // Remove token from user's tokens array
+    // Remove token from user tokens array
     const user = await User.findById(req.user.id);
     user.tokens = user.tokens.filter(t => t !== req.token);
     await user.save();
@@ -92,7 +89,6 @@ exports.logout = async (req, res) => {
     res.status(500).json({ error: 'Logout failed' });
   }
 };
-
 exports.getCurrentUser = async (req, res) => {
   try {
     // User is already attached to req by your auth middleware
