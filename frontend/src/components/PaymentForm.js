@@ -291,7 +291,7 @@ const PaymentForm = ({
         onClick={() => {
           onSuccess && onSuccess();
           navigate('/', { replace: true });
-        }} 
+        }}
       >
         {processing ? 'Processing...' : `Pay $${Math.floor(room.price.toString().replace(/\$/g, '')*nights)}`}        
       </button>

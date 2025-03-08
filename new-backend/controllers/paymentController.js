@@ -24,7 +24,7 @@ exports.createPayment = async (req, res) => {
     });
 
     // Update booking status
-    await Booking.findByIdAndUpdate(req.body.bookingId, { status: 'confirmed' });
+    await Booking.findByIdAndUpdate(req.body.bookingId, { status: 'pending' });
 
     res.status(201).json(payment);
   } catch (error) {

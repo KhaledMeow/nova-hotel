@@ -57,7 +57,6 @@
     margin-bottom: 5px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
-
 .user-message {
     background-color: var(--text);
     color: rgb(0, 0, 0);
@@ -69,6 +68,13 @@
     align-self: flex-end;
 }
 
+.error-message {
+    color: #ff4444;
+    border: 1px solid #ff4444;
+    padding: 8px;
+    border-radius: 5px;
+    background: rgba(255, 68, 68, 0.1);
+}
 .chatbot-box {
     display: flex;
     height: 420px;

@@ -51,12 +51,16 @@ const ChatBotComponent = () => {
           { text: botResponse, bot: true },
         ]);
       } catch (error) {
-        console.error("Error:", error);
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          { text: "Error communicating with the bot.", bot: true },
-        ]);
-      }
+        setMessages(prev => [...prev, { 
+            text: "Please use standard text characters. For urgent needs:", 
+            bot: true,
+            isError: true 
+        }, {
+            text: "Call: +60 3-2142 8888\nEmail: support@novahotel.com",
+            bot: true,
+            isError: true
+        }]);
+    }
 
       setUserInput("");
     }

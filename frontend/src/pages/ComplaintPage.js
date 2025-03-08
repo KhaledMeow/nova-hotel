@@ -106,6 +106,7 @@ const ComplaintPage = () => {
           "Authorization": `Bearer ${localStorage.getItem("token")}`
         },
         body: JSON.stringify({
+          user: userId,
           booking: formData.booking,
           category: formData.category,
           description: formData.description

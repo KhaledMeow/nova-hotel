@@ -38,8 +38,9 @@ exports.register = async (req, res) => {
     user.tokens.push(token);
     await user.save();
 
-    res.status(201).json({
-      user: user.toJSON(),
+    res.json({
+      user: {
+        _id: user._id },
       token
     });
 
