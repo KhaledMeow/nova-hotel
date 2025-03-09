@@ -13,90 +13,88 @@ const AboutPage = () => {
 
       <section className="about-intro">
         <h2>Our Story</h2>
-        <p>
-          Nova Hotel was founded with a vision to provide exceptional
-          hospitality experiences. Located in the heart of the city, we strive
-          to blend luxury with comfort, making every guest's stay unique and
-          memorable. Since our opening, we have welcomed travelers from all over
-          the world, each bringing their own stories and experiences that enrich
-          our community.
-        </p>
-        <p>
-          At Nova Hotel, we believe that a good stay starts with excellent
-          service. Our dedicated team works tirelessly to ensure that your needs
-          are met, from the moment you check in until your departure.
-        </p>
+        <p><strong>
+        Nova Hotel emerged from a dream to redefine hospitality—a sanctuary where
+        every guest feels both pampered and inspired. Nestled in the vibrant pulse
+        of the city, our doors open to a world where historic charm intertwines with
+        contemporary luxury. Since 2010, we’ve welcomed explorers, dreamers, and storytellers
+        from every corner of the globe, crafting unforgettable moments against the backdrop
+        of our iconic skyline.
+        </strong></p>
+        <p><strong>
+        Here, your journey begins with more than a stay; it begins with an experience.
+        Imagine waking to the aroma of freshly brewed coffee, sunlight streaming
+        through floor-to-ceiling windows, and the murmur of the city below—a symphony
+        of possibilities waiting just outside your door.
+        </strong></p>
       </section>
 
       <section className="about-values">
         <h2>Our Values</h2>
         <ul>
           <li>
-            <strong>Excellence in Service:</strong> We aim to exceed your
-            expectations with our attentive service and personalized care.
+            <strong>✨ Excellence in Service: </strong><p> "Your comfort is our compass."
+            From personalized concierge services to anticipating your needs before you ask, our team embodies warmth and precision.</p>
           </li>
           <li>
-            <strong>Commitment to Quality:</strong> From our facilities to our
-            cuisine, we prioritize high standards in everything we offer.
+            <strong>🌿 Sustainable Luxury: </strong><p>We tread lightly on the planet. Enjoy organic linens, zero-waste dining, and energy-efficient design—all part of our pledge to a greener future.</p>
           </li>
           <li>
-            <strong>Passion for Hospitality:</strong> Our love for hospitality
-            drives us to create memorable experiences for our guests.
+            <strong>🍴 Culinary Artistry: </strong><p> Led by award-winning Chef John Smith, our kitchens transform locally sourced ingredients into masterpieces. Taste the region’s soul in every bite.</p>
           </li>
           <li>
-            <strong>Sustainability:</strong> We are committed to reducing our
-            environmental impact and promoting sustainable practices.
-          </li>
-          <li>
-            <strong>Community Engagement:</strong> We believe in giving back to
-            the community and supporting local initiatives.
+            <strong>🤝 Community Heartbeat: </strong><p> We’re woven into the city’s fabric.
+            Through scholarships for local students and partnerships with nearby farms, we grow with our community.</p>
           </li>
         </ul>
       </section>
 
       <section className="about-team">
-        <h2>Meet the Team</h2>
+        <h2>Meet the Visionaries</h2>
         <p>
-          Our team is dedicated to ensuring your stay is unforgettable. Led by
-          our experienced management team, each member is trained to provide the
-          highest level of service. From our front desk staff to our
-          housekeeping team, we work together to create a welcoming and friendly
-          atmosphere.
+        Our team is the heartbeat of Nova Hotel—a family of passionate creators dedicated to your story.
         </p>
         <p>Meet some of our key team members:</p>
         <ul>
           <li>
-            <strong>Jane Doe, General Manager:</strong> With over 15 years of
-            experience in the hospitality industry, Jane leads our team with
-            passion and dedication.
+            <strong>Jane Doe, General Manager: </strong><p> “Great hospitality is about creating moments that linger in memory long after checkout.”
+            With 15+ years curating luxury stays, Jane ensures every detail feels effortless.</p>
           </li>
           <li>
-            <strong>John Smith, Head Chef:</strong> A culinary artist, John
-            crafts delicious dishes using locally sourced ingredients.
+            <strong>John Smith, Culinary Director: </strong><p> “Food is a love letter to culture.”
+            A pioneer of farm-to-table dining, John’s menus celebrate seasonal abundance.</p>
           </li>
           <li>
-            <strong>Alice Johnson, Guest Relations:</strong> Alice is here to
-            ensure that every guest feels at home during their stay.
+            <strong>Alice Johnson, Guest Experience Curator: </strong><p> “Your joy is my mission.”
+            From surprise birthday setups to hidden local gems, Alice crafts personalized magic.</p>
           </li>
         </ul>
       </section>
 
       <section className="about-community">
-        <h2>Community Involvement</h2>
+        <h2>Rooted in Community</h2>
         <p>
-          We are proud to be involved in various local initiatives that help
-          strengthen our community. Nova Hotel actively participates in charity
-          events, sponsors local sports teams, and collaborates with nearby
-          businesses to promote tourism and economic growth.
+        We believe in giving back as fiercely as we welcome in:
         </p>
-        <p>
-          Our hotel hosts regular events to engage with the community, such as
-          food drives, workshops, and cultural celebrations. We believe that
-          being a responsible corporate citizen is essential to our mission and
-          values.
-        </p>
+        <ul>
+          <li><strong>Nova Cares Initiative: </strong><p>Donates 5% of every stay to urban green spaces.</p></li>
+          <li><strong>Local Artisan Collaborations: </strong><p>Your minibar features craft spirits from the distillery down the street.</p></li>
+          <li><strong>Cultural Celebrations: </strong><p>Monthly rooftop gatherings spotlighting local musicians and chefs.</p></li>
+        </ul>
       </section>
-    </div>
+
+    <section className="community">
+    <h2>A Stay That Gives Back</h2>
+    <p>
+    Book our Eco-Luxe Package and we’ll plant a tree in your name. Or join our Cultural Immersion Weekends, where 100% of proceeds fund arts education for city youth.
+    </p>
+  </section>
+  <section className="meow">
+    <h2>Your Story Starts Here</h2>
+    <p>At Nova Hotel, you’re not just a guest—you’re part of a legacy. Let us turn your stay into a chapter worth remembering.</p>
+    <p>Discover more. Dream louder. Stay Nova.</p>
+  </section>
+</div>
   );
 };
 
