@@ -24,6 +24,10 @@ const adminRoutes = require('./routes/adminRoutes');
 
 // Initialize Express app
 const app = express();
+app.use(cors({
+  origin: 'http://localhost:3000', // Your React app's URL
+  credentials: true
+}));
 const server = http.createServer(app);
 
 const chatLimiter = rateLimit({
@@ -120,6 +124,7 @@ app.use('/api/v1/admin', adminRoutes);
 
 // Global error handler (MUST BE LAST MIDDLEWARE)
 app.use(errorHandler);
+
 
 // Server initialization
 const PORT = process.env.PORT || 5000;

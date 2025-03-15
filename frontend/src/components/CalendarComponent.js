@@ -7,333 +7,209 @@ const CalendarComponent = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-  const [bookedDays, setBookedDays] = useState([]);
   const [availability, setAvailability] = useState({});
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  const daysInMonth = () => {
-    const year = currentMonth.getFullYear();
-    const month = currentMonth.getMonth();
-    return new Date(year, month + 1, 0).getDate();
-  };
+  // Date calculations
+  const daysInMonth = () => new Date(
+    currentMonth.getFullYear(),
+    currentMonth.getMonth() + 1,
+    0
+  ).getDate();
 
-  const startOfMonth = () => {
-    const date = new Date(currentMonth);
-    date.setDate(1);
-    return date.getDay();
-  };
+  const startOfMonth = () => new Date(
+    currentMonth.getFullYear(),
+    currentMonth.getMonth(),
+    1
+  ).getDay();
 
-  const formatDate = (date) => {
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const year = date.getFullYear();
-    return `${day}-${month}-${year}`;
-  };
+  // Fetch availability data
+  useEffect(() => {
+    const source = axios.CancelToken.source();
+    
+    const fetchAvailability = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        
+        const response = await axios.get("/api/v1/rooms/availability", {
+          params: {
+            month: currentMonth.getMonth() + 1,
+            year: currentMonth.getFullYear()
+          },
+          cancelToken: source.token
+        });
 
+        setAvailability(response.data);
+      } catch (err) {
+        if (!axios.isCancel(err)) {
+          setError("Failed to load availability data");
+          console.error("Fetch error:", err);
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchAvailability();
+
+    return () => source.cancel("Component unmounted");
+  }, [currentMonth]);
+
+  // Date selection handler
   const handleDateClick = (day) => {
     const date = new Date(
       currentMonth.getFullYear(),
       currentMonth.getMonth(),
       day
     );
-
-    // Get today's date without time
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-
-    if (!dayAvailability?.available) {  // Changed from availableRooms
-      alert("Sorry, no rooms available for this date!");
-      return;
-    }
+    const dateString = date.toISOString().split("T")[0];
+    const dayAvailability = availability[dateString] || { available: false, count: 0 };
 
     if (date < today) {
-      alert("You cannot select a date before today!");
+      alert("Cannot select past dates");
       return;
     }
 
-    const dateString = date.toISOString().split('T')[0];
-    const dayAvailability = availability[dateString];
-    
-    if (!startDate) {
-      setStartDate(date);
-    } else if (!endDate && date >= startDate) {
-      let hasAvailability = true;
-      let unavailableDate = null;
-      
-      for (let checkDate = new Date(startDate); 
-           checkDate <= date; 
-           checkDate.setDate(checkDate.getDate() + 1)) {
-        
-        const checkDateString = checkDate.toISOString().split('T')[0];
-        const checkAvailability = availability[checkDateString];
-        
-        if (!checkAvailability || checkAvailability.availableRooms === 0) {
-          hasAvailability = false;
-          unavailableDate = new Date(checkDate);
-          break;
-        }
-      }
+    if (!dayAvailability.available) {
+      alert("No rooms available for this date");
+      return;
+    }
 
-      if (!hasAvailability) {
-        alert(`Sorry, no rooms available for ${unavailableDate.toLocaleDateString()}. Please select a different date range.`);
-        setStartDate(null); // Reset selection
-        return;
-      }
-
-      // IMPORTANT: Validate date range
-      if (!startDate || !date) {
-        alert("Please select both check-in and check-out dates.");
-        return;
-      }
-
-      // Ensure check-out date is after check-in date
-      if (date <= startDate) {
-        alert("Check-out date must be after check-in date.");
-        return;
-      }
-
-      setEndDate(date);
-
-      // Redirect to the RoomList page
-      setTimeout(() => {
-        const isoStart = startDate.toISOString().split('T')[0];
-        const isoEnd = endDate.toISOString().split('T')[0];
-        navigate("/room-list", { 
-          state: { 
-            checkInDate: isoStart, 
-            checkOutDate: isoEnd 
-          } 
-        });
-      }, 500);
-    } else {
+    if (!startDate || (startDate && endDate)) {
       setStartDate(date);
       setEndDate(null);
-    }
-  };
+    } else if (date > startDate) {
+      let allAvailable = true;
+      const current = new Date(startDate);
+      
+      while (current <= date) {
+        const checkDateStr = current.toISOString().split("T")[0];
+        if (!(availability[checkDateStr]?.available ?? false)) {
+          allAvailable = false;
+          break;
+        }
+        current.setDate(current.getDate() + 1);
+      }
 
-  // Check for booked days in the selected date range
-  const checkForBookedDays = (start, end) => {
-    const startDay = start.getDate();
-    const endDay = end.getDate();
-    const bookedDaysSet = new Set(bookedDays);
-
-    // Check each day in the range
-    for (let day = startDay; day <= endDay; day++) {
-      if (bookedDaysSet.has(day)) {
-        return true; // There is at least one booked day in the range
+      if (allAvailable) {
+        setEndDate(date);
+      } else {
+        alert("Some dates in this range are unavailable");
+        setStartDate(null);
+        setEndDate(null);
       }
     }
-    return false; // No booked days in the range
   };
 
-  // Go to the previous month
-  const handlePreviousMonth = () => {
-    setCurrentMonth(prev => {
-      const newMonth = new Date(prev);
-      newMonth.setMonth(newMonth.getMonth() - 1);
-      return newMonth;
-    });
-  };
-
-  // Go to the next month
-  const handleNextMonth = () => {
-    setCurrentMonth(prev => {
-      const newMonth = new Date(prev);
-      newMonth.setMonth(newMonth.getMonth() + 1);
-      return newMonth;
-    });
-  };
-
-  // Function to fetch booked dates from the backend
-  const fetchBookedDates = async () => {
-    try {
-      const response = await axios.get('http://localhost:5000/api/v1/bookings');
-      const bookings = response.data;
-
-      // Create a Set to store all booked dates
-      const bookedDatesSet = new Set();
-
-      bookings.forEach(booking => {
-        const start = new Date(startDate);
-        const end = new Date(endDate);
-
-        // Add all dates between check-in and check-out
-        for (let date = new Date(start); date <= end; date.setDate(date.getDate() + 1)) {
-          if (date.getMonth() === currentMonth.getMonth() &&
-              date.getFullYear() === currentMonth.getFullYear()) {
-            bookedDatesSet.add(date.getDate());
-          }
-        }
-      });
-
-      setBookedDays(Array.from(bookedDatesSet));
-    } catch (error) {
-      console.error('Error fetching booked dates:', error);
-    }
-  };
-
-  useEffect(() => {
-    fetchBookedDates();
-  }, [currentMonth]);
-
-  const fetchAvailability = async () => {
-    setIsLoading(true);
-    try {
-      const response = await axios.get(`http://localhost:5000/api/v1/rooms/availability`, {
-        params: {
-          month: currentMonth.getMonth() + 1,
-          year: currentMonth.getFullYear()
-        }
-      });
-      
-      // Transform the response data into a more usable format
-      const availabilityMap = response.data.reduce((acc, curr) => {
-        acc[curr.date] = { available: curr.available, count: curr.count };
-        return acc;
-      }, {});
-      
-      setAvailability(availabilityMap);
-    } catch (error) {
-      console.error('Error fetching availability:', error);
-      setAvailability({});
-    }
-    setIsLoading(false);
-  };
-
-  // Fetch availability when month changes
-  useEffect(() => {
-    fetchAvailability();
-  }, [currentMonth]);
-
-  // Save selected dates to the backend
-  const saveDatesToBackend = async () => {
-    if (!startDate || !endDate) {
-      console.error('Start and end dates are required');
-      return;
-    }
-
-    try {
-      console.log('Dates saved successfully');
-    } catch (error) {
-      console.error('Error saving dates:', error.response ? error.response.data : error.message);
-    }
-  };
-
-  // Render the calendar days
+  // Calendar grid rendering
   const renderDays = () => {
-    const days = [];
     const totalDays = daysInMonth();
     const startDay = startOfMonth();
     const today = new Date();
+    const days = [];
 
-    // Add empty cells for the days before the start of the month
+    // Empty days for week alignment
     for (let i = 0; i < startDay; i++) {
-      days.push(<div key={`empty-${i}`} className="empty-cell"></div>);
+      days.push(<div key={`empty-${i}`} className="empty-cell" />);
     }
 
-    
-    // Create the day cells
+    // Actual calendar days
     for (let day = 1; day <= totalDays; day++) {
-      const date = new Date(
-        currentMonth.getFullYear(),
-        currentMonth.getMonth(),
-        day
-      );
-      const dateString = date.toISOString().split('T')[0];
-      const dayAvailability = availability[dateString];
-      
+      const date = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
+      const dateString = date.toISOString().split("T")[0];
+      const { available, count = 0 } = availability[dateString] || {};
       const isToday = date.toDateString() === today.toDateString();
-      const isFullyBooked = dayAvailability && dayAvailability.availableRooms === 0;
-      const isSelectedStart =
-        startDate && date.toDateString() === startDate.toDateString();
-      const isSelectedEnd =
-        endDate && date.toDateString() === endDate.toDateString();
-      const isPastDay = date < today && !isToday;
+      const isSelectedStart = startDate?.toDateString() === date.toDateString();
+      const isSelectedEnd = endDate?.toDateString() === date.toDateString();
+      const isInRange = startDate && endDate && date > startDate && date < endDate;
 
       days.push(
         <div
           key={day}
-          className={`day-cell ${isToday ? "today" : ""} ${
-            isSelectedStart ? "selected-start" : ""
-          } ${isSelectedEnd ? "selected-end" : ""} ${
-            isPastDay ? "past-day" : ""
-          } ${isFullyBooked ? "fully-booked" : ""}`}
-          onClick={
-            !isFullyBooked && !isPastDay ? () => handleDateClick(day) : undefined
-          }
+          className={`day-cell 
+            ${isToday ? "today" : ""}
+            ${isSelectedStart ? "selected-start" : ""}
+            ${isSelectedEnd ? "selected-end" : ""}
+            ${isInRange ? "selected-range" : ""}
+            ${!available ? "unavailable" : ""}`}
+          onClick={() => available && handleDateClick(day)}
         >
-          <span className="day-number">{day}</span>
-          {dayAvailability && (
-            <span className={`availability ${isFullyBooked ? 'no-rooms' : dayAvailability.availableRooms < 5 ? 'low-rooms' : ''}`}>
-              {dayAvailability.availableRooms} rooms
-            </span>
+          <div className="day-number">{day}</div>
+          {available && (
+            <div className={`availability ${count < 3 ? "low-availability" : ""}`}>
+              {count} left
+            </div>
           )}
         </div>
       );
     }
+
     return days;
-  };
-
-  // Render the calendar header
-  const renderHeader = () => {
-    const monthNames = [
-      "January", "February", "March", "April", "May", "June", 
-      "July", "August", "September", "October", "November", "December"
-    ];
-
-    return (
-      <div className="calendar-header">
-        <button 
-          className="nav-button prev-month" 
-          onClick={handlePreviousMonth}
-        >
-          ←
-        </button>
-        <h2 className="current-month">
-          {monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}
-        </h2>
-        <button 
-          className="nav-button next-month" 
-          onClick={handleNextMonth}
-        >
-          →
-        </button>
-      </div>
-    );
   };
 
   return (
     <div className="calendar-container">
-      {renderHeader()}
-      <div className="dateDisplay">
-        {startDate && <p>Start date: {formatDate(startDate)}</p>}
-        {endDate && <p>End date: {formatDate(endDate)}</p>}
+      {error && (
+        <div className="error-banner">
+          {error} - <button onClick={() => window.location.reload()}>Retry</button>
+        </div>
+      )}
+
+      <div className="calendar-header">
+        <button onClick={() => setCurrentMonth(prev => {
+          const newDate = new Date(prev);
+          newDate.setMonth(prev.getMonth() - 1);
+          return newDate;
+        })}>
+          ←
+        </button>
+        
+        <h2>
+          {currentMonth.toLocaleString("default", {
+            month: "long",
+            year: "numeric"
+          })}
+        </h2>
+
+        <button onClick={() => setCurrentMonth(prev => {
+          const newDate = new Date(prev);
+          newDate.setMonth(prev.getMonth() + 1);
+          return newDate;
+        })}>
+          →
+        </button>
       </div>
+
+      {isLoading && (
+        <div className="loading-overlay">
+          <div className="loader" />
+          <p>Loading availability...</p>
+        </div>
+      )}
+
       <div className="calendar-grid">
-        <div className="day-header">Sun</div>
-        <div className="day-header">Mon</div>
-        <div className="day-header">Tue</div>
-        <div className="day-header">Wed</div>
-        <div className="day-header">Thu</div>
-        <div className="day-header">Fri</div>
-        <div className="day-header">Sat</div>
+        {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(day => (
+          <div key={day} className="day-header">{day}</div>
+        ))}
         {renderDays()}
       </div>
+
       {startDate && endDate && (
-        <div className="booking-confirmation">
-          <button 
-            onClick={() => {
-              saveDatesToBackend();
-              navigate("/room-list", { 
-                state: { 
-                  checkInDate: formatDate(startDate), 
-                  checkOutDate: formatDate(endDate) 
-                } 
-              });
-            }}
+        <div className="booking-actions">
+          <button
+            onClick={() => navigate("/room-list", {
+              state: {
+                checkInDate: startDate.toISOString().split("T")[0],
+                checkOutDate: endDate.toISOString().split("T")[0]
+              }
+            })}
           >
-            Proceed to Booking
+            View Available Rooms
           </button>
         </div>
       )}
