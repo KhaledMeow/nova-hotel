@@ -67,6 +67,7 @@ const CalendarComponent = () => {
     );
     const today = new Date();
     today.setHours(0, 0, 0, 0);
+    
     const dateString = date.toISOString().split("T")[0];
     const dayAvailability = availability[dateString] || { available: false, count: 0 };
 
@@ -121,6 +122,7 @@ const CalendarComponent = () => {
     // Actual calendar days
     for (let day = 1; day <= totalDays; day++) {
       const date = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
+      const isPast = date < new Date();
       const dateString = date.toISOString().split("T")[0];
       const { available, count = 0 } = availability[dateString] || {};
       const isToday = date.toDateString() === today.toDateString();
@@ -136,7 +138,8 @@ const CalendarComponent = () => {
             ${isSelectedStart ? "selected-start" : ""}
             ${isSelectedEnd ? "selected-end" : ""}
             ${isInRange ? "selected-range" : ""}
-            ${!available ? "unavailable" : ""}`}
+            ${!available ? "unavailable" : ""}
+            ${isPast ? "past-day" : ""}`}
           onClick={() => available && handleDateClick(day)}
         >
           <div className="day-number">{day}</div>
