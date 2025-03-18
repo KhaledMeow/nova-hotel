@@ -71,12 +71,12 @@ const CalendarComponent = () => {
     const dayAvailability = availability[dateString] || { available: false, count: 0 };
 
     if (date < today) {
-      alert("Cannot select past dates");
+      console.log("Cannot select past dates");
       return;
     }
 
     if (!dayAvailability.available) {
-      alert("No rooms available for this date");
+      console.log("No rooms available for this date");
       return;
     }
 
@@ -99,7 +99,7 @@ const CalendarComponent = () => {
       if (allAvailable) {
         setEndDate(date);
       } else {
-        alert("Some dates in this range are unavailable");
+        console.log("Some dates in this range are unavailable");
         setStartDate(null);
         setEndDate(null);
       }

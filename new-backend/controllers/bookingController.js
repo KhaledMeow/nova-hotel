@@ -9,8 +9,8 @@ exports.createBooking = async (req, res) => {
     const { check_in_date, check_out_date, num_guests } = req.body;
 
     // Remove transaction code
-    const checkIn = new Date(check_in_date);
-    const checkOut = new Date(check_out_date);
+    const checkIn = new Date(req.body.check_in_date + "T00:00:00Z");
+    const checkOut = new Date(req.body.check_out_date + "T23:59:59Z");
     
     // Add manual availability check
     const conflictingBooking = await Room.findOne({
@@ -40,7 +40,12 @@ exports.createBooking = async (req, res) => {
       num_guests,
       status: 'confirmed'
     });
-
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(req.body.check_in_date)) {
+      throw new Error('Invalid check-in date format');
+    }
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(req.body.check_out_date)) {
+      throw new Error('Invalid check-out date format');
+    }
     res.status(201).json({ ...booking.toObject(), message: "Booking created" });
 
   } catch (error) {

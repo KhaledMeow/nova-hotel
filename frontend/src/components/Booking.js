@@ -53,8 +53,8 @@ const Booking = () => {
 
   const [formData, setFormData] = useState({
     room_type: room.type,
-    check_in_date: location.state?.checkInDate,
-    check_out_date: location.state?.checkOutDate,
+    check_in_date: location.state?.checkInDate || '',
+    check_out_date: location.state?.checkOutDate || '',
     num_of_people: "",
   });
 
@@ -92,7 +92,20 @@ const Booking = () => {
       alert('Please login first');
       return navigate('/login');
     }
-
+    const formatDate = (isoString) => {
+      return new Date(isoString).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+    };
+    const validateDates = (checkIn, checkOut) => {
+      const isoRegex = /^\d{4}-\d{2}-\d{2}$/;
+      if (!isoRegex.test(checkIn) || !isoRegex.test(checkOut)) {
+        return "Invalid date format";
+      }
+      return "";
+    };
     // Validate all fields
     const newErrors = {};
     Object.keys(formData).forEach(key => {
@@ -225,13 +238,10 @@ const Booking = () => {
               <h3>Check-in Date <span className="required-asterisk">*</span></h3>
               <input 
                 type="date" 
-                value={formData.check_in_date || ''}
-                onChange={(e) => setFormData(prev => ({
-                  ...prev, 
-                  check_in_date: e.target.value
-                }))}
+                value={formData.check_in_date}
+                min={new Date().toISOString().split('T')[0]}
+                onChange={(e) => setFormData({...formData, check_in_date: e.target.value})}
                 required 
-                min={new Date().toISOString().split('T')[0]} 
                 className="date-input"
               />
             </div>
@@ -239,7 +249,7 @@ const Booking = () => {
               <h3>Check-out Date <span className="required-asterisk">*</span></h3>
               <input 
                 type="date" 
-                value={formData.check_out_date || ''}
+                value={formData.check_out_date}
                 onChange={(e) => setFormData(prev => ({
                   ...prev, 
                   check_out_date: e.target.value
