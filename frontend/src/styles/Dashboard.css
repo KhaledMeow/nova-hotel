@@ -71,7 +71,7 @@
   .no-bookings {
     text-align: center;
     padding: 4rem;
-    background: #f8f9fa;
+    background: #3c3c3c;
     border-radius: 10px;
   }
   
@@ -121,4 +121,41 @@
   .confirm-button:disabled {
     background: #6c757d;
     cursor: not-allowed;
+  }
+
+  .solved-button {
+    background: #6f1d25;
+    color: white;
+    padding: 0.75rem 2rem;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .solved-button:hover {
+    background: #ffffff;
+    color: #000000;
+  }
+  
+  .solved-button:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+  }
+  .resolution-notice {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+    border-left: 4px solid #2d7a4d;
+  }
+  
+  .complaint-description {
+    line-height: 1.6;
+    color: #666;
+    margin-bottom: 1rem;
+  }
+  
+  .booking-card .booking-details p {
+    margin: 0.5rem 0;
   }

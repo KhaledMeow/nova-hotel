@@ -6,8 +6,7 @@ const Register = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
-    first_name: '',
-    last_name: '',
+    name: '',
     phone: ''
   });
   const [errors, setErrors] = useState({});
@@ -17,8 +16,7 @@ const Register = () => {
     const newErrors = {};
     if (!formData.email) newErrors.email = 'Email is required';
     if (!formData.password) newErrors.password = 'Password is required';
-    if (!formData.first_name) newErrors.first_name = 'First name is required';
-    if (!formData.last_name) newErrors.last_name = 'Last name is required';
+    if (!formData.name) newErrors.name = 'Name is required';
     if (!formData.phone) newErrors.phone = 'Phone number is required';
     return newErrors;
   };
@@ -62,6 +60,18 @@ const Register = () => {
         {errors.general && <div className="register-error">{errors.general}</div>}
 
         <div className="form-group">
+          <label>Name</label>
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={(e) => setFormData({...formData, name: e.target.value})}
+            className={errors.name ? 'error' : ''}
+          />
+          {errors.name && <span className="error-message">{errors.name}</span>}
+        </div>
+
+        <div className="form-group">
           <label>Email</label>
           <input
             type="email"
@@ -85,30 +95,7 @@ const Register = () => {
           {errors.password && <span className="error-message">{errors.password}</span>}
         </div>
 
-        <div className="form-group">
-          <label>First Name</label>
-          <input
-            type="text"
-            name="first_name"
-            value={formData.first_name}
-            onChange={(e) => setFormData({...formData, first_name: e.target.value})}
-            className={errors.first_name ? 'error' : ''}
-          />
-          {errors.first_name && <span className="error-message">{errors.first_name}</span>}
-        </div>
-
-        <div className="form-group">
-          <label>Last Name</label>
-          <input
-            type="text"
-            name="last_name"
-            value={formData.last_name}
-            onChange={(e) => setFormData({...formData, last_name: e.target.value})}
-            className={errors.last_name ? 'error' : ''}
-          />
-          {errors.last_name && <span className="error-message">{errors.last_name}</span>}
-        </div>
-
+        
         <div className="form-group">
           <label>Phone Number</label>
           <input

@@ -2,8 +2,10 @@ const express = require('express');
 const router = express.Router();
 const {
   createComplaint,
-  getComplaints,
-  resolveComplaint
+  getUserComplaints,
+  inProgressComplaint,
+  solveComplaint
+
 } = require('../controllers/complaintController');
 const auth = require('../middleware/auth');
 const adminCheck = require('../middleware/adminCheck');
@@ -15,7 +17,8 @@ const complaintLimiter = rateLimit({
 });
 
 router.post('/', complaintLimiter, auth, createComplaint);
-router.get('/', auth, adminCheck, getComplaints);
-router.patch('/:id/resolve', auth, adminCheck, resolveComplaint);
+router.get('/', auth, getUserComplaints);
+router.patch('/:id/in-progress', auth, inProgressComplaint);
+router.patch('/:id/solve', auth, solveComplaint);
 
 module.exports = router;

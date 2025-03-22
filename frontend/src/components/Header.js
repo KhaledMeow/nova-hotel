@@ -132,7 +132,7 @@ const Header = () => {
             <img src={logo} alt="Hotel Logo" className="menu-logo" />
             {isLoggedIn && userData && (
               <div className="user-greeting-menu">
-                Welcome back, {userData.first_name} {userData.last_name}
+                Welcome back, {userData.name}
               </div>
             )}
             {navItems.map((item) => (

@@ -19,14 +19,9 @@ const userSchema = new mongoose.Schema({
     ref: 'Role',
     required: [true, 'Role is required']
   },
-  first_name: {
+  name: {
     type: String,
-    required: [true, 'First name is required'],
-    trim: true
-  },
-  last_name: {
-    type: String,
-    required: [true, 'Last name is required'],
+    required: [true, 'Name is required'],
     trim: true
   },
   phone: {

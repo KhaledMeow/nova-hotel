@@ -5,9 +5,9 @@ const bcrypt = require('bcryptjs');
 
 exports.register = async (req, res) => {
   try {
-    const { email, password, first_name, last_name, phone } = req.body;
+    const { email, password, name, phone } = req.body;
 
-    if (!email || !password || !first_name || !last_name) {
+    if (!email || !password || !name) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
@@ -25,8 +25,7 @@ exports.register = async (req, res) => {
     const user = await User.create({
       email,
       password,
-      first_name,
-      last_name,
+      name,
       phone,
       role: defaultRole._id
     });

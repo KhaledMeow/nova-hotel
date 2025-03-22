@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import backgroundImage from "./assets/images/background-home1.jpg";
 import CalendarComponent from "./components/CalendarComponent";
-import ContactUsPage from "./pages/ComplaintPage";
 import RoomList from "./components/RoomList";
 import Booking from "./components/Booking";
 import AboutPage from "./pages/AboutPage";

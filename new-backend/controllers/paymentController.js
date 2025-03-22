@@ -36,7 +36,7 @@ exports.getPaymentDetails = async (req, res) => {
   try {
     const payment = await Payment.findById(req.params.id)
       .populate('booking', 'check_in_date check_out_date')
-      .populate('user', 'first_name last_name');
+      .populate('user', 'name');
       
     res.json(payment);
   } catch (error) {

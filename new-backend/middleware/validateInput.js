@@ -16,15 +16,10 @@ exports.validateRegistration = [
     .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/)
     .withMessage('Password must contain at least one uppercase, one lowercase, and one number'),
 
-  body('first_name')
+  body('name')
     .trim()
-    .notEmpty().withMessage('First name is required')
-    .isLength({ max: 30 }).withMessage('First name too long'),
-
-  body('last_name')
-    .trim()
-    .notEmpty().withMessage('Last name is required')
-    .isLength({ max: 30 }).withMessage('Last name too long'),
+    .notEmpty().withMessage('Name is required')
+    .isLength({ max: 30 }).withMessage('Name too long'),
 
   body('phone')
     .optional({ checkFalsy: true })

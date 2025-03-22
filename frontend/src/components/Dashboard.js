@@ -1,159 +1,295 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import jwtDecode from 'jwt-decode';
 import "../styles/Dashboard.css";
 
 const Dashboard = () => {
   const [bookings, setBookings] = useState([]);
+  const [complaints, setComplaints] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [cancellingId, setCancellingId] = useState(null);
   const [confirmingId, setConfirmingId] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isStaff, setIsStaff] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          window.location = '/login';
+          return;
+        }
+
+        const decoded = jwtDecode(token);
+        setIsAdmin(decoded.role === 'admin');
+        setIsStaff(decoded.role === 'staff');
+
+        const [bookingsRes, complaintsRes] = await Promise.all([
+          fetch('/api/v1/bookings', {
+            headers: { 'Authorization': `Bearer ${token}` }
+          }),
+          fetch('/api/v1/complaints', {
+            headers: { 'Authorization': `Bearer ${token}` }
+          })
+        ]);
+
+        if (!bookingsRes.ok) {
+          if (bookingsRes.status === 401) {
+            localStorage.removeItem('token');
+            window.location = '/login';
+          }
+          throw new Error('Failed to fetch bookings');
+        }
+
+        if (!complaintsRes.ok) {
+          throw new Error('Failed to fetch complaints');
+        }
+
+        const bookingsData = await bookingsRes.json();
+        const complaintsData = await complaintsRes.json();
+
+        setBookings(bookingsData);
+        setComplaints(complaintsData);
+        
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const cancelBooking = async (bookingId) => {
     if (!window.confirm('Are you sure you want to cancel this booking?')) return;
-  try { 
-    setCancellingId(bookingId);
-    const token = localStorage.getItem('token');
-    const response = await fetch(`/api/v1/bookings/${bookingId}`, {
-      method: 'PATCH',
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error || 'Failed to cancel booking');
-    }
-
-    // Refresh bookings list
-    setBookings(prev => prev.filter(b => 
-      b._id !== bookingId ? {...b, status: 'cancelled'} : b
-    ));
-    
-  } catch (error) {
-    alert(error.message);
-    console.error('Cancellation Error:', error);
-  } finally {
-    setCancellingId(null);
-  }
-};
-const confirmBooking = async (bookingId) => {
-  if (!window.confirm('Confirm this booking?')) return;
-  try {
-    setConfirmingId(bookingId);
-    const token = localStorage.getItem('token');
-    const response = await fetch(`/api/v1/bookings/${bookingId}/confirm`, {
-      method: 'PATCH',
-      headers: { 'Authorization': `Bearer ${token}` }
-    });
-
-    if (!response.ok) throw new Error('Confirmation failed');
-    
-    setBookings(prev => prev.map(b => 
-      b._id === bookingId ? { ...b, status: 'confirmed' } : b
-    ));
-  } catch (error) {
-    alert(error.message);
-  } finally {
-    setConfirmingId(null);
-  }
-};
-
-useEffect(() => {
-  const fetchBookings = async () => {
-    try {
+    try { 
+      setCancellingId(bookingId);
       const token = localStorage.getItem('token');
-      if (!token) {
-        throw new Error('No authentication token found');
-      }
-
-      const response = await fetch('/api/v1/bookings', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
+      const response = await fetch(`/api/v1/bookings/${bookingId}`, {
+        method: 'PATCH',
+        headers: { 'Authorization': `Bearer ${token}` }
       });
 
       if (!response.ok) {
-        if (response.status === 401) {
-          localStorage.removeItem('token');
-          window.location = '/login';
-        }
-        throw new Error('Failed to fetch bookings');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to cancel booking');
       }
 
-      const data = await response.json();
-      setBookings(data);
-    } catch (err) {
-      setError(err.message);
+      setBookings(prev => prev.map(b => 
+        b._id === bookingId ? { ...b, status: 'cancelled' } : b
+      ));
+      
+    } catch (error) {
+      alert(error.message);
+      console.error('Cancellation Error:', error);
     } finally {
-      setLoading(false);
+      setCancellingId(null);
     }
   };
 
-  fetchBookings();
-}, []);
+  const confirmBooking = async (bookingId) => {
+    if (!window.confirm('Confirm this booking?')) return;
+    try {
+      setConfirmingId(bookingId);
+      const token = localStorage.getItem('token');
+      const response = await fetch(`/api/v1/bookings/${bookingId}/confirm`, {
+        method: 'PATCH',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      if (!response.ok) throw new Error('Booking already confirmed');
+      
+      setBookings(prev => prev.map(b => 
+        b._id === bookingId ? { ...b, status: 'confirmed' } : b
+      ));
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      setConfirmingId(null);
+    }
+  };
+  const solveComplaint = async (complaintId) => {
+    if (!window.confirm('Mark this complaint as solved?')) return;
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`/api/v1/complaints/${complaintId}/solve`, {
+        method: 'PATCH',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to solve complaint');
+      }
+  
+      // Update local state
+      setComplaints(prev => prev.map(c => 
+        c._id === complaintId ? { ...c, status: 'solved' } : c
+      ));
+      
+    } catch (error) {
+      alert(error.message);
+      console.error('Solve Complaint Error:', error);
+    }
+  };
+  const inProgressComplaint = async (complaintId) => {
+    if (!window.confirm('Mark this complaint as in progress?')) return;
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`/api/v1/complaints/${complaintId}/in-progress`, {
+        method: 'PATCH',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to mark complaint as in progress');
+      }
+  
+      // Update local state
+      setComplaints(prev => prev.map(c => 
+        c._id === complaintId ? { ...c, status: 'in progress' } : c
+      ));
+      
+    } catch (error) {
+      alert(error.message);
+      console.error('In Progress Complaint Error:', error);
+    }
+  };
+  // Update the button in complaints section to:
+  <div className="booking-actions">
+    {(isAdmin || isStaff) && complaint.status !== 'solved' && (
+      <button 
+        className="solved-button"
+        onClick={() => solveComplaint(complaint._id)}
+      >
+        Mark as Solved
+      </button>
+    )}
+  </div>
+  useEffect(() => {
+    console.log('Bookings:', bookings);
+    console.log('Current user role:', isAdmin ? 'Admin' : isStaff ? 'Staff' : 'Guest');
+  }, [bookings, isAdmin, isStaff]);
+
 
   if (loading) return <div className="loading-spinner"></div>;
   if (error) return <div className="error-message">Error: {error}</div>;
 
   return (
     <div className="room-list-page">
-    <div className="dashboard-container">
-      <h1 className="dashboard-title">Bookings</h1>
-      {bookings.length === 0 ? (
-        <div className="no-bookings">
-          <p>You have no upcoming bookings</p>
-          <Link to="/calendar" className="book-now-button">
-            Book Now
-          </Link>
-        </div>
-      ) : (
-        <div className="bookings-grid">
-          {bookings.map(booking => (
-            <div key={booking._id} className="booking-card">
-              <div className="booking-header">
-                <h3>{booking.room.name}</h3>
-                <span className={`status-badge ${booking.status}`}>
-                  {booking.status}
-                </span>
-              </div>
-              
-              <div className="booking-dates">
-                <div className="date-item">
-                  <span>Check-in:</span>
-                  {new Date(booking.check_in_date).toLocaleDateString()}
+      <div className="dashboard-container">
+        <h1 className="dashboard-title">Bookings</h1>
+        {bookings.length === 0 ? (
+          <div className="no-bookings">
+            <p>You have no upcoming bookings</p>
+            <Link to="/calendar" className="book-now-button">
+              Book Now
+            </Link>
+          </div>
+        ) : (
+          <div className="bookings-grid">
+            {bookings.map(booking => (
+              <div key={booking._id} className="booking-card">
+                <div className="booking-header">
+                  <h3>{booking.room.name}</h3>
+                  <span className={`status-badge ${booking.status}`}>
+                    {booking.status}
+                  </span>
                 </div>
-                <div className="date-item">
-                  <span>Check-out:</span>
-                  {new Date(booking.check_out_date).toLocaleDateString()}
+                
+                <div className="booking-dates">
+                  <div className="date-item">
+                    <span>Check-in:</span>
+                    {new Date(booking.check_in_date).toLocaleDateString()}
+                  </div>
+                  <div className="date-item">
+                    <span>Check-out:</span>
+                    {new Date(booking.check_out_date).toLocaleDateString()}
+                  </div>
+                </div>
+
+                <div className="booking-details">
+                  <p>Name: {booking.user.name}</p>
+                  <p>Email: {booking.user.email}</p>
+                  <p>Guests: {booking.num_guests}</p>
+                  <p>Total Price: ${booking.room.price * 
+                    Math.ceil((new Date(booking.check_out_date) - new Date(booking.check_in_date)) / (1000 * 3600 * 24))}</p>
+                </div>
+
+                <div className="booking-actions">
+                  {(isAdmin || isStaff) && booking.status === 'pending' && (
+                    <button className="confirm-button"
+                      onClick={() => confirmBooking(booking._id)}
+                      disabled={confirmingId === booking._id}>
+                      {confirmingId === booking._id ? 'Confirming...' : 'Confirm Booking'}
+                    </button>
+                    
+                  )}
+                  <button className="confirm-button"
+                    onClick={() => confirmBooking(booking._id)}
+                    disabled={confirmingId === booking._id}>
+                    {confirmingId === booking._id ? 'Confirming...' : 'Confirm Booking'}
+                  </button>
+                  <button className="cancel-button"
+                    onClick={() => cancelBooking(booking._id)}
+                    disabled={cancellingId === booking._id}>
+                    {cancellingId === booking._id ? 'Cancelling...' : 'Cancel Booking'}
+                  </button>
                 </div>
               </div>
+            ))}
+          </div>
+        )}
 
-              <div className="booking-details">
-                <p>Guests: {booking.num_guests}</p>
-                <p>Room Type: {booking.room.type}</p>
-                <p>Total Price: ${booking.room.price * 
-                  Math.ceil((new Date(booking.check_out_date) - new Date(booking.check_in_date)) / (1000 * 3600 * 24))}</p>
-              </div>
-
-              <div className="booking-actions">
-                <button className="cancel-button"
-                 onClick={() => cancelBooking(booking._id)}
-                 disabled={cancellingId === booking._id}>
-                  {cancellingId === booking._id ? 'Cancelling...' : 'Cancel Booking'}
-                </button>
-                <button className="confirm-button"
-                  onClick={() => confirmBooking(booking._id)}
-                  disabled={confirmingId === booking._id}>
-                  {confirmingId === booking._id ? 'Confirming...' : 'Confirm Booking'}
-                </button>
-              </div>
+        <h1 className="dashboard-title" style={{ marginTop: '3rem' }}>Complaints</h1>
+        {complaints.length === 0 ? (
+          <div className="no-bookings">
+            <p>You haven't submitted any complaints</p>
+            <Link to="/complaint" className="book-now-button">
+              Submit Complaint
+            </Link>
+          </div>
+        ) : (
+          <div className="bookings-grid">
+            {complaints.map(complaint => (
+              <div key={complaint._id} className="booking-card">
+                <div className="booking-header">
+                  <h3>{complaint.title}</h3>
+                  <span className={`status-badge ${complaint.status}`}>
+                    {complaint.status.replace('_', ' ')}
+                  </span>
+                </div>
+                <div className="user-info">
+                  <p>Submitted by: {complaint.user.name}</p>
+                  <p>Email: {complaint.user.email}</p>
+                </div>
+                <div className="booking-details">
+                  <p className="complaint-description">{complaint.message}</p>
+                  {complaint.resolution && (
+                    <div className="resolution-notice">
+                      <strong>Resolution:</strong>
+              <p>{complaint.resolution}</p>
             </div>
-          ))}
+          )}
         </div>
-      )}
-    </div>
+
+        <div className="booking-actions">
+            <button className="solved-button" onClick={() => solveComplaint(complaint._id)}>
+              {complaint.status === 'open' ? 'Solving...' : 'Mark as Solved'}
+            </button>
+          <button className="solved-button" onClick={() => inProgressComplaint(complaint._id)}>
+            {cancellingId === complaint._id ? 'in-progress...' : 'Mark as In Progress'}
+          </button>
+        </div>
+      </div>
+    ))}
+  </div>
+)}
+      </div>
     </div>
   );
 };
