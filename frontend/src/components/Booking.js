@@ -162,8 +162,8 @@ const Booking = ({ isModal }) => {
     
     const submissionData = {
       room: room._id,
-      check_in_date: new Date(formData.check_in_date).toISOString(),
-      check_out_date: new Date(formData.check_out_date).toISOString(),
+      check_in_date: formData.check_in_date,
+      check_out_date: formData.check_out_date,
       num_guests: parseInt(formData.num_of_people),
       special_requests: formData.special_requests
 

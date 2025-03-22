@@ -50,6 +50,9 @@ const roomSchema = new mongoose.Schema({
             return v < this.endDate;
           },
           message: 'Start date must be before end date'
+        },
+        set: function(v) {
+          return new Date(v).setUTCHours(23,59,59,999);
         }
       },
       endDate: {

@@ -9,18 +9,24 @@ exports.createBooking = async (req, res) => {
     const room = await Room.findById(roomId);
     if (!room) throw new Error('Room not found');
   
-    const checkIn = new Date(req.body.check_in_date + "T00:00:00Z");
-    const checkOut = new Date(req.body.check_out_date + "T23:59:59Z");
+    const checkIn = new Date(req.body.check_in_date);
+    const checkOut = new Date(req.body.check_out_date);
     
     const { num_guests } = req.body;
 
-    // Check room availability
+    if (!(checkIn instanceof Date && !isNaN(checkIn)) || 
+        !(checkOut instanceof Date && !isNaN(checkOut))) {
+      throw new Error('Invalid date values received');
+    }
+
     const conflictingBooking = await Room.findOne({
       _id: room._id,
       'booked_dates.startDate': { $lt: checkOut },
       'booked_dates.endDate': { $gt: checkIn }
     });
-
+    if (isNaN(checkIn) || isNaN(checkOut)) {
+      throw new Error('Invalid date format');
+    }
     if (conflictingBooking) {
       throw new Error('Room not available');
     }
@@ -40,7 +46,7 @@ exports.createBooking = async (req, res) => {
       check_in_date: checkIn,
       check_out_date: checkOut,
       num_guests,
-      status: 'confirmed'
+      status: 'pending'
     });
     if (!/^\d{4}-\d{2}-\d{2}$/.test(req.body.check_in_date)) {
       throw new Error('Invalid check-in date format');
