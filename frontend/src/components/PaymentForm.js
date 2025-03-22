@@ -65,7 +65,7 @@ useEffect(() => {
 
   const validateCardNumber = (number) => {
     const testCardNumbers = [
-      '4111111111111111',  // Visa
+      '1111111111111111',  // Visa
       '5500000000000004',  // Mastercard
       '3400000000000009',  // AMEX
       '6011000000000004'   // Discover
@@ -150,9 +150,6 @@ useEffect(() => {
   const paymentGatewaySimulation = () => {
     const scenarios = [
       { success: true, message: 'Payment Successful' },
-      { success: true, message: 'Payment Processed' },
-      { success: true, message: 'Payment Successful' },
-      { success: true, message: 'Payment Processed' },
       { success: false, message: 'Payment Failed - Please try again' }
     ];
     return scenarios[Math.floor(Math.random() * scenarios.length)];
@@ -296,12 +293,8 @@ useEffect(() => {
         type="submit" 
         disabled={processing}
         className="payment-button"
-        onClick={() => {
-          onSuccess && onSuccess();
-          navigate('/', { replace: true });
-        }}
       >
-        {processing ? 'Processing...' : `Pay $${Math.floor(room.price.toString().replace(/\$/g, '')*nights)}`}        
+        {processing ? 'Processing...' : `Pay $${Math.floor(room.price.toString().replace(/\$/g, '')*nights)}`}
       </button>
     </form>
   );
