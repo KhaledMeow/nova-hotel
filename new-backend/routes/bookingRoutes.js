@@ -54,7 +54,7 @@ router.post('/', [
 ], auth, validateBooking, bookingController.createBooking);
 
 router.get('/', auth, bookingController.getUserBookings);
-
-router.patch('/:id', auth, bookingController.cancelBooking);
+router.patch('/:id/', auth, bookingController.cancelBooking);
+router.patch('/:id/confirm', auth, bookingController.confirmBooking);
 
 module.exports = router;

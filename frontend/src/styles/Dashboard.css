@@ -103,9 +103,8 @@
     background: #6c757d;
     cursor: not-allowed;
   }
-  .view-button {
-
-    background: #fca53a;
+  .confirm-button {
+    background: #6f1d25;
     color: white;
     padding: 0.75rem 2rem;
     border: none;
@@ -114,7 +113,12 @@
     transition: background-color 0.3s;
   }
   
-  .view-button:hover {
-    background: #000000;
-    color: #ffffff;
+  .confirm-button:hover {
+    background: #ffffff;
+    color: #000000;
+  }
+  
+  .confirm-button:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
   }

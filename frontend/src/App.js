@@ -35,7 +35,6 @@ const App = () => {
         <Routes>
           <Route path="/" element={<HAC />} />
           <Route path="/About" element={<AboutPage />} />
-          <Route path="/Contact-Us" element={<ContactUsPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/check-availability" element={<CalendarComponent />} />

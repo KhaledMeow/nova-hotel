@@ -109,3 +109,40 @@ exports.cancelBooking = async (req, res) => {
     });
   }
 };
+exports.confirmBooking = async (req, res) => {
+  try {
+    const booking = await Booking.findById(req.params.id);
+    if (!booking) throw new Error('Booking not found');
+
+    if (booking.status === 'confirmed') {
+      return res.status(400).json({ 
+        success: false,
+        error: 'Booking already confirmed' 
+      });
+    }
+
+    // Verify room availability again
+    const isAvailable = await checkRoomAvailability(
+      booking.room,
+      booking.check_in_date,
+      booking.check_out_date
+    );
+
+    if (!isAvailable) {
+      throw new Error('Room no longer available for these dates');
+    }
+
+    const updatedBooking = await Booking.findByIdAndUpdate(
+      req.params.id,
+      { status: 'confirmed' },
+      { new: true }
+    );
+
+    res.json(updatedBooking);
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message
+    });
+  }
+};

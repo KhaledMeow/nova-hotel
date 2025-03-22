@@ -7,6 +7,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [cancellingId, setCancellingId] = useState(null);
+  const [confirmingId, setConfirmingId] = useState(null);
 
   const cancelBooking = async (bookingId) => {
     if (!window.confirm('Are you sure you want to cancel this booking?')) return;
@@ -35,6 +36,27 @@ const Dashboard = () => {
     console.error('Cancellation Error:', error);
   } finally {
     setCancellingId(null);
+  }
+};
+const confirmBooking = async (bookingId) => {
+  if (!window.confirm('Confirm this booking?')) return;
+  try {
+    setConfirmingId(bookingId);
+    const token = localStorage.getItem('token');
+    const response = await fetch(`/api/v1/bookings/${bookingId}/confirm`, {
+      method: 'PATCH',
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+
+    if (!response.ok) throw new Error('Confirmation failed');
+    
+    setBookings(prev => prev.map(b => 
+      b._id === bookingId ? { ...b, status: 'confirmed' } : b
+    ));
+  } catch (error) {
+    alert(error.message);
+  } finally {
+    setConfirmingId(null);
   }
 };
 
@@ -78,7 +100,7 @@ useEffect(() => {
   return (
     <div className="room-list-page">
     <div className="dashboard-container">
-      <h1 className="dashboard-title">Your Bookings</h1>
+      <h1 className="dashboard-title">Bookings</h1>
       {bookings.length === 0 ? (
         <div className="no-bookings">
           <p>You have no upcoming bookings</p>
@@ -121,11 +143,10 @@ useEffect(() => {
                  disabled={cancellingId === booking._id}>
                   {cancellingId === booking._id ? 'Cancelling...' : 'Cancel Booking'}
                 </button>
-              </div>
-              <div className="booking-actions">
-                <button className="view-button"
-                onClick={() => {}}>
-                  View Details
+                <button className="confirm-button"
+                  onClick={() => confirmBooking(booking._id)}
+                  disabled={confirmingId === booking._id}>
+                  {confirmingId === booking._id ? 'Confirming...' : 'Confirm Booking'}
                 </button>
               </div>
             </div>
