@@ -80,9 +80,16 @@ const Header = () => {
   const navItems = [
     { name: "Home", path: "/" },
     { name: "About Us", path: "/About" },
-    isLoggedIn 
-      ? { name: "Logout", path: "/logout" }
-      : { name: "Login", path: "/login" }
+
+    ...(isLoggedIn 
+      ?[ 
+        { name: "Dashboard", path: "/dashboard" },
+        { name: "Logout", path: "/logout" }
+      ]
+      :[ 
+        { name: "Login", path: "/login" }
+      ]
+    )
   ];
 
   const handleLogout = () => {

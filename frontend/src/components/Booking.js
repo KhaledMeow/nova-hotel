@@ -38,7 +38,7 @@ const validateForm = (key, value) => {
   return "";
 };
 
-const Booking = () => {
+const Booking = ({ isModal }) => {
   const location = useLocation();
   const room = location.state?.room || {};
   const navigate = useNavigate();
@@ -57,7 +57,12 @@ const Booking = () => {
     check_out_date: location.state?.checkOutDate || '',
     num_of_people: "",
   });
-
+  useEffect(() => {  
+    if (!isModal && !location.state?.room?._id) {  
+      alert("Invalid room selection");  
+      navigate("/room-list");  
+    }  
+  }, [isModal, location.state, navigate]);
   useEffect(() => {  
     if (!location.state?.room?._id) {  
       alert("Invalid room selection");  
@@ -229,7 +234,7 @@ const Booking = () => {
   };
 
   return (
-    <div className="booking-container main-content">
+    <div className={`booking-container ${isModal ? 'modal-version' : ''}`}>
       {!showPayment ? (
         <>
           <h2>Confirm Details</h2>

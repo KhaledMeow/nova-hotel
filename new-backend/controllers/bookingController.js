@@ -5,14 +5,16 @@ const { checkRoomAvailability } = require('../utils/roomAvailability');
 
 exports.createBooking = async (req, res) => {
   try {
-    const room = req.room;
-    const { check_in_date, check_out_date, num_guests } = req.body;
-
-    // Remove transaction code
+    const { room: roomId } = req.body;
+    const room = await Room.findById(roomId);
+    if (!room) throw new Error('Room not found');
+  
     const checkIn = new Date(req.body.check_in_date + "T00:00:00Z");
     const checkOut = new Date(req.body.check_out_date + "T23:59:59Z");
     
-    // Add manual availability check
+    const { num_guests } = req.body;
+
+    // Check room availability
     const conflictingBooking = await Room.findOne({
       _id: room._id,
       'booked_dates.startDate': { $lt: checkOut },
@@ -52,6 +54,7 @@ exports.createBooking = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
 exports.getUserBookings = async (req, res) => {
   try {
     const bookings = await Booking.find({ user: req.user._id })
@@ -67,25 +70,31 @@ exports.cancelBooking = async (req, res) => {
   session.startTransaction();
 
   try {
-    // 1. Update booking status
-    const booking = await Booking.findByIdAndUpdate(
+    const booking = await Booking.findById(req.params.id).session(session);
+    if (!booking) throw new Error('Booking not found');
+
+    await Room.findByIdAndUpdate(
+      booking.room,
+      { 
+        $pull: { 
+          booked_dates: { 
+            startDate: booking.check_in_date,
+            endDate: booking.check_out_date
+          }
+        }
+      },
+      { session }
+    );
+
+    // 3. Update booking status
+    const updatedBooking = await Booking.findByIdAndUpdate(
       req.params.id,
       { status: 'cancelled' },
       { new: true, session }
     );
 
-    // 2. Remove from room bookings
-    await Room.findByIdAndUpdate(
-      ObjectId(booking.room),
-      { $pull: { booked_dates: { 
-        startDate: Date,
-        endDate: Date
-      }}},
-      { session }
-    );
-
     await session.commitTransaction();
-    res.json(booking);
+    res.json(updatedBooking);
   } catch (error) {
     await session.abortTransaction();
     res.status(400).json({ error: error.message });

@@ -96,20 +96,23 @@
   }
   
   .menu-toggle {
+    background-color: transparent;
     font-size: 70px;
     font-weight: bolder;
-    background-color: transparent;
     color: var(--text);
     padding: 20px;
     border: none;
     cursor: pointer;
     border-radius: 10px;
     z-index: 100;
+    transform: translateY(-12px);
+    transition: all 0.5s ease;
   }
   
   .menu-toggle:hover {
     color: var(--primary);
     background-color: transparent;
+
   }
   
   .menu-logo {

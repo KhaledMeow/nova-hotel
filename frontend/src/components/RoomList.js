@@ -118,7 +118,7 @@ import "../styles/SweetAlertCustom.css";
   ];
   
 
-const RoomList = () => {
+const RoomList = ({ isModal, onRoomSelect }) => {
   const navigate = useNavigate();
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -140,6 +140,10 @@ const RoomList = () => {
   
 
   const handleBookNowClick = (room) => {
+    if (isModal) {
+      onRoomSelect(room);
+      return;
+    }
     navigate("/Confirm-details", { state: {
       room: {
         _id: room._id,
@@ -154,7 +158,7 @@ const RoomList = () => {
   if (error) return <div>{error}</div>;
 
   return (
-    <div className="room-list-page">
+    <div className={`room-list-page ${isModal ? 'modal-version' : ''}`}>
       <div className="room-list-container">
         {rooms.map((room) => (
           <div key={room.id} className="room-card">
