@@ -3,12 +3,16 @@ const router = express.Router();
 const {
   createPayment,
   getPaymentDetails,
-  handlePaymentWebhook
+  completePayment,
+  refundPayment,
+  getUserPayments
 } = require('../controllers/paymentController');
 const auth = require('../middleware/auth');
 
 router.post('/', auth, createPayment);
 router.get('/:id', auth, getPaymentDetails);
-router.post('/webhook', handlePaymentWebhook);
+router.patch('/:id/complete', auth, completePayment);
+router.patch('/:id/refund', auth, refundPayment);
+router.get('/', auth, getUserPayments);
 
 module.exports = router;

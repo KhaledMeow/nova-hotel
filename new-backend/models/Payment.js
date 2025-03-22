@@ -18,13 +18,13 @@ const paymentSchema = new mongoose.Schema({
   },
   method: {
     type: String,
-    enum: ['credit_card', 'debit_card', 'cash', 'voucher'],
+    enum: ['credit_card'],
     required: [true, 'Payment method is required']
   },
   status: {
     type: String,
-    enum: ['pending', 'completed', 'failed', 'refunded'],
-    default: 'completed'
+    enum: ['pending', 'completed', 'refunded'],
+    default: 'pending'
   },
   transaction_id: String
 }, { timestamps: true });

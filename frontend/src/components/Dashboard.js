@@ -12,6 +12,8 @@ const Dashboard = () => {
   const [confirmingId, setConfirmingId] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isStaff, setIsStaff] = useState(false);
+  const [payments, setPayments] = useState([]);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -26,11 +28,14 @@ const Dashboard = () => {
         setIsAdmin(decoded.role === 'admin');
         setIsStaff(decoded.role === 'staff');
 
-        const [bookingsRes, complaintsRes] = await Promise.all([
+        const [bookingsRes, complaintsRes, paymentsRes] = await Promise.all([
           fetch('/api/v1/bookings', {
             headers: { 'Authorization': `Bearer ${token}` }
           }),
           fetch('/api/v1/complaints', {
+            headers: { 'Authorization': `Bearer ${token}` }
+          }),
+          fetch('/api/v1/payments', {
             headers: { 'Authorization': `Bearer ${token}` }
           })
         ]);
@@ -47,11 +52,17 @@ const Dashboard = () => {
           throw new Error('Failed to fetch complaints');
         }
 
+        if (!paymentsRes.ok) {
+          throw new Error('Failed to fetch payments');
+        }
+
         const bookingsData = await bookingsRes.json();
         const complaintsData = await complaintsRes.json();
+        const paymentsData = await paymentsRes.json();
 
         setBookings(bookingsData);
         setComplaints(complaintsData);
+        setPayments(paymentsData);
         
       } catch (err) {
         setError(err.message);
@@ -159,6 +170,54 @@ const Dashboard = () => {
       console.error('In Progress Complaint Error:', error);
     }
   };
+  const completePayment = async (paymentId) => {
+    if (!window.confirm('Mark this payment as completed?')) return;
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`/api/v1/payments/${paymentId}/complete`, {
+        method: 'PATCH',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to complete payment');
+      }
+  
+      // Update local state
+      setPayments(prev => prev.map(p => 
+        p._id === paymentId ? { ...p, status: 'completed' } : p
+      ));
+      
+    } catch (error) {
+      alert(error.message);
+      console.error('Complete Payment Error:', error);
+    }
+  };
+  const refundPayment = async (paymentId) => {
+    if (!window.confirm('Mark this payment as refunded?')) return;
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`/api/v1/payments/${paymentId}/refund`, {
+        method: 'PATCH',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to refund payment');
+      }
+  
+      // Update local state
+      setPayments(prev => prev.map(p => 
+        p._id === paymentId ? { ...p, status: 'refunded' } : p
+      ));
+      
+    } catch (error) {
+      alert(error.message);
+      console.error('Refund Payment Error:', error);
+    }
+  };
   // Update the button in complaints section to:
   <div className="booking-actions">
     {(isAdmin || isStaff) && complaint.status !== 'solved' && (
@@ -182,7 +241,7 @@ const Dashboard = () => {
   return (
     <div className="room-list-page">
       <div className="dashboard-container">
-        <h1 className="dashboard-title">Bookings</h1>
+        <h1 className="dashboard-title" style={{ marginTop: '3rem' }}>Bookings</h1>
         {bookings.length === 0 ? (
           <div className="no-bookings">
             <p>You have no upcoming bookings</p>
@@ -244,6 +303,39 @@ const Dashboard = () => {
             ))}
           </div>
         )}
+        
+      <h1 className="dashboard-title" style={{ marginTop: '3rem' }}>Payments</h1>
+      {payments.length === 0 ? (
+          <div className="no-bookings">
+            <p>No payments found</p>
+          </div>
+        ) : ( 
+          <div className="bookings-grid">
+            {payments.map(payment => (
+              <div key={payment._id} className="booking-card">
+                <div className="booking-header">
+                  <h3>Payment #{payment._id.slice(-4)}</h3>
+                  <span className={`status-badge ${payment.status}`}>
+                    {payment.status}
+                  </span>
+                </div>
+                <div className="booking-details">
+                  <p>Amount: ${payment.amount}</p>
+                  <p>Method: {payment.method}</p>
+                  <p>Date: {new Date(payment.createdAt).toLocaleDateString()}</p>
+                </div>
+                <div className="booking-actions">
+                  <button className="solved-button" onClick={() => completePayment(payment._id)}>
+                    Mark as Completed
+                  </button>
+                  <button className="solved-button" onClick={() => refundPayment(payment._id)}>
+                    Mark as Refunded
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
 
         <h1 className="dashboard-title" style={{ marginTop: '3rem' }}>Complaints</h1>
         {complaints.length === 0 ? (
@@ -272,25 +364,28 @@ const Dashboard = () => {
                   {complaint.resolution && (
                     <div className="resolution-notice">
                       <strong>Resolution:</strong>
-              <p>{complaint.resolution}</p>
-            </div>
-          )}
-        </div>
+                      <p>{complaint.resolution}</p>
+                    </div>
+                  )}
+                </div>
 
-        <div className="booking-actions">
-            <button className="solved-button" onClick={() => solveComplaint(complaint._id)}>
-              {complaint.status === 'open' ? 'Solving...' : 'Mark as Solved'}
-            </button>
-          <button className="solved-button" onClick={() => inProgressComplaint(complaint._id)}>
-            {cancellingId === complaint._id ? 'in-progress...' : 'Mark as In Progress'}
-          </button>
-        </div>
+                <div className="booking-actions">
+                  <button className="solved-button" onClick={() => solveComplaint(complaint._id)}>
+                    {complaint.status === 'open' ? 'Solving...' : 'Mark as Solved'}
+                  </button>
+                    <button className="solved-button" onClick={() => inProgressComplaint(complaint._id)}>
+                    {cancellingId === complaint._id ? 'in-progress...' : 'Mark as In Progress'}
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
-    ))}
-  </div>
-)}
+
+
       </div>
-    </div>
+      
   );
 };
 
