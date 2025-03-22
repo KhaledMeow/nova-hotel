@@ -94,6 +94,10 @@
     background-color: #f98b0d;
     transform: translateY(-2px);
   }
+  .login-submit-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
   
   .login-footer {
     text-align: center;

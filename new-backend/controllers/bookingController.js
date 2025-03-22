@@ -56,9 +56,10 @@ exports.createBooking = async (req, res) => {
 };
 
 exports.getUserBookings = async (req, res) => {
+  
   try {
     const bookings = await Booking.find({ user: req.user._id })
-      .populate('room', 'roomType price');
+      .populate('room', 'name type price');
     res.json(bookings);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -66,39 +67,45 @@ exports.getUserBookings = async (req, res) => {
 };
 
 exports.cancelBooking = async (req, res) => {
-  const session = await mongoose.startSession();
-  session.startTransaction();
 
   try {
-    const booking = await Booking.findById(req.params.id).session(session);
+    const booking = await Booking.findById(req.params.id)
     if (!booking) throw new Error('Booking not found');
 
-    await Room.findByIdAndUpdate(
+    if (booking.status === 'cancelled')
+      return res.status(400).json({
+        success: false,
+        error: 'Booking already cancelled'
+      });
+
+    const roomUpdate = await Room.findByIdAndUpdate(
       booking.room,
-      { 
-        $pull: { 
-          booked_dates: { 
-            startDate: booking.check_in_date,
-            endDate: booking.check_out_date
-          }
+      { $pull: { 
+        booked_dates: { 
+          startDate: new Date(booking.check_in_date),
+          endDate: new Date(booking.check_out_date)
         }
-      },
-      { session }
+      }},
+      { new: true }
     );
+
+    if (!roomUpdate) throw new Error('Failed to update room availability');
 
     // 3. Update booking status
     const updatedBooking = await Booking.findByIdAndUpdate(
       req.params.id,
       { status: 'cancelled' },
-      { new: true, session }
+      { new: true }
     );
 
-    await session.commitTransaction();
-    res.json(updatedBooking);
+    res.json({
+      ...updatedBooking.toObject(),
+      room: roomUpdate
+    });
   } catch (error) {
-    await session.abortTransaction();
-    res.status(400).json({ error: error.message });
-  } finally {
-    session.endSession();
+    res.status(400).json({
+      success: false,
+      error: error.message
+    });
   }
 };

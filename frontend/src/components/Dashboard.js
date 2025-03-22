@@ -7,7 +7,9 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [cancellingId, setCancellingId] = useState(null);
+
   const cancelBooking = async (bookingId) => {
+    if (!window.confirm('Are you sure you want to cancel this booking?')) return;
   try { 
     setCancellingId(bookingId);
     const token = localStorage.getItem('token');
@@ -24,7 +26,9 @@ const Dashboard = () => {
     }
 
     // Refresh bookings list
-    setBookings(prev => prev.filter(b => b._id !== bookingId));
+    setBookings(prev => prev.filter(b => 
+      b._id !== bookingId ? {...b, status: 'cancelled'} : b
+    ));
     
   } catch (error) {
     alert(error.message);
@@ -34,47 +38,39 @@ const Dashboard = () => {
   }
 };
 
-// Update the cancel button in the JSX
-<button 
-  className="cancel-button"
-
->
-  Cancel Booking
-</button>
-
-  useEffect(() => {
-    const fetchBookings = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          throw new Error('No authentication token found');
-        }
-
-        const response = await fetch('/api/v1/bookings', {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
-
-        if (!response.ok) {
-          if (response.status === 401) {
-            localStorage.removeItem('token');
-            window.location = '/login';
-          }
-          throw new Error('Failed to fetch bookings');
-        }
-
-        const data = await response.json();
-        setBookings(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
+useEffect(() => {
+  const fetchBookings = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('No authentication token found');
       }
-    };
 
-    fetchBookings();
-  }, []);
+      const response = await fetch('/api/v1/bookings', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          localStorage.removeItem('token');
+          window.location = '/login';
+        }
+        throw new Error('Failed to fetch bookings');
+      }
+
+      const data = await response.json();
+      setBookings(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchBookings();
+}, []);
 
   if (loading) return <div className="loading-spinner"></div>;
   if (error) return <div className="error-message">Error: {error}</div>;
@@ -86,8 +82,8 @@ const Dashboard = () => {
       {bookings.length === 0 ? (
         <div className="no-bookings">
           <p>You have no upcoming bookings</p>
-          <Link to="/room-list" className="book-now-button">
-            Book a Room Now
+          <Link to="/calendar" className="book-now-button">
+            Book Now
           </Link>
         </div>
       ) : (
@@ -120,8 +116,16 @@ const Dashboard = () => {
               </div>
 
               <div className="booking-actions">
-                <button className="book-now-button">
-                  Cancel Booking
+                <button className="cancel-button"
+                 onClick={() => cancelBooking(booking._id)}
+                 disabled={cancellingId === booking._id}>
+                  {cancellingId === booking._id ? 'Cancelling...' : 'Cancel Booking'}
+                </button>
+              </div>
+              <div className="booking-actions">
+                <button className="view-button"
+                onClick={() => {}}>
+                  View Details
                 </button>
               </div>
             </div>

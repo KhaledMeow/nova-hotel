@@ -49,7 +49,8 @@ const validateBooking = async (req, res, next) => {
 router.post('/', [ 
   body('check_in_date').isISO8601(),
   body('check_out_date').isISO8601(),
-  body('num_guests').isInt({ min: 1, max: 6 })
+  body('num_guests').isInt({ min: 1, max: 6 }),
+  body('room').isMongoId()
 ], auth, validateBooking, bookingController.createBooking);
 
 router.get('/', auth, bookingController.getUserBookings);
