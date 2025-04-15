@@ -47,8 +47,11 @@ exports.createComplaint = async (req, res) => {
 };
 
 exports.getUserComplaints = async (req, res) => {
+  const filter = (req.user.role === 'guest')
+  ? {}
+  : {user: req.user._id};
   try {
-    const complaints = await Complaint.find({ user: req.user._id })
+    const complaints = await Complaint.find(filter)
       .sort({ createdAt: -1 })
       .populate('user', 'email name');
     res.json(complaints);
@@ -58,6 +61,9 @@ exports.getUserComplaints = async (req, res) => {
 };
 
 exports.solveComplaint = async (req, res) => {
+  const filter = (req.user.role === 'admin' || req.user.role === 'staff')
+  ? {}
+  : {user: req.user._id};
   try {
     const { id } = req.params;
     if (!id) {
@@ -79,6 +85,9 @@ exports.solveComplaint = async (req, res) => {
 };
 
 exports.inProgressComplaint = async (req, res) => {
+  const filter = (req.user.role === 'admin' || req.user.role === 'staff')
+  ? {}
+  : {user: req.user._id};
   try {
     const { id } = req.params;
     if (!id) {
@@ -96,5 +105,19 @@ exports.inProgressComplaint = async (req, res) => {
     res.json(complaint);
   } catch (error) {
     res.status(400).json({ error: error.message });
+  }
+};
+exports.getAllComplaints = async (req, res) => {
+  const filter = (req.user.role === 'admin' || req.user.role === 'staff') 
+  ? {} 
+  : { user: req.user._id };
+  try {
+    const complaints = await Complaint.find(filter)
+      .sort({ createdAt: -1 })
+      .populate('user', 'name email');
+      
+    res.json(complaints);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };

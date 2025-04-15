@@ -1,11 +1,11 @@
-module.exports = async (req, res, next) => {
-  try {
-    const user = await User.findById(req.user._id).populate('role');
-    if (!user.role || user.role.name !== 'admin') {
-      throw new Error('Admin privileges required');
-    }
+module.exports = (req, res, next) => {
+  // No async needed - role should already be in req.user from JWT
+  if (req.user?.role === 'admin' || req.user?.role === 'staff') {
     next();
-  } catch (error) {
-    res.status(403).json({ error: error.message });
+  } else {
+    res.status(403).json({ 
+      success: false,
+      error: 'Admin/Staff privileges required' 
+    });
   }
 };

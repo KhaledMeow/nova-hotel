@@ -341,9 +341,6 @@ const Dashboard = () => {
         {complaints.length === 0 ? (
           <div className="no-bookings">
             <p>You haven't submitted any complaints</p>
-            <Link to="/complaint" className="book-now-button">
-              Submit Complaint
-            </Link>
           </div>
         ) : (
           <div className="bookings-grid">

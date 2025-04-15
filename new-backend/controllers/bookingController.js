@@ -62,9 +62,11 @@ exports.createBooking = async (req, res) => {
 };
 
 exports.getUserBookings = async (req, res) => {
-  
+  const filter = (req.user.role === 'guest')
+  ? {}
+  : {user: req.user._id};
   try {
-    const bookings = await Booking.find({ user: req.user._id })
+    const bookings = await Booking.find(filter)
       .populate('room', 'name type price');
     res.json(bookings);
   } catch (error) {
@@ -72,10 +74,27 @@ exports.getUserBookings = async (req, res) => {
   }
 };
 
-exports.cancelBooking = async (req, res) => {
-
+exports.getAllBookings = async (req, res) => {
+  const filter = (req.user.role === 'admin' || req.user.role === 'staff') 
+  ? {} 
+  : { user: req.user._id };
   try {
-    const booking = await Booking.findById(req.params.id)
+    const bookings = await Booking.find(filter)
+      .populate('room', 'name type price')
+      .populate('user', 'name email');
+      
+    res.json(bookings);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+exports.cancelBooking = async (req, res) => {
+  const filter = (req.user.role === 'admin' || req.user.role === 'staff')
+  ? {}
+  : {user: req.user._id};
+  try {
+    const booking = await Booking.findById(req.params.id, filter)
     if (!booking) throw new Error('Booking not found');
 
     if (booking.status === 'cancelled')
@@ -116,8 +135,11 @@ exports.cancelBooking = async (req, res) => {
   }
 };
 exports.confirmBooking = async (req, res) => {
+  const filter = (req.user.role === 'admin' || req.user.role === 'staff')
+  ? {}
+  : {user: req.user._id};
   try {
-    const booking = await Booking.findById(req.params.id);
+    const booking = await Booking.findById(req.params.id, filter);
     if (!booking) throw new Error('Booking not found');
 
     if (booking.status === 'confirmed') {

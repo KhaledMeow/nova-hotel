@@ -30,7 +30,7 @@ exports.register = async (req, res) => {
       role: defaultRole._id
     });
 
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
+    const token = jwt.sign({ userId: user._id, role: user.role }, process.env.JWT_SECRET);
     user.tokens.push(token);
     await user.save();
 
@@ -62,7 +62,7 @@ exports.login = async (req, res) => {
     if (!isMatch) throw new Error('Invalid credentials');
 
     // Generate and store new token
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
+    const token = jwt.sign({ userId: user._id, role: user.role }, process.env.JWT_SECRET);
     user.tokens.push(token);
     await user.save();
 

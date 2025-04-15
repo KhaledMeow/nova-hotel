@@ -4,7 +4,8 @@ const {
   createComplaint,
   getUserComplaints,
   inProgressComplaint,
-  solveComplaint
+  solveComplaint,
+  getAllComplaints
 
 } = require('../controllers/complaintController');
 const auth = require('../middleware/auth');
@@ -18,7 +19,8 @@ const complaintLimiter = rateLimit({
 
 router.post('/', complaintLimiter, auth, createComplaint);
 router.get('/', auth, getUserComplaints);
-router.patch('/:id/in-progress', auth, inProgressComplaint);
+router.patch('/:id/in-progress', auth,  inProgressComplaint);
 router.patch('/:id/solve', auth, solveComplaint);
+router.get('/all', auth, getAllComplaints);
 
 module.exports = router;

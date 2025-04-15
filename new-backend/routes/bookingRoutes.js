@@ -4,6 +4,7 @@ const bookingController = require('../controllers/bookingController');
 const auth = require('../middleware/auth');
 const Room = require('../models/Room');
 const { body } = require('express-validator');
+const adminCheck = require('../middleware/adminCheck');
 
 
 const validateBooking = async (req, res, next) => {
@@ -51,10 +52,11 @@ router.post('/', [
   body('check_out_date').isISO8601(),
   body('num_guests').isInt({ min: 1, max: 6 }),
   body('room').isMongoId()
-], auth, validateBooking, bookingController.createBooking);
+], auth, validateBooking, adminCheck, bookingController.createBooking);
 
 router.get('/', auth, bookingController.getUserBookings);
 router.patch('/:id/', auth, bookingController.cancelBooking);
 router.patch('/:id/confirm', auth, bookingController.confirmBooking);
+router.get('/all', auth, bookingController.getAllBookings);
 
 module.exports = router;
