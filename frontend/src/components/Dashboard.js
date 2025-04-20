@@ -27,6 +27,9 @@ const Dashboard = () => {
         const decoded = jwtDecode(token);
         setIsAdmin(decoded.role === 'admin');
         setIsStaff(decoded.role === 'staff');
+        const currentUserId = decoded.userId || decoded._id || decoded.id; // fallback for userId
+        window._novaUserRole = decoded.role;
+        window._novaUserId = currentUserId;
 
         const [bookingsRes, complaintsRes, paymentsRes] = await Promise.all([
           fetch('/api/v1/bookings', {
@@ -242,7 +245,7 @@ const Dashboard = () => {
     <div className="room-list-page">
       <div className="dashboard-container">
         <h1 className="dashboard-title" style={{ marginTop: '3rem' }}>Bookings</h1>
-        {bookings.length === 0 ? (
+         {bookings.length === 0 ? (
           <div className="no-bookings">
             <p>You have no upcoming bookings</p>
             <Link to="/calendar" className="book-now-button">
@@ -251,59 +254,59 @@ const Dashboard = () => {
           </div>
         ) : (
           <div className="bookings-grid">
-            {bookings.map(booking => (
-              <div key={booking._id} className="booking-card">
-                <div className="booking-header">
-                  <h3>{booking.room.name}</h3>
-                  <span className={`status-badge ${booking.status}`}>
-                    {booking.status}
-                  </span>
-                </div>
-                
-                <div className="booking-dates">
-                  <div className="date-item">
-                    <span>Check-in:</span>
-                    {new Date(booking.check_in_date).toLocaleDateString()}
+            {bookings.map(booking => {
+              const role = window._novaUserRole;
+              const userId = window._novaUserId;
+              // Only show cards to admin/staff, or to guests if it's their own booking
+              if (!(role === 'admin' || role === 'staff') && booking.user && booking.user._id !== userId) {
+                return null;
+              }
+              return (
+                <div key={booking._id} className="booking-card">
+                  <div className="booking-header">
+                    <h3>{booking.room.name}</h3>
+                    <span className={`status-badge ${booking.status}`}>
+                      {booking.status}
+                    </span>
                   </div>
-                  <div className="date-item">
-                    <span>Check-out:</span>
-                    {new Date(booking.check_out_date).toLocaleDateString()}
+                  <div className="booking-dates">
+                    <div className="date-item">
+                      <span>Check-in:</span>
+                      {new Date(booking.check_in_date).toLocaleDateString()}
+                    </div>
+                    <div className="date-item">
+                      <span>Check-out:</span>
+                      {new Date(booking.check_out_date).toLocaleDateString()}
+                    </div>
                   </div>
-                </div>
-
-                <div className="booking-details">
-                  <p>Name: {booking.user.name}</p>
-                  <p>Email: {booking.user.email}</p>
-                  <p>Guests: {booking.num_guests}</p>
-                  <p>Total Price: ${booking.room.price * 
-                    Math.ceil((new Date(booking.check_out_date) - new Date(booking.check_in_date)) / (1000 * 3600 * 24))}</p>
-                </div>
-
-                <div className="booking-actions">
-                  {(isAdmin || isStaff) && booking.status === 'pending' && (
-                    <button className="confirm-button"
-                      onClick={() => confirmBooking(booking._id)}
-                      disabled={confirmingId === booking._id}>
-                      {confirmingId === booking._id ? 'Confirming...' : 'Confirm Booking'}
-                    </button>
-                    
+                  <div className="booking-details">
+                    <p>Name: {booking.user.name}</p>
+                    <p>Email: {booking.user.email}</p>
+                    <p>Guests: {booking.num_guests}</p>
+                    <p>Total Price: ${booking.room.price * 
+                      Math.ceil((new Date(booking.check_out_date) - new Date(booking.check_in_date)) / (1000 * 3600 * 24))}</p>
+                  </div>
+                  {(window._novaUserRole === 'admin' || window._novaUserRole === 'staff') && (
+                    <div className="booking-actions">
+                      {booking.status === 'pending' && (
+                        <button className="confirm-button"
+                          onClick={() => confirmBooking(booking._id)}
+                          disabled={confirmingId === booking._id}>
+                          {confirmingId === booking._id ? 'Confirming...' : 'Confirm Booking'}
+                        </button>
+                      )}
+                      <button className="cancel-button"
+                        onClick={() => cancelBooking(booking._id)}
+                        disabled={cancellingId === booking._id}>
+                        {cancellingId === booking._id ? 'Cancelling...' : 'Cancel Booking'}
+                      </button>
+                    </div>
                   )}
-                  <button className="confirm-button"
-                    onClick={() => confirmBooking(booking._id)}
-                    disabled={confirmingId === booking._id}>
-                    {confirmingId === booking._id ? 'Confirming...' : 'Confirm Booking'}
-                  </button>
-                  <button className="cancel-button"
-                    onClick={() => cancelBooking(booking._id)}
-                    disabled={cancellingId === booking._id}>
-                    {cancellingId === booking._id ? 'Cancelling...' : 'Cancel Booking'}
-                  </button>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
-        )}
-        
+        )}        
       <h1 className="dashboard-title" style={{ marginTop: '3rem' }}>Payments</h1>
       {payments.length === 0 ? (
           <div className="no-bookings">
@@ -311,31 +314,41 @@ const Dashboard = () => {
           </div>
         ) : ( 
           <div className="bookings-grid">
-            {payments.map(payment => (
-              <div key={payment._id} className="booking-card">
-                <div className="booking-header">
-                  <h3>Payment #{payment._id.slice(-4)}</h3>
-                  <span className={`status-badge ${payment.status}`}>
-                    {payment.status}
-                  </span>
+            {payments.map(payment => {
+              const role = window._novaUserRole;
+              const userId = window._novaUserId;
+              // Only show cards to admin/staff, or to guests if it's their own payment
+              if (!(role === 'admin' || role === 'staff') && payment.user && payment.user._id !== userId) {
+                return null;
+              }
+              return (
+                <div key={payment._id} className="booking-card">
+                  <div className="booking-header">
+                    <h3>Payment #{payment._id.slice(-4)}</h3>
+                    <span className={`status-badge ${payment.status}`}>
+                      {payment.status}
+                    </span>
+                  </div>
+                  <div className="booking-details">
+                    <p>Name: {payment.user.name}</p>
+                    <p>Email: {payment.user.email}</p>
+                    <p>Amount: ${payment.amount}</p>
+                    <p>Method: {payment.method}</p>
+                    <p>Date: {new Date(payment.createdAt).toLocaleDateString()}</p>
+                  </div>
+                  {(window._novaUserRole === 'admin' || window._novaUserRole === 'staff') && (
+                    <div className="booking-actions">
+                      <button className="solved-button" onClick={() => completePayment(payment._id)}>
+                        Mark as Completed
+                      </button>
+                      <button className="solved-button" onClick={() => refundPayment(payment._id)}>
+                        Mark as Refunded
+                      </button>
+                    </div>
+                  )}
                 </div>
-                <div className="booking-details">
-                  <p>Name: {payment.user.name}</p>
-                  <p>Email: {payment.user.email}</p>
-                  <p>Amount: ${payment.amount}</p>
-                  <p>Method: {payment.method}</p>
-                  <p>Date: {new Date(payment.createdAt).toLocaleDateString()}</p>
-                </div>
-                <div className="booking-actions">
-                  <button className="solved-button" onClick={() => completePayment(payment._id)}>
-                    Mark as Completed
-                  </button>
-                  <button className="solved-button" onClick={() => refundPayment(payment._id)}>
-                    Mark as Refunded
-                  </button>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
 
@@ -346,38 +359,47 @@ const Dashboard = () => {
           </div>
         ) : (
           <div className="bookings-grid">
-            {complaints.map(complaint => (
-              <div key={complaint._id} className="booking-card">
-                <div className="booking-header">
-                  <h3>{complaint.title}</h3>
-                  <span className={`status-badge ${complaint.status}`}>
-                    {complaint.status.replace('_', ' ')}
-                  </span>
-                </div>
-                <div className="user-info">
-                  <p>Submitted by: {complaint.user.name}</p>
-                  <p>Email: {complaint.user.email}</p>
-                </div>
-                <div className="booking-details">
-                  <p className="complaint-description">{complaint.message}</p>
-                  {complaint.resolution && (
-                    <div className="resolution-notice">
-                      <strong>Resolution:</strong>
-                      <p>{complaint.resolution}</p>
+            {complaints.map(complaint => {
+              const role = window._novaUserRole;
+              const userId = window._novaUserId;
+              // Only show cards to admin/staff, or to guests if it's their own complaint
+              if (!(role === 'admin' || role === 'staff') && complaint.user && complaint.user._id !== userId) {
+                return null;
+              }
+              return (
+                <div key={complaint._id} className="booking-card">
+                  <div className="booking-header">
+                    <h3>{complaint.title}</h3>
+                    <span className={`status-badge ${complaint.status}`}>
+                      {complaint.status.replace('_', ' ')}
+                    </span>
+                  </div>
+                  <div className="user-info">
+                    <p>Submitted by: {complaint.user.name}</p>
+                    <p>Email: {complaint.user.email}</p>
+                  </div>
+                  <div className="booking-details">
+                    <p className="complaint-description">{complaint.message}</p>
+                    {complaint.resolution && (
+                      <div className="resolution-notice">
+                        <strong>Resolution:</strong>
+                        <p>{complaint.resolution}</p>
+                      </div>
+                    )}
+                  </div>
+                  {(window._novaUserRole === 'admin' || window._novaUserRole === 'staff') && (
+                    <div className="booking-actions">
+                      <button className="solved-button" onClick={() => solveComplaint(complaint._id)}>
+                        {complaint.status === 'open' ? 'Solving...' : 'Mark as Solved'}
+                      </button>
+                      <button className="solved-button" onClick={() => inProgressComplaint(complaint._id)}>
+                        {cancellingId === complaint._id ? 'in-progress...' : 'Mark as In Progress'}
+                      </button>
                     </div>
                   )}
                 </div>
-
-                <div className="booking-actions">
-                  <button className="solved-button" onClick={() => solveComplaint(complaint._id)}>
-                    {complaint.status === 'open' ? 'Solving...' : 'Mark as Solved'}
-                  </button>
-                    <button className="solved-button" onClick={() => inProgressComplaint(complaint._id)}>
-                    {cancellingId === complaint._id ? 'in-progress...' : 'Mark as In Progress'}
-                  </button>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
