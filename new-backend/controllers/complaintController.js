@@ -47,7 +47,7 @@ exports.createComplaint = async (req, res) => {
 };
 
 exports.getUserComplaints = async (req, res) => {
-  const filter = (req.user.role === 'guest')
+  const filter = (req.user.roleName === 'guest')
   ? {}
   : {user: req.user._id};
   try {
@@ -61,7 +61,7 @@ exports.getUserComplaints = async (req, res) => {
 };
 
 exports.solveComplaint = async (req, res) => {
-  const filter = (req.user.role === 'admin' || req.user.role === 'staff')
+  const filter = (req.user.roleName === 'admin' || req.user.roleName === 'staff')
   ? {}
   : {user: req.user._id};
   try {
@@ -85,7 +85,7 @@ exports.solveComplaint = async (req, res) => {
 };
 
 exports.inProgressComplaint = async (req, res) => {
-  const filter = (req.user.role === 'admin' || req.user.role === 'staff')
+  const filter = (req.user.roleName === 'admin' || req.user.roleName === 'staff')
   ? {}
   : {user: req.user._id};
   try {
@@ -108,7 +108,7 @@ exports.inProgressComplaint = async (req, res) => {
   }
 };
 exports.getAllComplaints = async (req, res) => {
-  const filter = (req.user.role === 'admin' || req.user.role === 'staff') 
+  const filter = (req.user.roleName === 'admin' || req.user.roleName === 'staff') 
   ? {} 
   : { user: req.user._id };
   try {

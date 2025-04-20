@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const Role = require('../models/Role');
 
 module.exports = async (req, res, next) => {
   try {
@@ -22,6 +23,13 @@ module.exports = async (req, res, next) => {
     // Attach user and token to request
     req.user = user;
     req.token = token;
+    // Populate role name for privilege checks
+    if (user.role) {
+      const roleDoc = await Role.findById(user.role);
+      req.user.roleName = roleDoc ? roleDoc.name : undefined;
+    } else {
+      req.user.roleName = undefined;
+    }
     next();
   } catch (error) {
     res.status(401).json({

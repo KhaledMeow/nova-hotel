@@ -320,6 +320,8 @@ const Dashboard = () => {
                   </span>
                 </div>
                 <div className="booking-details">
+                  <p>Name: {payment.user.name}</p>
+                  <p>Email: {payment.user.email}</p>
                   <p>Amount: ${payment.amount}</p>
                   <p>Method: {payment.method}</p>
                   <p>Date: {new Date(payment.createdAt).toLocaleDateString()}</p>

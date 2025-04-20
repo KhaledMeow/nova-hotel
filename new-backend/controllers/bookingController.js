@@ -62,7 +62,7 @@ exports.createBooking = async (req, res) => {
 };
 
 exports.getUserBookings = async (req, res) => {
-  const filter = (req.user.role === 'guest')
+  const filter = (req.user.roleName === 'guest')
   ? {}
   : {user: req.user._id};
   try {
@@ -75,7 +75,7 @@ exports.getUserBookings = async (req, res) => {
 };
 
 exports.getAllBookings = async (req, res) => {
-  const filter = (req.user.role === 'admin' || req.user.role === 'staff') 
+  const filter = (req.user.roleName === 'admin' || req.user.roleName === 'staff') 
   ? {} 
   : { user: req.user._id };
   try {
@@ -90,7 +90,7 @@ exports.getAllBookings = async (req, res) => {
 };
 
 exports.cancelBooking = async (req, res) => {
-  const filter = (req.user.role === 'admin' || req.user.role === 'staff')
+  const filter = (req.user.roleName === 'admin' || req.user.roleName === 'staff')
   ? {}
   : {user: req.user._id};
   try {
@@ -135,7 +135,7 @@ exports.cancelBooking = async (req, res) => {
   }
 };
 exports.confirmBooking = async (req, res) => {
-  const filter = (req.user.role === 'admin' || req.user.role === 'staff')
+  const filter = (req.user.roleName === 'admin' || req.user.roleName === 'staff')
   ? {}
   : {user: req.user._id};
   try {

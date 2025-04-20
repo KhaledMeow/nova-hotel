@@ -32,7 +32,7 @@ exports.createPayment = async (req, res) => {
   }
 };
 exports.getUserPayments = async (req, res) => {
-  const filter = (req.user.role === 'guest')
+  const filter = (req.user.roleName === 'guest')
   ? {}
   : {user: req.user._id};
   try {
@@ -46,7 +46,7 @@ exports.getUserPayments = async (req, res) => {
 };
 
 exports.completePayment = async (req, res) => {
-  const filter = (req.user.role === 'admin' || req.user.role === 'staff')
+  const filter = (req.user.roleName === 'admin' || req.user.roleName === 'staff')
   ? {}
   : {user: req.user._id};
   try {
@@ -74,7 +74,7 @@ exports.completePayment = async (req, res) => {
 };
 
 exports.getPaymentDetails = async (req, res) => {
-  const filter = (req.user.role === 'admin' || req.user.role === 'staff')
+  const filter = (req.user.roleName === 'admin' || req.user.roleName === 'staff')
   ? {}
   : {user: req.user._id};
   try {
@@ -89,7 +89,7 @@ exports.getPaymentDetails = async (req, res) => {
 };
 
 exports.refundPayment = async (req, res) => {
-  const filter = (req.user.role === 'admin' || req.user.role === 'staff')
+  const filter = (req.user.roleName === 'admin' || req.user.roleName === 'staff')
   ? {}
   : {user: req.user._id};
   try {
