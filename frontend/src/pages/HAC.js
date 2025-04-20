@@ -178,11 +178,13 @@ const ContactUs = () => {
     name: "",
     email: "",
     message: "",
+    category: '',
   });
   const [errors, setErrors] = useState({
     name: "",
     email: "",
     message: "",
+    category: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submissionError, setSubmissionError] = useState("");
@@ -200,6 +202,9 @@ const ContactUs = () => {
         if (value.trim() === "") return "Message is required";
         if (value.length < 20) return "Minimum 20 characters";
         if (value.length > 500) return "Maximum 500 characters";
+        return "";
+      case "category":
+        if (!value || !['service', 'facility', 'billing', 'other'].includes(value)) return "Category is required.";
         return "";
       default:
         return "";
@@ -250,7 +255,8 @@ const ContactUs = () => {
         body: JSON.stringify({
           name: formData.name,
           email: formData.email,
-          message: formData.message
+          message: formData.message,
+          category: formData.category
         }),
       });
   
@@ -271,7 +277,7 @@ const ContactUs = () => {
   
       // Success handling
       alert("Complaint submitted successfully!");
-      setFormData({ name: "", email: "", message: "" });
+      setFormData({ name: "", email: "", message: "", category: '' });
       setErrors({});
   
     } catch (error) {
@@ -334,7 +340,24 @@ const ContactUs = () => {
             />
             {errors.email && <span className="error-message">{errors.email}</span>}
           </div>
-
+          <div className="form-group">
+            <label htmlFor="category">Category:</label>
+            <select
+              id="category"
+              name="category"
+              value={formData.category}
+              onChange={handleChange}
+              className={errors.category ? "error" : ""}
+            >
+              <option value="">Select a category</option>
+              <option value="service">Service</option>
+              <option value="facility">Facility</option>
+              <option value="billing">Billing</option>
+              <option value="other">Other</option>
+              
+            </select>
+            {errors.category && <span className="error-message">{errors.category}</span>}
+          </div>
           <div className="form-group">
             <label htmlFor="message">Your Message:</label>
             <textarea
@@ -352,16 +375,6 @@ const ContactUs = () => {
             {isSubmitting ? <div className="loading-indicator"><span className="spinner"></span> Submitting</div> : "Submit"}
           </button>
         </form>
-      </div>
-
-      <div className="key-persons">
-        <h3>Example</h3>
-        <ul>
-          <li className="key-person">
-            Name: <strong>Maya Xin</strong>
-          </li>
-          <li className="key-person">Email: maya.xin@example.com</li>
-        </ul>
       </div>
     </section>
   );

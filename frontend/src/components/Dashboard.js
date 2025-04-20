@@ -257,8 +257,8 @@ const Dashboard = () => {
             {bookings.map(booking => {
               const role = window._novaUserRole;
               const userId = window._novaUserId;
-              // Only show cards to admin/staff, or to guests if it's their own booking
-              if (!(role === 'admin' || role === 'staff') && booking.user && booking.user._id !== userId) {
+              // Only show cards to admin, or to staff/guests if it's their own booking
+              if (role !== 'admin' && booking.user && booking.user._id !== userId) {
                 return null;
               }
               return (
@@ -317,8 +317,8 @@ const Dashboard = () => {
             {payments.map(payment => {
               const role = window._novaUserRole;
               const userId = window._novaUserId;
-              // Only show cards to admin/staff, or to guests if it's their own payment
-              if (!(role === 'admin' || role === 'staff') && payment.user && payment.user._id !== userId) {
+              // Only show cards to admin, or to staff/guests if it's their own payment
+              if (role !== 'admin' && payment.user && payment.user._id !== userId) {
                 return null;
               }
               return (
@@ -362,8 +362,8 @@ const Dashboard = () => {
             {complaints.map(complaint => {
               const role = window._novaUserRole;
               const userId = window._novaUserId;
-              // Only show cards to admin/staff, or to guests if it's their own complaint
-              if (!(role === 'admin' || role === 'staff') && complaint.user && complaint.user._id !== userId) {
+              // Only show cards to admin, or to staff/guests if it's their own complaint
+              if (role !== 'admin' && complaint.user && complaint.user._id !== userId) {
                 return null;
               }
               return (
