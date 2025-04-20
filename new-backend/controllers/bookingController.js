@@ -67,7 +67,8 @@ exports.getUserBookings = async (req, res) => {
   : {user: req.user._id};
   try {
     const bookings = await Booking.find(filter)
-      .populate('room', 'name type price');
+      .populate('room', 'name type price')
+      .populate('user', 'name email');
     res.json(bookings);
   } catch (error) {
     res.status(500).json({ error: error.message });
