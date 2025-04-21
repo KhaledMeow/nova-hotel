@@ -38,12 +38,12 @@ const complaintSchema = new mongoose.Schema({
   category: {
     type: String,
     enum: ['service', 'facility', 'billing', 'other'],
-    required: [true, 'Category is required'],
-    validate: {
-      validator: (v) => ['service', 'facility', 'billing', 'other'].includes(v),
-      message: 'Invalid category'
-    },
     default: 'other'
+  },
+  priority: {
+    type: String,
+    enum: ['low', 'medium', 'high'],
+    default: 'medium'
   },
   solvedAt: {
     type: Date,
@@ -57,6 +57,7 @@ const complaintSchema = new mongoose.Schema({
 
 // Indexes for common query patterns
 complaintSchema.index({ createdAt: -1 });
+complaintSchema.index({ status: 1, priority: -1 });
 
 // Virtual property for complaint duration
 complaintSchema.virtual('duration').get(function() {

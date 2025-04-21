@@ -62,7 +62,9 @@ exports.createBooking = async (req, res) => {
 };
 
 exports.getUserBookings = async (req, res) => {
-  const filter = { user: req.user._id };
+  const filter = (req.user.roleName === 'guest')
+  ? {}
+  : {user: req.user._id};
   try {
     const bookings = await Booking.find(filter)
       .populate('room', 'name type price')
@@ -74,7 +76,7 @@ exports.getUserBookings = async (req, res) => {
 };
 
 exports.getAllBookings = async (req, res) => {
-  const filter = (req.user.roleName === 'admin') 
+  const filter = (req.user.roleName === 'admin' || req.user.roleName === 'staff') 
   ? {} 
   : { user: req.user._id };
   try {

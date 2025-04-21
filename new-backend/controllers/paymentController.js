@@ -32,7 +32,9 @@ exports.createPayment = async (req, res) => {
   }
 };
 exports.getUserPayments = async (req, res) => {
-  const filter = { user: req.user._id };
+  const filter = (req.user.roleName === 'guest')
+  ? {}
+  : {user: req.user._id};
   try {
     const payments = await Payment.find(filter)
       .populate('booking', 'check_in_date check_out_date')
@@ -117,7 +119,7 @@ exports.refundPayment = async (req, res) => {
   }
 };
 exports.getAllPayments = async (req, res) => {
-  const filter = (req.user.role === 'admin') 
+  const filter = (req.user.role === 'admin' || req.user.role === 'staff') 
   ? {} 
   : { user: req.user._id };
   try {

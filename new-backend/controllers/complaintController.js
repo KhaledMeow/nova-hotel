@@ -7,8 +7,7 @@ exports.createComplaint = async (req, res) => {
       user: req.user._id,  // Ensure authentication middleware is working
       name: req.body.name,
       email: req.body.email,
-      message: req.body.message,
-      category: req.body.category
+      message: req.body.message
     });
     console.log('Created Complaint:', complaint); // Log the created complaint
     res.status(201).json(complaint);
@@ -48,12 +47,13 @@ exports.createComplaint = async (req, res) => {
 };
 
 exports.getUserComplaints = async (req, res) => {
-  const filter = { user: req.user._id };
+  const filter = (req.user.roleName === 'guest')
+  ? {}
+  : {user: req.user._id};
   try {
     const complaints = await Complaint.find(filter)
       .sort({ createdAt: -1 })
       .populate('user', 'email name');
-      
     res.json(complaints);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -108,14 +108,13 @@ exports.inProgressComplaint = async (req, res) => {
   }
 };
 exports.getAllComplaints = async (req, res) => {
-  const filter = (req.user.roleName === 'admin') 
+  const filter = (req.user.roleName === 'admin' || req.user.roleName === 'staff') 
   ? {} 
   : { user: req.user._id };
   try {
     const complaints = await Complaint.find(filter)
       .sort({ createdAt: -1 })
-      .populate('user', 'name email')
-      .populate('room', 'name type price');
+      .populate('user', 'name email');
       
     res.json(complaints);
   } catch (error) {
