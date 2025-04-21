@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const Role = require('../models/Role');
+const dotenv = require('dotenv');
+dotenv.config();
 
 module.exports = async (req, res, next) => {
   try {
@@ -12,7 +14,6 @@ module.exports = async (req, res, next) => {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     
-    // Find user with valid token
     const user = await User.findOne({
       _id: decoded.userId,
       tokens: token
@@ -20,10 +21,9 @@ module.exports = async (req, res, next) => {
 
     if (!user) throw new Error('Invalid token');
 
-    // Attach user and token to request
     req.user = user;
     req.token = token;
-    // Populate role name for privilege checks
+
     if (user.role) {
       const roleDoc = await Role.findById(user.role);
       req.user.roleName = roleDoc ? roleDoc.name : undefined;

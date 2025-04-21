@@ -31,7 +31,6 @@ exports.createBooking = async (req, res) => {
       throw new Error('Room not available');
     }
 
-    // Continue with booking creation
     const updatedRoom = await Room.findByIdAndUpdate(
       room._id,
       { $push: { booked_dates: { startDate: checkIn, endDate: checkOut } } },
@@ -117,7 +116,7 @@ exports.cancelBooking = async (req, res) => {
 
     if (!roomUpdate) throw new Error('Failed to update room availability');
 
-    // 3. Update booking status
+
     const updatedBooking = await Booking.findByIdAndUpdate(
       req.params.id,
       { status: 'cancelled' },
@@ -150,7 +149,6 @@ exports.confirmBooking = async (req, res) => {
       });
     }
 
-    // Verify room availability again
     const isAvailable = await checkRoomAvailability(
       booking.room,
       booking.check_in_date,

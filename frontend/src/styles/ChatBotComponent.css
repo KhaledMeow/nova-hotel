@@ -5,18 +5,15 @@
     bottom: 20px;
     right: 20px;
     width: 300px;
-    /* Adjusted width */
+
     border: 1px solid var(--background);
-    /* Border color */
+
     border-radius: 8px;
-    /* Rounded corners */
+
     overflow: hidden;
     box-shadow: 0 0 2px 10px rgba(0, 0, 0, 0.2);
-    /* Subtle shadow */
     background-color: rgb(0, 0, 0);
-    /* White background */
     z-index: 97;
-    /* Ensure it's on top */
     overflow-y: auto;
     transition: 0.3s;
 }
@@ -28,21 +25,14 @@
 
 .chatbot-header {
     background-color: var(--primary);
-    /* Header color */
-    color: rgb(0, 0, 0);
-    /* Text color */
+    color: #000;
     padding: 10px;
-    /* Padding */
     cursor: pointer;
     text-align: center;
-    /* Centered text */
     border-radius: 8px 8px 0 0;
-    /* Rounded corners for header */
     display: flex;
     justify-content: space-between;
-    /* Space for icons */
     align-items: center;
-    /* Center items vertically */
 }
 
 .bot-message {    

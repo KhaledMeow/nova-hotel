@@ -1,12 +1,13 @@
 const { ValidationError } = require('mongoose');
 const { JsonWebTokenError, TokenExpiredError } = require('jsonwebtoken');
+const dotenv = require('dotenv');
+dotenv.config();
 
 module.exports = (err, req, res, next) => {
   let statusCode = 500;
   let message = 'Internal Server Error';
   let errors = {};
 
-  // Handle Mongoose Validation Errors
   if (err instanceof ValidationError) {
     statusCode = 400;
     message = 'Validation Error';
@@ -15,7 +16,6 @@ module.exports = (err, req, res, next) => {
     });
   }
 
-  // Handle JWT Errors
   else if (err instanceof JsonWebTokenError) {
     statusCode = 401;
     message = err instanceof TokenExpiredError 
@@ -23,13 +23,10 @@ module.exports = (err, req, res, next) => {
       : 'Invalid token';
   }
 
-  // Handle Custom Errors
   else if (err.statusCode && err.message) {
     statusCode = err.statusCode;
     message = err.message;
   }
-
-  // Development logging
   if (process.env.NODE_ENV === 'development') {
     return {success : true, message : 'Payment Successful (Dev Mode)'}
   }

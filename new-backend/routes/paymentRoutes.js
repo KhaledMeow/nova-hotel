@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const dotenv = require('dotenv');
+dotenv.config();
 const {
   createPayment,
   getPaymentDetails,
@@ -13,9 +15,9 @@ const adminCheck = require('../middleware/adminCheck');
 
 router.post('/', auth, createPayment);
 router.get('/:id', auth, getPaymentDetails);
-router.patch('/:id/complete', auth, completePayment);
-router.patch('/:id/refund', auth, refundPayment);
+router.patch('/:id/complete', auth, adminCheck, completePayment);
+router.patch('/:id/refund', auth, adminCheck, refundPayment);
 router.get('/', auth, getUserPayments);
-router.get('/all', auth, getAllPayments);
+router.get('/all', auth, adminCheck, getAllPayments);
 
 module.exports = router;

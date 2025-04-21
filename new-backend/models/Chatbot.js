@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+dotenv.config();
 
 const chatSchema = new mongoose.Schema({
     userInput: { type: String, required: true },

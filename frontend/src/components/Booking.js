@@ -204,10 +204,10 @@ const Booking = ({ isModal }) => {
   };
 
   const handlePaymentSuccess = () => {
-    // Clear any stored booking data
+
     setBookingData(null);
     setShowPayment(false);
-    // Reset form data
+
     setFormData({
       name: "",
       phone: "",
@@ -225,7 +225,7 @@ const Booking = ({ isModal }) => {
     setShowPayment(false);
   };
 
-  // Calculate total amount based on room price and number of nights
+
   const calculateAmount = () => {
     const checkIn = new Date(location.state?.checkInDate);
     const checkOut = new Date(location.state?.checkOutDate);

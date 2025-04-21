@@ -25,7 +25,7 @@
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.3);
 }
 
-/* Header Styles */
+
 .calendar-header {
   display: flex;
   justify-content: space-between;
@@ -54,7 +54,7 @@
   color: var(--text);
 }
 
-/* Grid Layout */
+
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -70,7 +70,7 @@
   font-weight: bold;
 }
 
-/* Day Cell Styles */
+
 .day-cell {
   position: relative;
   min-height: 5rem;
@@ -86,7 +86,7 @@
 
 }
 
-/* Cell States */
+
 .unavailable {
   background-color: rgba(255, 0, 0, 0.1);
   cursor: not-allowed;
@@ -118,7 +118,6 @@
   font-weight: bold;
 }
 
-/* Availability Indicators */
 .availability {
   position: absolute;
   bottom: 0.25rem;
@@ -133,7 +132,7 @@
   font-weight: bold;
 }
 
-/* Buttons & Interactions */
+
 button {
   padding: 1.75rem 1.5rem;
   margin-top: 1rem;
@@ -149,7 +148,7 @@ button:hover {
   background-color: var(--primary);
 }
 
-/* Error & Loading States */
+
 .error-banner {
   background-color: var(--error);
   color: var(--background);
@@ -185,8 +184,8 @@ button:hover {
   100% { transform: rotate(360deg); }
 }
 
-/* Responsive Design */
-@media (max-width: 37.5rem) { /* 600px */
+
+@media (max-width: 600px) { 
   .calendar-grid {
     grid-template-columns: repeat(4, 1fr);
   }
@@ -197,7 +196,7 @@ button:hover {
   }
 }
 
-@media (max-width: 25rem) { /* 400px */
+@media (max-width: 400px) {
   .calendar-grid {
     grid-template-columns: repeat(3, 1fr);
   }

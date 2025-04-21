@@ -5,7 +5,6 @@ exports.createPayment = async (req, res) => {
   try {
     const { bookingId, method } = req.body;
     
-    // Get booking details
     const booking = await Booking.findById(bookingId)
       .populate('room', 'price')
       .populate('user', 'name email');
@@ -24,7 +23,7 @@ exports.createPayment = async (req, res) => {
       method,
       status: 'pending'
     });
-    // Update booking status
+
     await Booking.findByIdAndUpdate(bookingId, { status: 'pending' });
     res.status(201).json(payment);
   } catch (error) {
@@ -60,7 +59,6 @@ exports.completePayment = async (req, res) => {
       });
     }
 
-    // Update payment status
     const updatedPayment = await Payment.findByIdAndUpdate(
       req.params.id,
       { status: 'completed' },
@@ -103,7 +101,6 @@ exports.refundPayment = async (req, res) => {
       });
     }
 
-    // Update payment status
     const updatedPayment = await Payment.findByIdAndUpdate(
       req.params.id,
       { status: 'refunded' },

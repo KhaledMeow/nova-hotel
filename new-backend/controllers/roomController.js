@@ -13,21 +13,18 @@ exports.getRoomAvailability = async (req, res) => {
   try {
     const { month, year } = req.query;
     
-    // Validate input
-    const startDate = new Date(year, month - 1, 1);
-    const endDate = new Date(year, month, 0); // Last day of month
 
-    // Get all rooms with their bookings
+    const startDate = new Date(year, month - 1, 1);
+    const endDate = new Date(year, month, 0);
+
     const rooms = await Room.find().lean();
 
-    // Create daily availability map
     const availability = {};
     const currentDate = new Date(startDate);
     
     while (currentDate <= endDate) {
       const dateStr = currentDate.toISOString().split('T')[0];
       
-      // Calculate available rooms for this date
       const availableRooms = rooms.filter(room => 
         !room.booked_dates.some(booking => {
           const bookingStart = new Date(booking.startDate);

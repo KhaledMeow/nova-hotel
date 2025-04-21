@@ -2,18 +2,18 @@ const Complaint = require('../models/Complaint');
 
 exports.createComplaint = async (req, res) => {
   try {
-    console.log('Request Body:', req.body); // Log the incoming request body
+    console.log('Request Body:', req.body); 
     const complaint = await Complaint.create({
-      user: req.user._id,  // Ensure authentication middleware is working
+      user: req.user._id,
       name: req.body.name,
       email: req.body.email,
       message: req.body.message
     });
-    console.log('Created Complaint:', complaint); // Log the created complaint
+    console.log('Created Complaint:', complaint); 
     res.status(201).json(complaint);
   } catch (error) {
-    console.error('Validation Error:', error); // Log the error details
-    console.error('Validation Error Message:', error.message); // Log the error message
+    console.error('Validation Error:', error); 
+    console.error('Validation Error Message:', error.message); 
     if (error.name === 'ValidationError') {
       const validationErrorDetails = Object.keys(error.errors).map(key => {
         return {
@@ -24,12 +24,11 @@ exports.createComplaint = async (req, res) => {
           value: error.errors[key].value
         };
       });
-      console.error('Validation Error Details:', validationErrorDetails); // Log the validation error details
+      console.error('Validation Error Details:', validationErrorDetails); 
     } else {
-      console.error('Error Details:', error); // Log the error details
+      console.error('Error Details:', error); 
     }
     
-    // Enhanced validation error handling
     if (error.name === 'ValidationError') {
       const errors = Object.entries(error.errors).reduce((acc, [key, val]) => {
         acc[key] = val.message;
@@ -38,7 +37,6 @@ exports.createComplaint = async (req, res) => {
       return res.status(400).json({ errors });
     }
     
-    // Consistent error format
     res.status(400).json({ 
       error: error.message,
       ...(process.env.NODE_ENV === 'development' && { stack: error.stack })

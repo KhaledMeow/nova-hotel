@@ -1,6 +1,5 @@
 module.exports = (req, res, next) => {
-  // No async needed - role should already be in req.user from JWT
-  if (req.user?.roleName === 'admin' || req.user?.roleName === 'staff') {
+  if (req.user?.roleName === 'admin' || req.user?.roleName === 'staff' || req.user?.role === '67b796f382f9002a043ad2aa' || req.user?.role === '67b796f382f9002a043ad2ab') {
     next();
   } else {
     res.status(403).json({ 

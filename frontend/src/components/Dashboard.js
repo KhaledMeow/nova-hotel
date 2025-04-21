@@ -27,7 +27,7 @@ const Dashboard = () => {
         const decoded = jwtDecode(token);
         setIsAdmin(decoded.role === 'admin');
         setIsStaff(decoded.role === 'staff');
-        const currentUserId = decoded.userId || decoded._id || decoded.id; // fallback for userId
+        const currentUserId = decoded.userId || decoded._id || decoded.id; 
         window._novaUserRole = decoded.role;
         window._novaUserId = currentUserId;
 
@@ -139,7 +139,7 @@ const Dashboard = () => {
         throw new Error(errorData.error || 'Failed to solve complaint');
       }
   
-      // Update local state
+
       setComplaints(prev => prev.map(c => 
         c._id === complaintId ? { ...c, status: 'solved' } : c
       ));
@@ -163,7 +163,7 @@ const Dashboard = () => {
         throw new Error(errorData.error || 'Failed to mark complaint as in progress');
       }
   
-      // Update local state
+
       setComplaints(prev => prev.map(c => 
         c._id === complaintId ? { ...c, status: 'in progress' } : c
       ));
@@ -187,7 +187,7 @@ const Dashboard = () => {
         throw new Error(errorData.error || 'Failed to complete payment');
       }
   
-      // Update local state
+
       setPayments(prev => prev.map(p => 
         p._id === paymentId ? { ...p, status: 'completed' } : p
       ));
@@ -211,7 +211,6 @@ const Dashboard = () => {
         throw new Error(errorData.error || 'Failed to refund payment');
       }
   
-      // Update local state
       setPayments(prev => prev.map(p => 
         p._id === paymentId ? { ...p, status: 'refunded' } : p
       ));
@@ -221,7 +220,7 @@ const Dashboard = () => {
       console.error('Refund Payment Error:', error);
     }
   };
-  // Update the button in complaints section to:
+
   <div className="booking-actions">
     {(isAdmin || isStaff) && complaint.status !== 'solved' && (
       <button 
@@ -257,7 +256,6 @@ const Dashboard = () => {
             {bookings.map(booking => {
               const role = window._novaUserRole;
               const userId = window._novaUserId;
-              // Only show cards to admin/staff, or to guests if it's their own booking
               if (!(role === 'admin' || role === 'staff') && booking.user && booking.user._id !== userId) {
                 return null;
               }
@@ -317,7 +315,6 @@ const Dashboard = () => {
             {payments.map(payment => {
               const role = window._novaUserRole;
               const userId = window._novaUserId;
-              // Only show cards to admin/staff, or to guests if it's their own payment
               if (!(role === 'admin' || role === 'staff') && payment.user && payment.user._id !== userId) {
                 return null;
               }
@@ -362,7 +359,6 @@ const Dashboard = () => {
             {complaints.map(complaint => {
               const role = window._novaUserRole;
               const userId = window._novaUserId;
-              // Only show cards to admin/staff, or to guests if it's their own complaint
               if (!(role === 'admin' || role === 'staff') && complaint.user && complaint.user._id !== userId) {
                 return null;
               }

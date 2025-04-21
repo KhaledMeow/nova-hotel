@@ -13,13 +13,12 @@ const PaymentForm = ({
 }) => {
   const navigate = useNavigate();
 
-  // Calculate number of nights
+
   const calculateNights = () => {
-    if (!checkInDate || !checkOutDate) return 1; // Default to 1 night
+    if (!checkInDate || !checkOutDate) return 1; 
     const start = new Date(checkInDate);
     const end = new Date(checkOutDate);
     
-    // Calculate difference in days and subtract 1 to get actual nights
     const timeDiff = end.getTime() - start.getTime();
     const nights = Math.max(1, Math.floor(timeDiff / (1000 * 3600 * 24)));
     
@@ -65,16 +64,15 @@ useEffect(() => {
 
   const validateCardNumber = (number) => {
     const testCardNumbers = [
-      '1111111111111111',  // Visa
-      '5500000000000004',  // Mastercard
-      '3400000000000009',  // AMEX
-      '6011000000000004'   // Discover
+      '1111111111111111', 
     ];
     return testCardNumbers.includes(number.replace(/\s/g, ''));
   };
 
   const validateExpiryDate = (date) => {
-    return true;
+    const expiryDate = new Date(date);
+    const today = new Date();
+    return expiryDate > today;
   };
 
   const validateCVV = (cvv) => {
@@ -108,13 +106,13 @@ useEffect(() => {
     }
 
     try {
-      // Keep your existing simulation
+
       await new Promise(resolve => setTimeout(resolve, 2000));
       
       const paymentResult = paymentGatewaySimulation();
   
       if (paymentResult.success) {
-        // Only call backend if simulation succeeds
+
         const response = await fetch('/api/v1/payments', {
           method: 'POST',
           headers: {

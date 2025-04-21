@@ -8,6 +8,8 @@ const {
 } = require('../controllers/userController');
 const auth = require('../middleware/auth');
 const adminCheck = require('../middleware/adminCheck');
+const dotenv = require('dotenv');
+dotenv.config();
 
 router.get('/me', auth, getUserProfile);
 router.put('/me', auth, updateProfile);

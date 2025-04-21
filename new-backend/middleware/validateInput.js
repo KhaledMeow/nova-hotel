@@ -1,5 +1,8 @@
 const { body, validationResult } = require('express-validator');
 const { isValidObjectId } = require('mongoose');
+const User = require('../models/User');
+const dotenv = require('dotenv');
+dotenv.config();
 
 exports.validateRegistration = [
   body('email')
@@ -85,7 +88,6 @@ exports.validateBooking = [
       });
     }
     
-    // Convert dates to proper Date objects
     req.body.check_in_date = new Date(req.body.check_in_date);
     req.body.check_out_date = new Date(req.body.check_out_date);
     

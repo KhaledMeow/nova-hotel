@@ -3,7 +3,7 @@ import "../styles/HAC.css";
 import "../styles/SweetAlertCustom.css";
 import SpecialOfferPopup from '../components/SpecialOfferPopup';
 
-// Home Section
+
 const Home = () => {
   return (
     <div className="main-content">
@@ -51,7 +51,7 @@ const Home = () => {
   );
 };
 
-// Features Data
+
 const featuresData = [
   {
     title: "Exquisite Accommodations",
@@ -79,7 +79,6 @@ const galleryImages = [
   require("../assets/images/photo3.jpg"),
 ];
 
-// About Section
 const About = () => {
   const [currentOffer, setCurrentOffer] = useState(null);
 
@@ -171,7 +170,6 @@ const About = () => {
   );
 };
 
-// Contact Us Section
 
 const ContactUs = () => {
   const [formData, setFormData] = useState({
@@ -214,13 +212,13 @@ const ContactUs = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    // Update form data
+
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
 
-    // Validate and update errors
+
     const errorMessage = validateForm(name, value);
     setErrors((prev) => ({
       ...prev,
@@ -233,7 +231,6 @@ const ContactUs = () => {
     setIsSubmitting(true);
     setSubmissionError("");
 
-    // Frontend validation
     const newErrors = Object.keys(formData).reduce((acc, key) => {
       acc[key] = validateForm(key, formData[key]);
       return acc;
@@ -263,26 +260,23 @@ const ContactUs = () => {
       const data = await response.json();
   
       if (!response.ok) {
-        // Handle backend validation errors
         if (data.errors) {
           const backendErrors = Object.entries(data.errors).reduce((acc, [key, value]) => ({
             ...acc,
             [key]: value
           }), {});
           setErrors(backendErrors);
-          return;  // Critical fix - exit after setting errors
+          return;
         }
         throw new Error(data.error || "Submission failed");
       }
   
-      // Success handling
       alert("Complaint submitted successfully!");
       setFormData({ name: "", email: "", message: "", category: '' });
       setErrors({});
   
     } catch (error) {
       console.error("Submission Error:", error);
-      // Only show alert for non-validation errors
       if (!error.message.includes("Validation")) {
         alert(error.message || "An unexpected error occurred");
       }
@@ -380,7 +374,6 @@ const ContactUs = () => {
   );
 };
 
-// Main HAC Component
 const HAC = () => {
   return (
     <div>

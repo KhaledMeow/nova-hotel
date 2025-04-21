@@ -12,7 +12,6 @@ const CalendarComponent = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  // Date calculations
   const daysInMonth = () => new Date(
     currentMonth.getFullYear(),
     currentMonth.getMonth() + 1,
@@ -25,7 +24,6 @@ const CalendarComponent = () => {
     1
   ).getDay();
 
-  // Fetch availability data
   useEffect(() => {
     const source = axios.CancelToken.source();
     
@@ -58,7 +56,7 @@ const CalendarComponent = () => {
     return () => source.cancel("Component unmounted");
   }, [currentMonth]);
 
-  // Date selection handler
+
   const handleDateClick = (day) => {
     const date = new Date(
       currentMonth.getFullYear(),
@@ -106,19 +104,18 @@ const CalendarComponent = () => {
     }
   };
 
-  // Calendar grid rendering
+
   const renderDays = () => {
     const totalDays = daysInMonth();
     const startDay = startOfMonth();
     const today = new Date();
     const days = [];
 
-    // Empty days for week alignment
+
     for (let i = 0; i < startDay; i++) {
       days.push(<div key={`empty-${i}`} className="empty-cell" />);
     }
 
-    // Actual calendar days
     for (let day = 1; day <= totalDays; day++) {
       const date = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
       const dateString = date.toISOString().split("T")[0];

@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const rateLimit = require('express-rate-limit');
+const dotenv = require('dotenv');
+dotenv.config();
 const {
   login,
   register,

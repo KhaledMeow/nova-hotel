@@ -1,11 +1,13 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const dotenv = require('dotenv');
+dotenv.config();
 
 const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: [true, 'Email is required'],
-    unique: true, // This automatically creates a unique index
+    unique: true,
     match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, 'Invalid email']
   },
   password: {
@@ -51,9 +53,7 @@ const userSchema = new mongoose.Schema({
   }
 });
 
-// Removed explicit index declaration (duplicate of 'unique: true')
 
-// Password hashing middleware
 userSchema.pre('save', async function(next) {
   if (!this.isModified('password')) return next();
   
@@ -66,7 +66,6 @@ userSchema.pre('save', async function(next) {
   }
 });
 
-// Password comparison method
 userSchema.methods.comparePassword = async function(candidatePassword) {
   return bcrypt.compare(candidatePassword, this.password);
 };

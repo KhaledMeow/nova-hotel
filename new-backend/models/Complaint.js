@@ -1,11 +1,13 @@
 const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+dotenv.config();
 
 const complaintSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: [true, 'User reference is required'],
-    index: true // Added index for better query performance
+    index: true
   },
   name: {
     type: String,
@@ -34,16 +36,10 @@ const complaintSchema = new mongoose.Schema({
     enum: ['open','in progress', 'solved'],
     default: 'open',
   },
-  // Additional useful fields
   category: {
     type: String,
     enum: ['service', 'facility', 'billing', 'other'],
     default: 'other'
-  },
-  priority: {
-    type: String,
-    enum: ['low', 'medium', 'high'],
-    default: 'medium'
   },
   solvedAt: {
     type: Date,
@@ -55,18 +51,16 @@ const complaintSchema = new mongoose.Schema({
   toObject: { virtuals: true }
 });
 
-// Indexes for common query patterns
-complaintSchema.index({ createdAt: -1 });
-complaintSchema.index({ status: 1, priority: -1 });
 
-// Virtual property for complaint duration
+complaintSchema.index({ createdAt: -1 });
+complaintSchema.index({ status: 1 });
+
 complaintSchema.virtual('duration').get(function() {
   if (!this.createdAt) return null;
   const endDate = this.solvedAt || new Date();
   return Math.ceil((endDate - this.createdAt) / (1000 * 60 * 60 * 24));
 });
 
-// Pre-save hook for status changes
 complaintSchema.pre('save', function(next) {
   if (this.isModified('status') && this.status === 'solved' && !this.solvedAt) {
     this.solvedAt = new Date();

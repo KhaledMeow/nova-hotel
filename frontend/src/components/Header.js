@@ -80,6 +80,7 @@ const Header = () => {
   const navItems = [
     { name: "Home", path: "/" },
     { name: "About Us", path: "/About" },
+    { name: "Deals", path: "/deals" },
 
     ...(isLoggedIn 
       ?[ 

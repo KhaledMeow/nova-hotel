@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const dotenv = require('dotenv');
+dotenv.config();
 const {
   createComplaint,
   getUserComplaints,
@@ -10,17 +12,12 @@ const {
 } = require('../controllers/complaintController');
 const auth = require('../middleware/auth');
 const adminCheck = require('../middleware/adminCheck');
-const rateLimit = require('express-rate-limit');
 
-const complaintLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 500
-});
 
-router.post('/', complaintLimiter, auth, createComplaint);
-router.get('/', auth, getUserComplaints);
-router.patch('/:id/in-progress', auth,  inProgressComplaint);
-router.patch('/:id/solve', auth, solveComplaint);
-router.get('/all', auth, getAllComplaints);
+router.post('/', auth, createComplaint);
+router.get('/', auth, adminCheck, getUserComplaints);
+router.patch('/:id/in-progress', auth, adminCheck,  inProgressComplaint);
+router.patch('/:id/solve', auth, adminCheck, solveComplaint);
+router.get('/all', auth, adminCheck, getAllComplaints);
 
 module.exports = router;
