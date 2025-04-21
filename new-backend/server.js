@@ -12,6 +12,7 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const errorHandler = require('./middleware/errorHandler');
 
+// Import route files
 const chatbotRoutes = require('./routes/chatbotRoutes');
 const authRoutes = require('./routes/authRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
@@ -21,10 +22,10 @@ const roomRoutes = require('./routes/roomRoutes');
 const userRoutes = require('./routes/userRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 
-
+// Initialize Express app
 const app = express();
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: 'http://localhost:3000', // Your React app's URL
   credentials: true
 }));
 const server = http.createServer(app);
@@ -44,26 +45,30 @@ const io = socketIo(server, {
   }
 });
 
+// Database connection setup
+console.log('ENV URI:', process.env.MONGODB_URI); // Debug log
 
-console.log('ENV URI:', process.env.MONGODB_URI); 
-
+// Validate environment variable exists
 if (!process.env.MONGODB_URI) {
   console.error('❌ MONGODB_URI is not defined in environment variables');
-  process.exit(1); 
+  process.exit(1); // Exit with failure code
 }
 
+// Configure MongoDB connection options
 const mongooseOptions = {
   serverSelectionTimeoutMS: 5000, 
   family: 4
 };
 
+// Attempt connection
 mongoose.connect(process.env.MONGODB_URI, mongooseOptions)
   .then(() => console.log('✅ Successfully connected to MongoDB'))
   .catch(err => {
     console.error('❌ MongoDB connection error:', err.message);
-    process.exit(1); 
+    process.exit(1); // Exit on connection failure
   });
 
+// Handle connection events
 mongoose.connection.on('connected', () => {
   console.log(`📚 Connected to MongoDB database: ${mongoose.connection.name}`);
 });
@@ -85,14 +90,16 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Rate limiting configuration
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, 
-  max: 1000, 
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 1000, // Limit each IP to 1000 requests per window
   standardHeaders: true,
   legacyHeaders: false
 });
 app.use(limiter);
 
+// Real-time socket.io handlers
 io.on('connection', (socket) => {
   console.log('🔌 New client connected');
   
@@ -105,6 +112,7 @@ io.on('connection', (socket) => {
   });
 });
 
+// API endpoints
 app.use('/api/v1/chatbot', chatbotRoutes);
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/bookings', bookingRoutes);
@@ -114,9 +122,11 @@ app.use('/api/v1/rooms', roomRoutes);
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/admin', adminRoutes);
 
+// Global error handler (MUST BE LAST MIDDLEWARE)
 app.use(errorHandler);
 
 
+// Server initialization
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
   console.log(`🚀 Server running in ${process.env.NODE_ENV || 'development'} mode`);
