@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import '../styles/PaymentForm.css';
 import PropTypes from 'prop-types';
+import PaymentSuccessPopup from './PaymentSuccessPopup';
+import '../styles/PaymentSuccessPopup.css';
 
 const PaymentForm = ({ 
   room, 
@@ -216,6 +218,14 @@ useEffect(() => {
 
   return (
     <form onSubmit={handleSubmit} >
+      {paymentSuccess && (
+        <PaymentSuccessPopup
+          onClose={() => {
+            setPaymentSuccess(false);
+            navigate('/', { replace: true });
+          }}
+        />
+      )}
       <h2>Payment for {room.type} Room</h2>
       <p>{calculateNights()} Night(s) at {room.price}/night</p>
       
