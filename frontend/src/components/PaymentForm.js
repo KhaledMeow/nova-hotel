@@ -69,11 +69,6 @@ useEffect(() => {
     return testCardNumbers.includes(number.replace(/\s/g, ''));
   };
 
-  const validateExpiryDate = (date) => {
-    const expiryDate = new Date(date);
-    const today = new Date();
-    return expiryDate > today;
-  };
 
   const validateCVV = (cvv) => {
     return /^\d{3,4}$/.test(cvv);
@@ -84,7 +79,7 @@ useEffect(() => {
     setProcessing(true);
 
     const isCardNumberValid = validateCardNumber(cardNumber);
-    const isExpiryValid = validateExpiryDate(expiryDate);
+
     const isCVVValid = validateCVV(cvv);
 
     if (!isCardNumberValid) {
@@ -93,11 +88,7 @@ useEffect(() => {
       return;
     }
 
-    if (!isExpiryValid) {
-      alert('Please use a valid test expiry date');
-      setProcessing(false);
-      return;
-    }
+ 
 
     if (!isCVVValid) {
       alert('Please use a 3 or 4 digit test CVV');
