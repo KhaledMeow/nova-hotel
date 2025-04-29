@@ -31,20 +31,15 @@ exports.createPayment = async (req, res) => {
   }
 };
 exports.getUserPayments = async (req, res) => {
-  console.log('getUserPayments CALLED', req.user);
-
-  console.log('getUserPayments: req.user =', req.user);
   const filter = (req.user.roleName === 'admin' || req.user.roleName === 'staff')
     ? {} 
     : { user: req.user._id }; 
-  console.log('getUserPayments: filter =', filter);
   try {
     const payments = await Payment.find(filter)
       .populate('booking', 'check_in_date check_out_date')
       .populate('user', 'name email');
     res.json(payments);
   } catch (error) {
-    console.error('getUserPayments error:', error);
     res.status(500).json({ error: error.message });
   }
 };
