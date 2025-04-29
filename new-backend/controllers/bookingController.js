@@ -95,7 +95,7 @@ exports.cancelBooking = async (req, res) => {
   ? {}
   : {user: req.user._id};
   try {
-    const booking = await Booking.findById(req.params.id, filter)
+    const booking = await Booking.findOne({ _id: req.params.id, ...filter });
     if (!booking) throw new Error('Booking not found');
 
     if (booking.status === 'cancelled')
@@ -140,7 +140,7 @@ exports.confirmBooking = async (req, res) => {
   ? {}
   : {user: req.user._id};
   try {
-    const booking = await Booking.findById(req.params.id, filter);
+    const booking = await Booking.findOne({ _id: req.params.id, ...filter });
     if (!booking) throw new Error('Booking not found');
 
     if (booking.status === 'confirmed') {

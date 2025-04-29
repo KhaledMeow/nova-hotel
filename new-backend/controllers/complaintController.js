@@ -69,8 +69,8 @@ exports.solveComplaint = async (req, res) => {
       return res.status(400).json({ error: 'Complaint ID is required' });
     }
 
-    const complaint = await Complaint.findByIdAndUpdate(
-      id,
+    const complaint = await Complaint.findOneAndUpdate(
+      { _id: id, ...filter },
       { status: 'solved' },
       { new: true }
     );
@@ -93,8 +93,8 @@ exports.inProgressComplaint = async (req, res) => {
       return res.status(400).json({ error: 'Complaint ID is required' });
     }
 
-    const complaint = await Complaint.findByIdAndUpdate(
-      id,
+    const complaint = await Complaint.findOneAndUpdate(
+      { _id: id, ...filter },
       { status: 'in progress' },
       { new: true }
     );

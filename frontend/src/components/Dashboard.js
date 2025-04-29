@@ -10,8 +10,7 @@ const Dashboard = () => {
   const [error, setError] = useState(null);
   const [cancellingId, setCancellingId] = useState(null);
   const [confirmingId, setConfirmingId] = useState(null);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [isStaff, setIsStaff] = useState(false);
+  const [roleName, setRoleName] = useState('');
   const [payments, setPayments] = useState([]);
 
 
@@ -25,16 +24,13 @@ const Dashboard = () => {
         }
 
         const decoded = jwtDecode(token);
-        setIsAdmin(decoded.roleName === 'admin');
-        setIsStaff(decoded.roleName === 'staff');
+        setRoleName(decoded.roleName);
         const currentUserId = decoded.userId || decoded._id || decoded.id; 
-        window._novaUserRole = decoded.roleName;
         window._novaUserId = currentUserId;
         
-        const isAdminOrStaff = decoded.roleName === 'admin' || decoded.roleName === 'staff';
-        const bookingsEndpoint = isAdminOrStaff ? '/api/v1/bookings' : '/api/v1/bookings/my';
-        const complaintsEndpoint = isAdminOrStaff ? '/api/v1/complaints' : '/api/v1/complaints/my';
-        const paymentsEndpoint = isAdminOrStaff ? '/api/v1/payments' : '/api/v1/payments/my';
+        const bookingsEndpoint = (decoded.roleName === 'admin' || decoded.roleName === 'staff') ? '/api/v1/bookings' : '/api/v1/bookings/my';
+        const complaintsEndpoint = (decoded.roleName === 'admin' || decoded.roleName === 'staff') ? '/api/v1/complaints' : '/api/v1/complaints/my';
+        const paymentsEndpoint = (decoded.roleName === 'admin' || decoded.roleName === 'staff') ? '/api/v1/payments' : '/api/v1/payments/my';
         const [bookingsRes, complaintsRes, paymentsRes] = await Promise.all([
           fetch(bookingsEndpoint, {
             headers: { 'Authorization': `Bearer ${token}` }
@@ -226,7 +222,7 @@ const Dashboard = () => {
   };
 
   <div className="booking-actions">
-    {(isAdmin || isStaff) && complaint.status !== 'solved' && (
+    {(roleName === 'admin' || roleName === 'staff') && complaint.status !== 'solved' && (
       <button 
         className="solved-button"
         onClick={() => solveComplaint(complaint._id)}
@@ -237,8 +233,8 @@ const Dashboard = () => {
   </div>
   useEffect(() => {
     console.log('Bookings:', bookings);
-    console.log('Current user role:', isAdmin ? 'Admin' : isStaff ? 'Staff' : 'Guest');
-  }, [bookings, isAdmin, isStaff]);
+    console.log('Current user role:', roleName);
+  }, [bookings, roleName]);
 
 
   if (loading) return <div className="loading-spinner"></div>;
@@ -258,7 +254,8 @@ const Dashboard = () => {
         ) : (
           <div className="bookings-grid">
             {bookings.map(booking => {
-              const roleName  = window._novaUserRole;
+              // Use roleName from state everywhere
+
               const userId = window._novaUserId;
               // Only filter for guests
               if (roleName === 'guest' && booking.user && booking.user._id !== userId) {
@@ -289,7 +286,7 @@ const Dashboard = () => {
                     <p>Total Price: ${booking.room.price * 
                       Math.ceil((new Date(booking.check_out_date) - new Date(booking.check_in_date)) / (1000 * 3600 * 24))}</p>
                   </div>
-                  {(window._novaUserRole === 'admin' || window._novaUserRole === 'staff') && (
+                  {(roleName === 'admin' || roleName === 'staff') && (
                     <div className="booking-actions">
                       {booking.status === 'pending' && (
                         <button className="confirm-button"
@@ -318,7 +315,8 @@ const Dashboard = () => {
         ) : ( 
           <div className="bookings-grid">
             {payments.map(payment => {
-              const roleName = window._novaUserRole;
+              // Use roleName from state everywhere
+
               const userId = window._novaUserId;
               // Only filter for guests
               if (roleName === 'guest' && payment.user && payment.user._id !== userId) {
@@ -339,7 +337,7 @@ const Dashboard = () => {
                     <p>Method: {payment.method}</p>
                     <p>Date: {new Date(payment.createdAt).toLocaleDateString()}</p>
                   </div>
-                  {(window._novaUserRole === 'admin' || window._novaUserRole === 'staff') && (
+                  {(roleName === 'admin' || roleName === 'staff') && (
                     <div className="booking-actions">
                       <button className="solved-button" onClick={() => completePayment(payment._id)}>
                         Mark as Completed
@@ -363,7 +361,8 @@ const Dashboard = () => {
         ) : (
           <div className="bookings-grid">
             {complaints.map(complaint => {
-              const roleName = window._novaUserRole;
+              // Use roleName from state everywhere
+
               const userId = window._novaUserId;
               // Only filter for guests
               if (roleName === 'guest' && complaint.user && complaint.user._id !== userId) {
