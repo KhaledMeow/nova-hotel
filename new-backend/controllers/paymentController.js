@@ -55,7 +55,7 @@ exports.completePayment = async (req, res) => {
   ? {}
   : {user: req.user._id};
   try {
-    const payment = await Payment.findById(req.params.id, filter);
+    const payment = await Payment.findOne({ _id: req.params.id, ...filter });
     if (!payment) throw new Error('Payment not found');
 
     if (payment.status === 'completed') {
@@ -97,7 +97,7 @@ exports.refundPayment = async (req, res) => {
   ? {}
   : {user: req.user._id};
   try {
-    const payment = await Payment.findById(req.params.id, filter);
+    const payment = await Payment.findOne({ _id: req.params.id, ...filter });
     if (!payment) throw new Error('Payment not found');
 
     if (payment.status === 'refunded') {
