@@ -1,12 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/HAC.css";
 import "../styles/SweetAlertCustom.css";
 import SpecialOfferPopup from '../components/SpecialOfferPopup';
 
 
 const Home = () => {
+  const location = useLocation();
+  const [showMessage, setShowMessage] = React.useState(!!location.state?.paymentMessage);
+  const paymentMessage = location.state?.paymentMessage;
+
+  useEffect(() => {
+    if (showMessage) {
+      const timer = setTimeout(() => setShowMessage(false), 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [showMessage]);
+
   return (
     <div className="main-content">
+      {showMessage && paymentMessage && (
+        <div style={{
+          background: '#d1e7dd',
+          color: '#0f5132',
+          padding: '16px',
+          marginBottom: '16px',
+          borderRadius: '8px',
+          textAlign: 'center',
+          fontWeight: 'bold',
+          fontSize: '1.1rem',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.07)'
+        }}>
+          {paymentMessage}
+        </div>
+      )}
       <header className="App-header">
         <h1>Welcome to NOVA Hotel!</h1>
         <p>Book your stay today for an unforgettable experience.</p>
@@ -348,7 +374,6 @@ const ContactUs = () => {
               <option value="facility">Facility</option>
               <option value="billing">Billing</option>
               <option value="other">Other</option>
-              
             </select>
             {errors.category && <span className="error-message">{errors.category}</span>}
           </div>
@@ -374,6 +399,7 @@ const ContactUs = () => {
   );
 };
 
+import { useLocation } from "react-router-dom";
 const HAC = () => {
   return (
     <div>

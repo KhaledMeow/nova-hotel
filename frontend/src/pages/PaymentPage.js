@@ -2,16 +2,48 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import '../styles/PaymentForm.css';
 import PropTypes from 'prop-types';
-import PaymentSuccessPopup from './PaymentSuccessPopup';
+import PaymentSuccessPopup from '../components/PaymentSuccessPopup';
 import '../styles/PaymentSuccessPopup.css';
+
+const PaymentPage = () => {
+  const location = useLocation();
+  const formData = location.state?.formData || {};
+  const navigate = useNavigate();
+
+  const state = location.state || {};
+  const { room, checkInDate, checkOutDate, bookingData } = state;
+
+  useEffect(() => {
+    if (!room || !checkInDate || !checkOutDate || !bookingData) {
+      alert('Missing booking/payment details. Please start your booking again.');
+      navigate('/room-list', { replace: true });
+    }
+  }, [room, checkInDate, checkOutDate, bookingData, navigate]);
+
+  if (!room || !checkInDate || !checkOutDate || !bookingData) {
+    return null;
+  }
+
+  return (
+    <PaymentForm
+      room={room}
+      checkInDate={checkInDate}
+      checkOutDate={checkOutDate}
+      bookingData={bookingData}
+      formData={formData}
+
+    />
+  );
+};
 
 const PaymentForm = ({ 
   room, 
   checkInDate, 
   checkOutDate, 
-  bookingData, 
-  onSuccess, 
-  onError 
+  bookingData,
+  formData,
+  onSuccess = () => {}, 
+  onError = () => {} 
 }) => {
   const navigate = useNavigate();
 
@@ -105,7 +137,6 @@ useEffect(() => {
       const paymentResult = paymentGatewaySimulation();
   
       if (paymentResult.success) {
-
         const response = await fetch('/api/v1/payments', {
           method: 'POST',
           headers: {
@@ -118,12 +149,10 @@ useEffect(() => {
             method: 'credit_card'
           })
         });
-  
         if (!response.ok) {
           const errorData = await response.json();
           throw new Error(errorData.error || 'Payment recording failed');
         }
-  
         const paymentData = await response.json();
         setPaymentSuccess(true);
         onSuccess(paymentData);
@@ -139,12 +168,9 @@ useEffect(() => {
     }
   };
   const paymentGatewaySimulation = () => {
-    const scenarios = [
-      { success: true, message: 'Payment Successful' },
-      { success: false, message: 'Payment Failed - Please try again' }
-    ];
-    return scenarios[Math.floor(Math.random() * scenarios.length)];
-  };
+  // Always succeed for development/testing
+  return { success: true, message: 'Payment Successful' };
+};
   if (paymentSuccess) {
     return (
       <div className="payment-success">
@@ -171,7 +197,7 @@ useEffect(() => {
               </div>
               <div className="detail-item">
                 <span className="detail-label">Number of Guests</span>
-                <span className="detail-value">{room.num_of_people || '1'}</span>
+                <span className="detail-value">{formData.num_of_people}</span>
               </div>
             </div>
           </div>
@@ -204,7 +230,7 @@ useEffect(() => {
           <p className="thank-you">Thank you for choosing Nova Hotel</p>
           <button 
             onClick={() => {
-              onSuccess && onSuccess();
+              onSuccess;
               navigate('/', { replace: true });
             }} 
             className="home-btn"
@@ -299,7 +325,7 @@ useEffect(() => {
   );
 };
 
-export default PaymentForm;
+export default PaymentPage;
 
 PaymentForm.propTypes = {
   room: PropTypes.shape({

@@ -3,7 +3,8 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import backgroundImage from "./assets/images/background-home1.jpg";
 import CalendarComponent from "./components/CalendarComponent";
 import RoomList from "./components/RoomList";
-import Booking from "./components/Booking";
+import ConfirmDetailsPage from "./pages/ConfirmDetailsPage";
+import PaymentPage from "./pages/PaymentPage";
 import AboutPage from "./pages/AboutPage";
 import Header from "./components/Header";
 import Login from "./components/Login";
@@ -39,7 +40,8 @@ const App = () => {
           <Route path="/check-availability" element={<CalendarComponent />} />
           <Route path="/calendar" element={<CalendarComponent />} />
           <Route path="/Room-List" element={<RoomList />} />
-          <Route path="/Confirm-details" element={<Booking />} />
+          <Route path="/confirm-details" element={<ConfirmDetailsPage />} />
+          <Route path="/payment" element={<PaymentPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
         <ChatBotComponent />

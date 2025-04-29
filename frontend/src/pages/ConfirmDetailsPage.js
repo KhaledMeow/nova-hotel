@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import PaymentForm from "./PaymentForm";
-import "E:/React/nova-hotel/frontend/src/styles/Booking.css";
+import "../styles/Booking.css";
 
-// Helper function to format date
 const formatDate = (dateString) => {
   if (!dateString) return '';
   const date = new Date(dateString);
@@ -345,27 +343,21 @@ const Booking = ({ isModal }) => {
         </>
       ) : (
         <div className="payment-section">
-          <h2>Payment Details</h2>
+          <h2>Booking Complete</h2>
           <div className="payment-summary">
             <div className="booking-dates">
               <div className="booking-date-item">
                 <p>{formatDate(formData.check_in_date)}</p>
               </div>
               <div className="booking-date-item">
-
                 <p>{formatDate(formData.check_out_date)}</p>
               </div>
             </div>
-
           </div>
-          <PaymentForm 
-            room={room}
-            checkInDate={formData.check_in_date}
-            checkOutDate={formData.check_out_date}
-            bookingData={bookingData}
-            onSuccess={handlePaymentSuccess}
-            onError={handlePaymentError}
-          />
+          <p>Your booking has been created. Proceed to payment to confirm your reservation.</p>
+          <button className="submit-button" onClick={() => navigate('/payment', { state: { room, checkInDate: formData.check_in_date, checkOutDate: formData.check_out_date, bookingData } })}>
+            Go to Payment Page
+          </button>
         </div>
       )}
     </div>
