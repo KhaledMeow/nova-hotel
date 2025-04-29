@@ -9,6 +9,7 @@ const Login = () => {
     password: ''
   });
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const validateForm = () => {
@@ -20,10 +21,12 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const formErrors = validateForm();
     
     if (Object.keys(formErrors).length > 0) {
       setErrors(formErrors);
+      setLoading(false);
       return;
     }
 
@@ -39,15 +42,18 @@ const Login = () => {
       if (!response.ok) {
         const errorMessage = data?.error || 'Login failed';
         setErrors({ general: errorMessage });
+        setLoading(false);
         return;
       }
 
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
       navigate('/');
-      
+      window.location.reload();
+ 
     } catch (error) {
       setErrors({ general: 'Network error. Please try again.' });
+      setLoading(false);
       console.error('Login Error:', error);
     }
   };
@@ -83,8 +89,8 @@ const Login = () => {
           {errors.password && <span className="login-error">{errors.password}</span>}
         </div>
 
-        <button type="submit" className="login-submit-button">
-          Sign In
+        <button type="submit" className="login-submit-button" disabled={loading}>
+          {loading ? 'Signing In...' : 'Sign In'}
         </button>
 
         <div className="login-footer">
