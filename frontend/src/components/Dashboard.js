@@ -10,6 +10,7 @@ const Dashboard = () => {
   const [error, setError] = useState(null);
   const [cancellingId, setCancellingId] = useState(null);
   const [confirmingId, setConfirmingId] = useState(null);
+  const [inProgressId, setInProgressId] = useState(null);
   const [roleName, setRoleName] = useState('');
   const [payments, setPayments] = useState([]);
 
@@ -152,6 +153,7 @@ const Dashboard = () => {
   const inProgressComplaint = async (complaintId) => {
     if (!window.confirm('Mark this complaint as in progress?')) return;
     try {
+      setInProgressId(complaintId);
       const token = localStorage.getItem('token');
       const response = await fetch(`/api/v1/complaints/${complaintId}/in-progress`, {
         method: 'PATCH',
@@ -165,12 +167,14 @@ const Dashboard = () => {
   
 
       setComplaints(prev => prev.map(c => 
-        c._id === complaintId ? { ...c, status: 'in progress' } : c
+        c._id === complaintId ? { ...c, status: 'in_progress' } : c
       ));
       
     } catch (error) {
       alert(error.message);
       console.error('In Progress Complaint Error:', error);
+    } finally {
+      setInProgressId(null);
     }
   };
   const completePayment = async (paymentId) => {
@@ -221,16 +225,7 @@ const Dashboard = () => {
     }
   };
 
-  <div className="booking-actions">
-    {(roleName === 'admin' || roleName === 'staff') && complaint.status !== 'solved' && (
-      <button 
-        className="solved-button"
-        onClick={() => solveComplaint(complaint._id)}
-      >
-        Mark as Solved
-      </button>
-    )}
-  </div>
+
   useEffect(() => {
     console.log('Bookings:', bookings);
     console.log('Current user role:', roleName);
@@ -286,22 +281,34 @@ const Dashboard = () => {
                     <p>Total Price: ${booking.room.price * 
                       Math.ceil((new Date(booking.check_out_date) - new Date(booking.check_in_date)) / (1000 * 3600 * 24))}</p>
                   </div>
-                  {(roleName === 'admin' || roleName === 'staff') && (
-                    <div className="booking-actions">
-                      {booking.status === 'pending' && (
-                        <button className="confirm-button"
-                          onClick={() => confirmBooking(booking._id)}
-                          disabled={confirmingId === booking._id}>
-                          {confirmingId === booking._id ? 'Confirming...' : 'Confirm Booking'}
-                        </button>
-                      )}
-                      <button className="cancel-button"
-                        onClick={() => cancelBooking(booking._id)}
-                        disabled={cancellingId === booking._id}>
-                        {cancellingId === booking._id ? 'Cancelling...' : 'Cancel Booking'}
-                      </button>
-                    </div>
-                  )}
+                  <div className="booking-actions">
+  {(roleName === 'admin' || roleName === 'staff') && (
+    <>
+      <button
+        className="confirm-button"
+        onClick={() => confirmBooking(booking._id)}
+        disabled={(booking.status === 'confirmed') || confirmingId === booking._id}
+      >
+        {booking.status === 'confirmed'
+          ? 'Confirmed'
+          : confirmingId === booking._id
+            ? 'Confirming...'
+            : 'Mark as Confirmed'}
+      </button>
+      <button
+        className="cancel-button"
+        onClick={() => cancelBooking(booking._id)}
+        disabled={booking.status === 'cancelled' || cancellingId === booking._id}
+      >
+        {booking.status === 'cancelled'
+          ? 'Cancelled'
+          : cancellingId === booking._id
+            ? 'Cancelling...'
+            : 'Cancel Booking'}
+      </button>
+    </>
+  )}
+</div>
                 </div>
               );
             })}
@@ -315,10 +322,7 @@ const Dashboard = () => {
         ) : ( 
           <div className="bookings-grid">
             {payments.map(payment => {
-              // Use roleName from state everywhere
-
               const userId = window._novaUserId;
-              // Only filter for guests
               if (roleName === 'guest' && payment.user && payment.user._id !== userId) {
                 return null;
               }
@@ -337,16 +341,26 @@ const Dashboard = () => {
                     <p>Method: {payment.method}</p>
                     <p>Date: {new Date(payment.createdAt).toLocaleDateString()}</p>
                   </div>
-                  {(roleName === 'admin' || roleName === 'staff') && (
-                    <div className="booking-actions">
-                      <button className="solved-button" onClick={() => completePayment(payment._id)}>
-                        Mark as Completed
-                      </button>
-                      <button className="solved-button" onClick={() => refundPayment(payment._id)}>
-                        Mark as Refunded
-                      </button>
-                    </div>
-                  )}
+                  <div className="booking-actions">
+                    {(roleName === 'admin' || roleName === 'staff') && (
+                      <>
+                        <button
+                          className="solved-button"
+                          disabled={payment.status === 'completed'}
+                          onClick={() => completePayment(payment._id)}
+                        >
+                          {payment.status === 'completed' ? 'Completed' : 'Mark as Completed'}
+                        </button>
+                        <button
+                          className="solved-button"
+                          disabled={payment.status === 'refunded'}
+                          onClick={() => refundPayment(payment._id)}
+                        >
+                          {payment.status === 'refunded' ? 'Refunded' : 'Mark as Refunded'}
+                        </button>
+                      </>
+                    )}
+                  </div>
                 </div>
               );
             })}
@@ -361,10 +375,7 @@ const Dashboard = () => {
         ) : (
           <div className="bookings-grid">
             {complaints.map(complaint => {
-              // Use roleName from state everywhere
-
               const userId = window._novaUserId;
-              // Only filter for guests
               if (roleName === 'guest' && complaint.user && complaint.user._id !== userId) {
                 return null;
               }
@@ -389,16 +400,30 @@ const Dashboard = () => {
                       </div>
                     )}
                   </div>
-                  {(roleName === 'admin' || roleName === 'staff') && (
-                    <div className="booking-actions">
-                      <button className="solved-button" onClick={() => solveComplaint(complaint._id)}>
-                        {complaint.status === 'open' ? 'Solving...' : 'Mark as Solved'}
-                      </button>
-                      <button className="solved-button" onClick={() => inProgressComplaint(complaint._id)}>
-                        {cancellingId === complaint._id ? 'in-progress...' : 'Mark as In Progress'}
-                      </button>
-                    </div>
-                  )}
+                  <div className="booking-actions">
+                    {(roleName === 'admin' || roleName === 'staff') && (
+                      <>
+                        <button
+  className="solved-button"
+  disabled={complaint.status === 'solved'}
+  onClick={() => solveComplaint(complaint._id)}
+>
+  {complaint.status === 'solved' ? 'Solved' : 'Mark as Solved'}
+</button>
+                        <button
+  className="solved-button"
+  disabled={complaint.status === 'in_progress' || inProgressId === complaint._id}
+  onClick={() => inProgressComplaint(complaint._id)}
+>
+  {complaint.status === 'in_progress'
+    ? 'In Progress'
+    : inProgressId === complaint._id
+      ? 'Processing...'
+      : 'Mark as In Progress'}
+</button>
+                      </>
+                    )}
+                  </div>
                 </div>
               );
             })}

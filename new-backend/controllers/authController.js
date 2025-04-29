@@ -30,7 +30,8 @@ exports.register = async (req, res) => {
       role: defaultRole._id
     });
 
-    const token = jwt.sign({ userId: user._id, role: user.roleName }, process.env.JWT_SECRET);
+    const userRole = await Role.findById(user.role);
+const token = jwt.sign({ userId: user._id, roleName: userRole ? userRole.name : 'guest' }, process.env.JWT_SECRET);
     user.tokens.push(token);
     await user.save();
 
@@ -62,7 +63,8 @@ exports.login = async (req, res) => {
     if (!isMatch) throw new Error('Invalid credentials');
 
 
-    const token = jwt.sign({ userId: user._id, role: user.roleName }, process.env.JWT_SECRET);
+    const userRole = await Role.findById(user.role);
+const token = jwt.sign({ userId: user._id, roleName: userRole ? userRole.name : 'guest' }, process.env.JWT_SECRET);
     user.tokens.push(token);
     await user.save();
 
