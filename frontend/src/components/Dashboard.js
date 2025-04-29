@@ -13,6 +13,11 @@ const Dashboard = () => {
   const [inProgressId, setInProgressId] = useState(null);
   const [roleName, setRoleName] = useState('');
   const [payments, setPayments] = useState([]);
+  const [categoryFilter, setCategoryFilter] = useState("");
+
+  const filteredComplaints = (roleName === 'admin' || roleName === 'staff') && categoryFilter
+    ? complaints.filter(c => c.category === categoryFilter)
+    : complaints;
 
 
   useEffect(() => {
@@ -368,13 +373,30 @@ const Dashboard = () => {
         )}
 
         <h1 className="dashboard-title" style={{ marginTop: '3rem' }}>Complaints</h1>
-        {complaints.length === 0 ? (
+        {(roleName === 'admin' || roleName === 'staff') && (
+          <div style={{ marginBottom: '1rem' }}>
+            <label htmlFor="categoryFilter" style={{ marginRight: '0.5rem' }}>Filter by Category:</label>
+            <select
+              id="categoryFilter"
+              value={categoryFilter}
+              onChange={e => setCategoryFilter(e.target.value)}
+              style={{ padding: '0.3rem 1rem', borderRadius: '6px' }}
+            >
+              <option value="">All</option>
+              <option value="service">Service</option>
+              <option value="facility">Facility</option>
+              <option value="billing">Billing</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        )}
+        {filteredComplaints.length === 0 ? (
           <div className="no-bookings">
-            <p>You haven't submitted any complaints</p>
+            <p>No complaints found for this category.</p>
           </div>
         ) : (
           <div className="bookings-grid">
-            {complaints.map(complaint => {
+            {filteredComplaints.map(complaint => {
               const userId = window._novaUserId;
               if (roleName === 'guest' && complaint.user && complaint.user._id !== userId) {
                 return null;

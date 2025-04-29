@@ -269,17 +269,17 @@ const ContactUs = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/api/v1/complaints", {
+      const response = await fetch("/api/v1/complaints", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem('token')}`
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify({
           name: formData.name,
           email: formData.email,
           message: formData.message,
-          category: formData.category
+          category: formData.category,
         }),
       });
   

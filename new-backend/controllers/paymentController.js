@@ -32,12 +32,11 @@ exports.createPayment = async (req, res) => {
 };
 exports.getUserPayments = async (req, res) => {
   console.log('getUserPayments CALLED', req.user);
-  // Debug log to help diagnose roleName and filter
+
   console.log('getUserPayments: req.user =', req.user);
-  // Guests: see only their own payments; admin/staff: see all
   const filter = (req.user.roleName === 'admin' || req.user.roleName === 'staff')
-    ? {} // admin/staff see all
-    : { user: req.user._id }; // guest sees only their own
+    ? {} 
+    : { user: req.user._id }; 
   console.log('getUserPayments: filter =', filter);
   try {
     const payments = await Payment.find(filter)
@@ -122,7 +121,6 @@ exports.refundPayment = async (req, res) => {
   }
 };
 exports.getAllPayments = async (req, res) => {
-  console.log('getAllPayments CALLED', req.user);
   const filter = (req.user.roleName === 'admin' || req.user.roleName === 'staff') 
   ? {} 
   : { user: req.user._id };

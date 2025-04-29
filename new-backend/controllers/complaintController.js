@@ -7,7 +7,8 @@ exports.createComplaint = async (req, res) => {
       user: req.user._id,
       name: req.body.name,
       email: req.body.email,
-      message: req.body.message
+      message: req.body.message,
+      category: req.body.category 
     });
     console.log('Created Complaint:', complaint); 
     res.status(201).json(complaint);
