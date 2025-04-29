@@ -249,10 +249,10 @@ const Dashboard = () => {
         ) : (
           <div className="bookings-grid">
             {bookings.map(booking => {
-              // Use roleName from state everywhere
+
 
               const userId = window._novaUserId;
-              // Only filter for guests
+
               if (roleName === 'guest' && booking.user && booking.user._id !== userId) {
                 return null;
               }
@@ -390,6 +390,7 @@ const Dashboard = () => {
                   <div className="user-info">
                     <p>Submitted by: {complaint.user.name}</p>
                     <p>Email: {complaint.user.email}</p>
+                    <p>Category: {complaint.category}</p>
                   </div>
                   <div className="booking-details">
                     <p className="complaint-description">{complaint.message}</p>
