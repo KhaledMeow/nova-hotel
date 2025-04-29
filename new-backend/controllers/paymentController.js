@@ -31,15 +31,21 @@ exports.createPayment = async (req, res) => {
   }
 };
 exports.getUserPayments = async (req, res) => {
-  const filter = (req.user.roleName === 'guest')
-  ? {}
-  : {user: req.user._id};
+  console.log('getUserPayments CALLED', req.user);
+  // Debug log to help diagnose roleName and filter
+  console.log('getUserPayments: req.user =', req.user);
+  // Guests: see only their own payments; admin/staff: see all
+  const filter = (req.user.roleName === 'admin' || req.user.roleName === 'staff')
+    ? {} // admin/staff see all
+    : { user: req.user._id }; // guest sees only their own
+  console.log('getUserPayments: filter =', filter);
   try {
     const payments = await Payment.find(filter)
       .populate('booking', 'check_in_date check_out_date')
       .populate('user', 'name email');
     res.json(payments);
   } catch (error) {
+    console.error('getUserPayments error:', error);
     res.status(500).json({ error: error.message });
   }
 };
@@ -116,7 +122,8 @@ exports.refundPayment = async (req, res) => {
   }
 };
 exports.getAllPayments = async (req, res) => {
-  const filter = (req.user.role === 'admin' || req.user.role === 'staff') 
+  console.log('getAllPayments CALLED', req.user);
+  const filter = (req.user.roleName === 'admin' || req.user.roleName === 'staff') 
   ? {} 
   : { user: req.user._id };
   try {

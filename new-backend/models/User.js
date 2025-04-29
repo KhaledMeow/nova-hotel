@@ -17,9 +17,9 @@ const userSchema = new mongoose.Schema({
     select: false
   },
   role: {
-    type: String,
-    enum: ['67b796f382f9002a043ad2ac', '67b796f382f9002a043ad2ab', '67b796f382f9002a043ad2aa'],
-    default: '67b796f382f9002a043ad2ac'
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Role',
+    required: true
   },
   name: {
     type: String,

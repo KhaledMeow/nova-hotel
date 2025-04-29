@@ -20,7 +20,7 @@ exports.manageRoles = async (req, res) => {
   try {
     const user = await User.findByIdAndUpdate(
       req.params.id,
-      { role: req.body.role },
+      { role: req.body.roleName },
       { new: true }
     );
     res.json(user);

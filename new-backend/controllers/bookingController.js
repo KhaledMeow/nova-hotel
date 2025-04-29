@@ -61,9 +61,10 @@ exports.createBooking = async (req, res) => {
 };
 
 exports.getUserBookings = async (req, res) => {
-  const filter = (req.user.roleName === 'guest')
-  ? {}
-  : {user: req.user._id};
+  // Guests: see only their own bookings; admin/staff: see all
+  const filter = (req.user.roleName === 'admin' || req.user.roleName === 'staff')
+    ? {} // admin/staff see all
+    : { user: req.user._id }; // guest sees only their own
   try {
     const bookings = await Booking.find(filter)
       .populate('room', 'name type price')

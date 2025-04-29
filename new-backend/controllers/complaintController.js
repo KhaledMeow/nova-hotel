@@ -45,9 +45,10 @@ exports.createComplaint = async (req, res) => {
 };
 
 exports.getUserComplaints = async (req, res) => {
-  const filter = (req.user.roleName === 'guest')
-  ? {}
-  : {user: req.user._id};
+  const filter = (req.user.roleName === 'admin' || req.user.roleName === 'staff')
+    ? {}
+    : { user: req.user._id };
+
   try {
     const complaints = await Complaint.find(filter)
       .sort({ createdAt: -1 })

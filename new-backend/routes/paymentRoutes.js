@@ -14,10 +14,12 @@ const auth = require('../middleware/auth');
 const adminCheck = require('../middleware/adminCheck');
 
 router.post('/', auth, createPayment);
+
+router.get('/my', auth, getUserPayments);
 router.get('/:id', auth, getPaymentDetails);
 router.patch('/:id/complete', auth, adminCheck, completePayment);
 router.patch('/:id/refund', auth, adminCheck, refundPayment);
-router.get('/', auth, getUserPayments);
-router.get('/all', auth, adminCheck, getAllPayments);
+// Admin/Staff: get all payments
+router.get('/', auth, adminCheck, getAllPayments);
 
 module.exports = router;

@@ -25,20 +25,24 @@ const Dashboard = () => {
         }
 
         const decoded = jwtDecode(token);
-        setIsAdmin(decoded.role === 'admin');
-        setIsStaff(decoded.role === 'staff');
+        setIsAdmin(decoded.roleName === 'admin');
+        setIsStaff(decoded.roleName === 'staff');
         const currentUserId = decoded.userId || decoded._id || decoded.id; 
-        window._novaUserRole = decoded.role;
+        window._novaUserRole = decoded.roleName;
         window._novaUserId = currentUserId;
-
+        
+        const isAdminOrStaff = decoded.roleName === 'admin' || decoded.roleName === 'staff';
+        const bookingsEndpoint = isAdminOrStaff ? '/api/v1/bookings' : '/api/v1/bookings/my';
+        const complaintsEndpoint = isAdminOrStaff ? '/api/v1/complaints' : '/api/v1/complaints/my';
+        const paymentsEndpoint = isAdminOrStaff ? '/api/v1/payments' : '/api/v1/payments/my';
         const [bookingsRes, complaintsRes, paymentsRes] = await Promise.all([
-          fetch('/api/v1/bookings', {
+          fetch(bookingsEndpoint, {
             headers: { 'Authorization': `Bearer ${token}` }
           }),
-          fetch('/api/v1/complaints', {
+          fetch(complaintsEndpoint, {
             headers: { 'Authorization': `Bearer ${token}` }
           }),
-          fetch('/api/v1/payments', {
+          fetch(paymentsEndpoint, {
             headers: { 'Authorization': `Bearer ${token}` }
           })
         ]);
@@ -254,9 +258,10 @@ const Dashboard = () => {
         ) : (
           <div className="bookings-grid">
             {bookings.map(booking => {
-              const role = window._novaUserRole;
+              const roleName  = window._novaUserRole;
               const userId = window._novaUserId;
-              if (!(role === 'admin' || role === 'staff') && booking.user && booking.user._id !== userId) {
+              // Only filter for guests
+              if (roleName === 'guest' && booking.user && booking.user._id !== userId) {
                 return null;
               }
               return (
@@ -313,9 +318,10 @@ const Dashboard = () => {
         ) : ( 
           <div className="bookings-grid">
             {payments.map(payment => {
-              const role = window._novaUserRole;
+              const roleName = window._novaUserRole;
               const userId = window._novaUserId;
-              if (!(role === 'admin' || role === 'staff') && payment.user && payment.user._id !== userId) {
+              // Only filter for guests
+              if (roleName === 'guest' && payment.user && payment.user._id !== userId) {
                 return null;
               }
               return (
@@ -357,9 +363,10 @@ const Dashboard = () => {
         ) : (
           <div className="bookings-grid">
             {complaints.map(complaint => {
-              const role = window._novaUserRole;
+              const roleName = window._novaUserRole;
               const userId = window._novaUserId;
-              if (!(role === 'admin' || role === 'staff') && complaint.user && complaint.user._id !== userId) {
+              // Only filter for guests
+              if (roleName === 'guest' && complaint.user && complaint.user._id !== userId) {
                 return null;
               }
               return (
@@ -383,7 +390,7 @@ const Dashboard = () => {
                       </div>
                     )}
                   </div>
-                  {(window._novaUserRole === 'admin' || window._novaUserRole === 'staff') && (
+                  {(roleName === 'admin' || roleName === 'staff') && (
                     <div className="booking-actions">
                       <button className="solved-button" onClick={() => solveComplaint(complaint._id)}>
                         {complaint.status === 'open' ? 'Solving...' : 'Mark as Solved'}
