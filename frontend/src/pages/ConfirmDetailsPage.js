@@ -4,7 +4,10 @@ import "../styles/Booking.css";
 
 const formatDate = (dateString) => {
   if (!dateString) return '';
-  const date = new Date(dateString);
+
+  const [year, month, day] = dateString.split('-');
+  if (!year || !month || !day) return dateString;
+  const date = new Date(Number(year), Number(month) - 1, Number(day));
   return date.toLocaleDateString('en-US', {
     weekday: 'long',
     year: 'numeric',
@@ -38,23 +41,36 @@ const validateForm = (key, value) => {
 
 const Booking = ({ isModal }) => {
   const location = useLocation();
-  const room = location.state?.room || {};
   const navigate = useNavigate();
-  const [showPayment, setShowPayment] = useState(false);
-  const [bookingData, setBookingData] = useState(null);
-  const [errors, setErrors] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    num_of_people: ""
-  });
 
-  const [formData, setFormData] = useState({
-    room_type: room.type,
-    check_in_date: location.state?.checkInDate || '',
-    check_out_date: location.state?.checkOutDate || '',
-    num_of_people: "",
-  });
+  const bookingData = location.state?.bookingData;
+  const checkInDate = location.state?.checkInDate;
+  const checkOutDate = location.state?.checkOutDate;
+  const room = location.state?.room || {};
+
+  React.useEffect(() => {
+    if (!bookingData || !checkInDate || !checkOutDate || !room._id) {
+      alert('Missing booking details. Please start your booking again.');
+      navigate('/');
+    }
+  }, [bookingData, checkInDate, checkOutDate, room, navigate]);
+
+  if (!bookingData || !checkInDate || !checkOutDate || !room._id) return null;
+
+
+  const [errors, setErrors] = useState({
+  name: "",
+  email: "",
+  phone: "",
+  num_of_people: ""
+});
+
+const [formData, setFormData] = useState({
+  room_type: room.type,
+  check_in_date: checkInDate ? checkInDate.slice(0, 10) : '',
+  check_out_date: checkOutDate ? checkOutDate.slice(0, 10) : '',
+  num_of_people: "",
+});
   useEffect(() => {  
     if (!isModal && !location.state?.room?._id) {  
       alert("Invalid room selection");  
@@ -87,77 +103,31 @@ const Booking = ({ isModal }) => {
     setErrors(prev => ({ ...prev, [name]: errorMessage }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const token = localStorage.getItem('token');
-    if (!token) {
-      alert('Please login first');
-      return navigate('/login');
+  const handleSubmit = (e) => {
+  e.preventDefault();
+  const newErrors = {};
+  Object.keys(formData).forEach(key => {
+    const errorMessage = validateForm(key, formData[key]);
+    if (errorMessage) {
+      newErrors[key] = errorMessage;
     }
-    const formatDate = (isoString) => {
-      return new Date(isoString).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      });
-    };
-    const validateDates = (checkIn, checkOut) => {
-      const isoRegex = /^\d{4}-\d{2}-\d{2}$/;
-      if (!isoRegex.test(checkIn) || !isoRegex.test(checkOut)) {
-        return "Invalid date format";
-      }
-      return "";
-    };
-    // Validate all fields
-    const newErrors = {};
-    Object.keys(formData).forEach(key => {
-        const errorMessage = validateForm(key, formData[key]);
-        if (errorMessage) {
-            newErrors[key] = errorMessage;
-        }
-    });
-
-    // Update errors
-    setErrors(newErrors);
-
-    // Check if form is valid
-    if (Object.values(newErrors).some(error => error !== "")) {
-        alert("Please correct the errors before submitting");
-        return;
+  });
+  setErrors(newErrors);
+  if (Object.values(newErrors).some(error => error !== "")) {
+    alert("Please correct the errors before submitting");
+    return;
+  }
+  navigate('/payment', {
+    state: {
+      room,
+      checkInDate: formData.check_in_date,
+      checkOutDate: formData.check_out_date,
+      bookingData,
+      formData
     }
+  });
+};
 
-    // Validate check-in and check-out dates
-    if (!formData.check_in_date || !formData.check_out_date) {
-      alert("Check-in and check-out dates are required.");
-      return;
-    }
-
-    // Additional date validation
-    const checkInDate = new Date(formData.check_in_date);
-    const checkOutDate = new Date(formData.check_out_date);
-
-    // Validate date range
-    if (checkInDate >= checkOutDate) {
-      alert("Check-out date must be after check-in date.");
-      return;
-    }
-
-    // Validate against past dates
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    if (checkInDate < today) {
-      alert("Check-in date cannot be in the past.");
-      return;
-    }
-
-    const numOfPeople = parseInt(formData.num_of_people, 10);
-    if (isNaN(numOfPeople) || numOfPeople < 1) {
-        alert("Number of people must be a positive number.");
-        return;
-    }
-    
     const submissionData = {
       room: room._id,
       check_in_date: formData.check_in_date,
@@ -168,72 +138,10 @@ const Booking = ({ isModal }) => {
     };
     console.log('Booking data:', submissionData);
 
-    try {
-      const response = await fetch('/api/v1/bookings', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify(submissionData)
-      });
-      if (!response.ok){
-        if (response.status === 401) {
-          localStorage.removeItem('token');
-          alert('Session expired - Please login again');
-          navigate('/login');
-          return;
-        }
-        const errorData = await response.json();
-        throw new Error(errorData.error) || 'Booking failed';
-      }
-      const booking = await response.json();
-      setBookingData(booking);
-      setShowPayment(true);
-
-    } catch (error) {
-      if (error.message.includes('401')) {
-        localStorage.removeItem('token');
-        navigate('/login');
-      }
-      alert(error.message);
-      console.error('Booking Error:', error);
-    }
-  };
-
-  const handlePaymentSuccess = () => {
-
-    setBookingData(null);
-    setShowPayment(false);
-
-    setFormData({
-      name: "",
-      phone: "",
-      email: "",
-      special_requests: "",
-      room_type: "",
-      check_in_date: "",
-      check_out_date: "",
-      num_of_people: "",
-    });
-  };
-
-  const handlePaymentError = (error) => {
-    console.error('Payment error:', error);
-    setShowPayment(false);
-  };
-
-
-  const calculateAmount = () => {
-    const checkIn = new Date(location.state?.checkInDate);
-    const checkOut = new Date(location.state?.checkOutDate);
-    const nights = Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24));
-    return room.price * nights;
-  };
-
+  
+  
   return (
     <div className={`booking-container ${isModal ? 'modal-version' : ''}`}>
-      {!showPayment ? (
         <>
           <h2>Confirm Details</h2>
           <div className="booking-dates required">
@@ -253,12 +161,7 @@ const Booking = ({ isModal }) => {
               <input 
                 type="date" 
                 value={formData.check_out_date}
-                onChange={(e) => setFormData(prev => ({
-                  ...prev, 
-                  check_out_date: e.target.value
-                }))}
-                required 
-                min={formData.check_in_date || new Date().toISOString().split('T')[0]} 
+                readOnly
                 className="date-input"
               />
             </div>
@@ -341,27 +244,9 @@ const Booking = ({ isModal }) => {
             </button>
           </form>
         </>
-      ) : (
-        <div className="payment-section">
-          <h2>Booking Complete</h2>
-          <div className="payment-summary">
-            <div className="booking-dates">
-              <div className="booking-date-item">
-                <p>{formatDate(formData.check_in_date)}</p>
-              </div>
-              <div className="booking-date-item">
-                <p>{formatDate(formData.check_out_date)}</p>
-              </div>
-            </div>
-          </div>
-          <p>Your booking has been created. Proceed to payment to confirm your reservation.</p>
-          <button className="submit-button" onClick={() => navigate('/payment', { state: { room, checkInDate: formData.check_in_date, checkOutDate: formData.check_out_date, bookingData } })}>
-            Go to Payment Page
-          </button>
-        </div>
-      )}
     </div>
   );
 };
 
 export default Booking;
+

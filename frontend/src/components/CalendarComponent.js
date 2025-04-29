@@ -199,12 +199,20 @@ const CalendarComponent = () => {
       {startDate && endDate && (
         <div className="booking-actions">
           <button
-            onClick={() => navigate("/room-list", {
-              state: {
-                checkInDate: startDate.toISOString().split("T")[0],
-                checkOutDate: endDate.toISOString().split("T")[0]
-              }
-            })}
+            onClick={() => {
+              const toLocalYYYYMMDD = (date) => {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+              };
+              navigate("/room-list", {
+                state: {
+                  checkInDate: toLocalYYYYMMDD(startDate),
+                  checkOutDate: toLocalYYYYMMDD(endDate)
+                }
+              });
+            }}
           >
             View Available Rooms
           </button>

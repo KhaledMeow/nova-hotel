@@ -139,19 +139,60 @@ const RoomList = ({ isModal, onRoomSelect }) => {
   }, []);
   
 
-  const handleBookNowClick = (room) => {
-    if (isModal) {
-      onRoomSelect(room);
-      return;
+  const handleBookNowClick = async (room) => {
+  if (isModal) {
+    onRoomSelect(room);
+    return;
+  }
+  // Get check-in/out dates from navigation state
+  const locationState = window.history.state && window.history.state.usr ? window.history.state.usr : {};
+  const checkInDate = locationState.checkInDate;
+  const checkOutDate = locationState.checkOutDate;
+  if (!checkInDate || !checkOutDate) {
+    alert('Please select check-in and check-out dates first.');
+    return;
+  }
+  const token = localStorage.getItem('token');
+  if (!token) {
+    alert('Please login first');
+    return navigate('/login');
+  }
+  try {
+    // You may want to collect guest info here or in the next step
+    const response = await fetch('/api/v1/bookings', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        room: room._id,
+        check_in_date: checkInDate,
+        check_out_date: checkOutDate,
+        num_guests: 1 // default, can be changed later
+      })
+    });
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Booking failed');
     }
-    navigate("/Confirm-details", { state: {
-      room: {
-        _id: room._id,
-        type: room.type,
-        price: room.price
+    const bookingData = await response.json();
+    navigate('/Confirm-details', {
+      state: {
+        room: {
+          _id: room._id,
+          type: room.type,
+          price: room.price
+        },
+        checkInDate,
+        checkOutDate,
+        bookingData
       }
-    } 
-  });
+    });
+  } catch (error) {
+    alert(error.message);
+    console.error('Booking Error:', error);
+  }
 };
 
   if (loading) return <div className="loader"></div>;

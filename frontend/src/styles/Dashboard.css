@@ -87,7 +87,7 @@
   .cancel-button {
     background: #6f1d25;
     color: white;
-    padding: 0.75rem 2rem;
+    padding: 0.75rem 1.1rem;
     border: none;
     border-radius: 25px;
     cursor: pointer;
@@ -106,7 +106,7 @@
   .confirm-button {
     background: #6f1d25;
     color: white;
-    padding: 0.75rem 2rem;
+    padding: 0.75rem 1.1rem;
     border: none;
     border-radius: 25px;
     cursor: pointer;
@@ -126,7 +126,7 @@
   .solved-button {
     background: #6f1d25;
     color: white;
-    padding: 0.75rem 2rem;
+    padding: 0.75rem 1.1rem;
     border: none;
     border-radius: 25px;
     cursor: pointer;
@@ -142,6 +142,31 @@
     background: #6c757d;
     cursor: not-allowed;
   }
+  
+  .delete-button {
+  background: #c0392b;
+  color: white;
+  padding: 1rem 1.1rem;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-left: auto;
+  margin-right: 0;
+  font-size: 0.95rem;
+  align-self: flex-end;
+}
+.delete-button:hover {
+  background: #fff;
+  color: #c0392b;
+  border: 1px solid #c0392b;
+}
+.delete-button:disabled {
+  background: #6c757d;
+  color: #fff;
+  cursor: not-allowed;
+}
+  
   .resolution-notice {
     background: #f8f9fa;
     padding: 1rem;

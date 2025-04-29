@@ -60,6 +60,7 @@ router.get('/', auth, adminCheck, bookingController.getUserBookings);
 // Guest: get only their own bookings
 router.get('/my', auth, bookingController.getUserBookings);
 router.patch('/:id/', auth, adminCheck, bookingController.cancelBooking);
+router.delete('/:id', auth, adminCheck, bookingController.deleteBooking);
 router.patch('/:id/confirm', auth, adminCheck, bookingController.confirmBooking);
 router.get('/all', auth, adminCheck, bookingController.getAllBookings);
 

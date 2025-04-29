@@ -115,6 +115,20 @@ exports.refundPayment = async (req, res) => {
     });
   }
 };
+exports.deletePayment = async (req, res) => {
+  const filter = (req.user.roleName === 'admin' || req.user.roleName === 'staff')
+    ? {}
+    : { user: req.user._id };
+  try {
+    const payment = await Payment.findOne({ _id: req.params.id, ...filter });
+    if (!payment) return res.status(404).json({ error: 'Payment not found' });
+    await Payment.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Payment deleted successfully' });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 exports.getAllPayments = async (req, res) => {
   const filter = (req.user.roleName === 'admin' || req.user.roleName === 'staff') 
   ? {} 

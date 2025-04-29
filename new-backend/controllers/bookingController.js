@@ -135,6 +135,31 @@ exports.cancelBooking = async (req, res) => {
     });
   }
 };
+exports.deleteBooking = async (req, res) => {
+  const filter = (req.user.roleName === 'admin' || req.user.roleName === 'staff')
+    ? {}
+    : { user: req.user._id };
+  try {
+    const booking = await Booking.findOne({ _id: req.params.id, ...filter });
+    if (!booking) return res.status(404).json({ error: 'Booking not found' });
+
+    // Remove booked_dates from room
+    await Room.findByIdAndUpdate(
+      booking.room,
+      { $pull: {
+        booked_dates: {
+          startDate: new Date(booking.check_in_date),
+          endDate: new Date(booking.check_out_date)
+        }
+      } }
+    );
+    await Booking.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Booking deleted successfully' });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 exports.confirmBooking = async (req, res) => {
   const filter = (req.user.roleName === 'admin' || req.user.roleName === 'staff')
   ? {}

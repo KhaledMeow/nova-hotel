@@ -107,6 +107,20 @@ exports.inProgressComplaint = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+exports.deleteComplaint = async (req, res) => {
+  const filter = (req.user.roleName === 'admin' || req.user.roleName === 'staff')
+    ? {}
+    : { user: req.user._id };
+  try {
+    const complaint = await Complaint.findOne({ _id: req.params.id, ...filter });
+    if (!complaint) return res.status(404).json({ error: 'Complaint not found' });
+    await Complaint.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Complaint deleted successfully' });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 exports.getAllComplaints = async (req, res) => {
   const filter = (req.user.roleName === 'admin' || req.user.roleName === 'staff') 
   ? {} 

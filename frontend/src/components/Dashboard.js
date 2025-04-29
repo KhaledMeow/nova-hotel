@@ -83,6 +83,63 @@ const Dashboard = () => {
     fetchData();
   }, []);
 
+  const deleteBooking = async (bookingId) => {
+    if (!window.confirm('Are you sure you want to delete this booking?')) return;
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`/api/v1/bookings/${bookingId}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to delete booking');
+      }
+      setBookings(prev => prev.filter(b => b._id !== bookingId));
+    } catch (error) {
+      alert(error.message);
+      console.error('Delete Booking Error:', error);
+    }
+  };
+
+  const deletePayment = async (paymentId) => {
+    if (!window.confirm('Are you sure you want to delete this payment?')) return;
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`/api/v1/payments/${paymentId}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to delete payment');
+      }
+      setPayments(prev => prev.filter(p => p._id !== paymentId));
+    } catch (error) {
+      alert(error.message);
+      console.error('Delete Payment Error:', error);
+    }
+  };
+
+  const deleteComplaint = async (complaintId) => {
+    if (!window.confirm('Are you sure you want to delete this complaint?')) return;
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`/api/v1/complaints/${complaintId}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to delete complaint');
+      }
+      setComplaints(prev => prev.filter(c => c._id !== complaintId));
+    } catch (error) {
+      alert(error.message);
+      console.error('Delete Complaint Error:', error);
+    }
+  };
+
   const cancelBooking = async (bookingId) => {
     if (!window.confirm('Are you sure you want to cancel this booking?')) return;
     try { 
@@ -254,71 +311,72 @@ const Dashboard = () => {
         ) : (
           <div className="bookings-grid">
             {bookings.map(booking => {
-
-
-              const userId = window._novaUserId;
-
-              if (roleName === 'guest' && booking.user && booking.user._id !== userId) {
-                return null;
-              }
-              return (
-                <div key={booking._id} className="booking-card">
-                  <div className="booking-header">
-                    <h3>{booking.room.name}</h3>
-                    <span className={`status-badge ${booking.status}`}>
-                      {booking.status}
-                    </span>
-                  </div>
-                  <div className="booking-dates">
-                    <div className="date-item">
-                      <span>Check-in:</span>
-                      {new Date(booking.check_in_date).toLocaleDateString()}
-                    </div>
-                    <div className="date-item">
-                      <span>Check-out:</span>
-                      {new Date(booking.check_out_date).toLocaleDateString()}
-                    </div>
-                  </div>
-                  <div className="booking-details">
-                    <p>Name: {booking.user.name}</p>
-                    <p>Email: {booking.user.email}</p>
-                    <p>Guests: {booking.num_guests}</p>
-                    <p>Total Price: ${booking.room.price * 
-                      Math.ceil((new Date(booking.check_out_date) - new Date(booking.check_in_date)) / (1000 * 3600 * 24))}</p>
-                  </div>
-                  <div className="booking-actions">
-  {(roleName === 'admin' || roleName === 'staff') && (
-    <>
-      <button
-        className="confirm-button"
-        onClick={() => confirmBooking(booking._id)}
-        disabled={(booking.status === 'confirmed') || confirmingId === booking._id}
-      >
-        {booking.status === 'confirmed'
-          ? 'Confirmed'
-          : confirmingId === booking._id
-            ? 'Confirming...'
-            : 'Mark as Confirmed'}
-      </button>
-      <button
-        className="cancel-button"
-        onClick={() => cancelBooking(booking._id)}
-        disabled={booking.status === 'cancelled' || cancellingId === booking._id}
-      >
-        {booking.status === 'cancelled'
-          ? 'Cancelled'
-          : cancellingId === booking._id
-            ? 'Cancelling...'
-            : 'Cancel Booking'}
-      </button>
-    </>
-  )}
-</div>
-                </div>
-              );
-            })}
-          </div>
-        )}        
+  const userId = window._novaUserId;
+  if (roleName === 'guest' && booking.user && booking.user._id !== userId) {
+    return null;
+  }
+  return (
+    <div key={booking._id} className="booking-card">
+      <div className="booking-header">
+        <h3>{booking.room.name}</h3>
+        <span className={`status-badge ${booking.status}`}>{booking.status}</span>
+      </div>
+      <div className="booking-dates">
+        <div className="date-item">
+          <span>Check-in:</span>
+          {new Date(booking.check_in_date).toLocaleDateString()}
+        </div>
+        <div className="date-item">
+          <span>Check-out:</span>
+          {new Date(booking.check_out_date).toLocaleDateString()}
+        </div>
+      </div>
+      <div className="booking-details">
+        <p>Name: {booking.user.name}</p>
+        <p>Email: {booking.user.email}</p>
+        <p>Guests: {booking.num_guests}</p>
+        <p>Total Price: ${booking.room.price * Math.ceil((new Date(booking.check_out_date) - new Date(booking.check_in_date)) / (1000 * 3600 * 24))}</p>
+      </div>
+      <div className="booking-actions">
+      {(roleName === 'admin' || roleName === 'staff') && (
+        <>
+          <button
+            className="confirm-button"
+            onClick={() => confirmBooking(booking._id)}
+            disabled={(booking.status === 'confirmed') || confirmingId === booking._id}
+          >
+            {booking.status === 'confirmed'
+              ? 'Confirmed'
+              : confirmingId === booking._id
+                ? 'Confirming...'
+                : 'Mark as Confirmed'}
+          </button>
+          <button
+            className="cancel-button"
+            onClick={() => cancelBooking(booking._id)}
+            disabled={booking.status === 'cancelled' || cancellingId === booking._id}
+          >
+            {booking.status === 'cancelled'
+              ? 'Cancelled'
+              : cancellingId === booking._id
+                ? 'Cancelling...'
+                : 'Cancel Booking'}
+          </button>
+          <button
+            className="delete-button"
+            style={{marginLeft: 'auto'}} // ensure right alignment
+            onClick={() => deleteBooking(booking._id)}
+          >
+            Delete
+          </button>
+        </>
+      )}
+    </div>
+    </div>
+  );
+})}
+        </div>
+      )}        
       <h1 className="dashboard-title" style={{ marginTop: '3rem' }}>Payments</h1>
       {payments.length === 0 ? (
           <div className="no-bookings">
@@ -327,48 +385,53 @@ const Dashboard = () => {
         ) : ( 
           <div className="bookings-grid">
             {payments.map(payment => {
-              const userId = window._novaUserId;
-              if (roleName === 'guest' && payment.user && payment.user._id !== userId) {
-                return null;
-              }
-              return (
-                <div key={payment._id} className="booking-card">
-                  <div className="booking-header">
-                    <h3>Payment #{payment._id.slice(-4)}</h3>
-                    <span className={`status-badge ${payment.status}`}>
-                      {payment.status}
-                    </span>
-                  </div>
-                  <div className="booking-details">
-                    <p>Name: {payment.user.name}</p>
-                    <p>Email: {payment.user.email}</p>
-                    <p>Amount: ${payment.amount}</p>
-                    <p>Method: {payment.method}</p>
-                    <p>Date: {new Date(payment.createdAt).toLocaleDateString()}</p>
-                  </div>
-                  <div className="booking-actions">
-                    {(roleName === 'admin' || roleName === 'staff') && (
-                      <>
-                        <button
-                          className="solved-button"
-                          disabled={payment.status === 'completed'}
-                          onClick={() => completePayment(payment._id)}
-                        >
-                          {payment.status === 'completed' ? 'Completed' : 'Mark as Completed'}
-                        </button>
-                        <button
-                          className="solved-button"
-                          disabled={payment.status === 'refunded'}
-                          onClick={() => refundPayment(payment._id)}
-                        >
-                          {payment.status === 'refunded' ? 'Refunded' : 'Mark as Refunded'}
-                        </button>
-                      </>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
+  const userId = window._novaUserId;
+  if (roleName === 'guest' && payment.user && payment.user._id !== userId) {
+    return null;
+  }
+  return (
+    <div key={payment._id} className="booking-card">
+      <div className="booking-header">
+        <h3>Payment #{payment._id.slice(-4)}</h3>
+        <span className={`status-badge ${payment.status}`}>{payment.status}</span>
+      </div>
+      <div className="booking-details">
+        <p>Name: {payment.user.name}</p>
+        <p>Email: {payment.user.email}</p>
+        <p>Amount: ${payment.amount}</p>
+        <p>Method: {payment.method}</p>
+        <p>Date: {new Date(payment.createdAt).toLocaleDateString()}</p>
+      </div>
+      <div className="booking-actions">
+        {(roleName === 'admin' || roleName === 'staff') && (
+          <>
+            <button
+              className="solved-button"
+              disabled={payment.status === 'completed'}
+              onClick={() => completePayment(payment._id)}
+            >
+              {payment.status === 'completed' ? 'Completed' : 'Mark as Completed'}
+            </button>
+            <button
+              className="solved-button"
+              disabled={payment.status === 'refunded'}
+              onClick={() => refundPayment(payment._id)}
+            >
+              {payment.status === 'refunded' ? 'Refunded' : 'Mark as Refunded'}
+            </button>
+            <button
+              className="delete-button"
+              style={{marginLeft: 'auto'}}
+              onClick={() => deletePayment(payment._id)}
+            >
+              Delete
+            </button>
+          </>
+        )}
+      </div>
+    </div>
+  );
+})}
           </div>
         )}
 
@@ -397,65 +460,68 @@ const Dashboard = () => {
         ) : (
           <div className="bookings-grid">
             {filteredComplaints.map(complaint => {
-              const userId = window._novaUserId;
-              if (roleName === 'guest' && complaint.user && complaint.user._id !== userId) {
-                return null;
-              }
-              return (
-                <div key={complaint._id} className="booking-card">
-                  <div className="booking-header">
-                    <h3>{complaint.title}</h3>
-                    <span className={`status-badge ${complaint.status}`}>
-                      {complaint.status.replace('_', ' ')}
-                    </span>
-                  </div>
-                  <div className="user-info">
-                    <p>Submitted by: {complaint.user.name}</p>
-                    <p>Email: {complaint.user.email}</p>
-                    <p>Category: {complaint.category}</p>
-                  </div>
-                  <div className="booking-details">
-                    <p className="complaint-description">{complaint.message}</p>
-                    {complaint.resolution && (
-                      <div className="resolution-notice">
-                        <strong>Resolution:</strong>
-                        <p>{complaint.resolution}</p>
-                      </div>
-                    )}
-                  </div>
-                  <div className="booking-actions">
-                    {(roleName === 'admin' || roleName === 'staff') && (
-                      <>
-                        <button
-  className="solved-button"
-  disabled={complaint.status === 'solved'}
-  onClick={() => solveComplaint(complaint._id)}
->
-  {complaint.status === 'solved' ? 'Solved' : 'Mark as Solved'}
-</button>
-                        <button
-  className="solved-button"
-  disabled={complaint.status === 'in_progress' || inProgressId === complaint._id}
-  onClick={() => inProgressComplaint(complaint._id)}
->
-  {complaint.status === 'in_progress'
-    ? 'In Progress'
-    : inProgressId === complaint._id
-      ? 'Processing...'
-      : 'Mark as In Progress'}
-</button>
-                      </>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
+  const userId = window._novaUserId;
+  if (roleName === 'guest' && complaint.user && complaint.user._id !== userId) {
+    return null;
+  }
+  return (
+    <div key={complaint._id} className="booking-card">
+      <div className="booking-header">
+        <h3>{complaint.title}</h3>
+        <span className={`status-badge ${complaint.status}`}>{complaint.status.replace('_', ' ')}</span>
+      </div>
+      <div className="user-info">
+        <p>Submitted by: {complaint.user.name}</p>
+        <p>Email: {complaint.user.email}</p>
+        <p>Category: {complaint.category}</p>
+      </div>
+      <div className="booking-details">
+        <p className="complaint-description">{complaint.message}</p>
+        {complaint.resolution && (
+          <div className="resolution-notice">
+            <strong>Resolution:</strong>
+            <p>{complaint.resolution}</p>
           </div>
         )}
       </div>
-
-
+      <div className="booking-actions">
+        {(roleName === 'admin' || roleName === 'staff') && (
+          <>
+            <button
+              className="solved-button"
+              disabled={complaint.status === 'solved'}
+              onClick={() => solveComplaint(complaint._id)}
+            >
+              {complaint.status === 'solved' ? 'Solved' : 'Mark as Solved'}
+            </button>
+            <button
+              className="solved-button"
+              disabled={complaint.status === 'in_progress' || inProgressId === complaint._id}
+              onClick={() => inProgressComplaint(complaint._id)}
+            >
+              {complaint.status === 'in_progress'
+                ? 'In Progress'
+                : inProgressId === complaint._id
+                  ? 'Processing...'
+                  : 'Mark as In Progress'}
+            </button>
+            <button
+              className="delete-button"
+              style={{marginLeft: 'auto'}}
+              onClick={() => deleteComplaint(complaint._id)}
+            >
+              Delete
+            </button>
+          </>
+        )}
       </div>
+    </div>
+  );
+})}
+          </div>
+        )}
+      </div>
+    </div>
       
   );
 };

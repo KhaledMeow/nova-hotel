@@ -7,7 +7,8 @@ const {
   getUserComplaints,
   inProgressComplaint,
   solveComplaint,
-  getAllComplaints
+  getAllComplaints,
+  deleteComplaint
 
 } = require('../controllers/complaintController');
 const auth = require('../middleware/auth');
@@ -21,6 +22,7 @@ router.get('/', auth, adminCheck, getUserComplaints);
 router.get('/my', auth, getUserComplaints);
 router.patch('/:id/in-progress', auth, adminCheck,  inProgressComplaint);
 router.patch('/:id/solve', auth, adminCheck, solveComplaint);
+router.delete('/:id', auth, adminCheck, deleteComplaint);
 router.get('/all', auth, adminCheck, getAllComplaints);
 
 module.exports = router;
