@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
 import "../styles/Dashboard.css";
+import '../styles/SpecialOfferPopup.css';
 
 const Dashboard = () => {
   const [bookings, setBookings] = useState([]);
@@ -85,6 +86,7 @@ const Dashboard = () => {
 
   const deleteBooking = async (bookingId) => {
     if (!window.confirm('Are you sure you want to delete this booking?')) return;
+    if (!window.confirm('After this action, the booking will be permanently deleted.')) return;
     try {
       const token = localStorage.getItem('token');
       const response = await fetch(`/api/v1/bookings/${bookingId}`, {
@@ -104,6 +106,7 @@ const Dashboard = () => {
 
   const deletePayment = async (paymentId) => {
     if (!window.confirm('Are you sure you want to delete this payment?')) return;
+    if (!window.confirm('After this action, the payment will be permanently deleted.')) return;
     try {
       const token = localStorage.getItem('token');
       const response = await fetch(`/api/v1/payments/${paymentId}`, {
@@ -123,6 +126,7 @@ const Dashboard = () => {
 
   const deleteComplaint = async (complaintId) => {
     if (!window.confirm('Are you sure you want to delete this complaint?')) return;
+    if (!window.confirm('After this action, the complaint will be permanently deleted.')) return;
     try {
       const token = localStorage.getItem('token');
       const response = await fetch(`/api/v1/complaints/${complaintId}`, {
@@ -141,8 +145,7 @@ const Dashboard = () => {
   };
 
   const cancelBooking = async (bookingId) => {
-    if (!window.confirm('Are you sure you want to cancel this booking?')) return;
-    try { 
+    if (!window.confirm('Are you sure you want to cancel this booking?')) return;    try { 
       setCancellingId(bookingId);
       const token = localStorage.getItem('token');
       const response = await fetch(`/api/v1/bookings/${bookingId}`, {
@@ -300,26 +303,26 @@ const Dashboard = () => {
   return (
     <div className="room-list-page">
       <div className="dashboard-container">
-        <h1 className="dashboard-title" style={{ marginTop: '3rem' }}>Bookings</h1>
-         {bookings.length === 0 ? (
-          <div className="no-bookings">
-            <p>You have no upcoming bookings</p>
-            <Link to="/calendar" className="book-now-button">
-              Book Now
-            </Link>
-          </div>
-        ) : (
-          <div className="bookings-grid">
-            {bookings.map(booking => {
-  const userId = window._novaUserId;
-  if (roleName === 'guest' && booking.user && booking.user._id !== userId) {
-    return null;
-  }
-  return (
-    <div key={booking._id} className="booking-card">
-      <div className="booking-header">
-        <h3>{booking.room.name}</h3>
-        <span className={`status-badge ${booking.status}`}>{booking.status}</span>
+          <h1 className="dashboard-title" style={{ marginTop: '3rem' }}>Bookings</h1>
+           {bookings.length === 0 ? (
+            <div className="no-bookings">
+              <p>You have no upcoming bookings</p>
+              <Link to="/calendar" className="book-now-button">
+                Book Now
+              </Link>
+            </div>
+          ) : (
+            <div className="bookings-grid">
+              {bookings.map(booking => {
+    const userId = window._novaUserId;
+    if (roleName === 'guest' && booking.user && booking.user._id !== userId) {
+      return null;
+    }
+    return (
+      <div key={booking._id} className="booking-card">
+        <div className="booking-header">
+          <h3>{booking.room.name}</h3>
+          <span className={`status-badge ${booking.status}`}>{booking.status}</span>
       </div>
       <div className="booking-dates">
         <div className="date-item">
@@ -376,7 +379,7 @@ const Dashboard = () => {
   );
 })}
         </div>
-      )}        
+      )}
       <h1 className="dashboard-title" style={{ marginTop: '3rem' }}>Payments</h1>
       {payments.length === 0 ? (
           <div className="no-bookings">
