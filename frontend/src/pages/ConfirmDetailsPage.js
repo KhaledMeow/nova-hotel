@@ -152,7 +152,7 @@ const [formData, setFormData] = useState({
                 value={formData.check_in_date}
                 min={new Date().toISOString().split('T')[0]}
                 onChange={(e) => setFormData({...formData, check_in_date: e.target.value})}
-                required 
+                readOnly
                 className="date-input"
               />
             </div>

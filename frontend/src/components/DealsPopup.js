@@ -25,7 +25,6 @@ const DealsPopup = ({ onClose }) => {
     const newX = e.clientX - dragOffset.x;
     const newY = e.clientY - dragOffset.y;
     
-    // Keep popup within window bounds
     const maxX = window.innerWidth - popupRef.current.offsetWidth;
     const maxY = window.innerHeight - popupRef.current.offsetHeight;
     
@@ -79,9 +78,6 @@ const DealsPopup = ({ onClose }) => {
         onMouseDown={handleMouseDown}
       >
         <div className="popup-header">
-          <div className="title-container">
-            <h2>Special Deals</h2>
-          </div>
           <button 
             onClick={onClose} 
             className="close-button"
@@ -89,6 +85,9 @@ const DealsPopup = ({ onClose }) => {
           >
             ✘
           </button>
+        </div>
+        <div className="title-container">
+        <h2>Special Deals</h2>
         </div>
         <div 
           className="deals-content" 

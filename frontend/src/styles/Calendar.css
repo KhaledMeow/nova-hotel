@@ -20,7 +20,7 @@
   max-width: 50rem;
   margin: 2rem auto;
   padding: 1.25rem;
-  background-color: rgba(0, 0, 0, 0.9);
+  background-color: var(--background-secondary);
   border-radius: 0.5rem;
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.3);
 }
@@ -33,6 +33,7 @@
   padding: 1rem;
   background-color: var(--background);
   color: var(--text);
+  gap: 1rem;
 }
 
 .nav-button {
@@ -41,17 +42,29 @@
   color: var(--text);
   font-size: 1.5rem;
   cursor: pointer;
-  transition: color 0.3s ease;
+  transition: all 0.3s ease;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .nav-button:hover {
   color: var(--primary);
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: scale(1.1);
 }
 
 .current-month {
   margin: 0;
   font-size: 1.25rem;
   color: var(--text);
+  font-weight: bold;
+  flex: 1;
+  text-align: center;
 }
 
 
@@ -95,8 +108,8 @@
 
 .past-day {
   background-color: rgba(0, 0, 0, 0.5);
-  cursor: not-allowed required;
-  opacity: 0.5;
+  cursor: not-allowed;
+  opacity: 0.1;
 }
 
 .selected-start {
@@ -134,11 +147,13 @@
 
 
 button {
-  padding: 1.75rem 1.5rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 10rem;
   margin-top: 1rem;
   background-color: var(--primary);
   color: var(--background);
-  border: none;
+
   border-radius: 0.25rem;
   cursor: pointer;
   transition: background-color 0.3s ease;
@@ -177,31 +192,4 @@ button:hover {
   width: 2.5rem;
   height: 2.5rem;
   animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-
-@media (max-width: 600px) { 
-  .calendar-grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-  
-  .calendar-container {
-    margin-top: 4rem;
-    padding: 0.5rem;
-  }
-}
-
-@media (max-width: 400px) {
-  .calendar-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-  
-  .day-cell {
-    min-height: 4rem;
-  }
 }
