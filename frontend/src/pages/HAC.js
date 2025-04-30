@@ -318,9 +318,9 @@ const ContactUs = () => {
       </div>
       <div className="contact-info">
         <h2>Address</h2>
-        <p>No.16-22 Jalan Alor, 50200 Kuala Lumpur, Malaysia.</p>
+        <p>AOU Arab Open University,El-Shorouk, Cairo, Egypt</p>
         <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3180.000000000000000!2d101.70752555002214!3d3.1453263510836957!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMy4xNDUzMjYzLCAxMDEuNzA3NTI1NQ!5e0!3m2!1sen!2s!4v1234567890123"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d110266.64695849992!2d31.624997!3d30.149238!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzDCsDA4JzU3LjMiTiAzMcKwMzcnMzAuMCJF!5e0!3m2!1sen!2seg!4v1621234567890"
           title="map"
           width="100%"
           height="300rem"

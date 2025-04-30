@@ -20,7 +20,7 @@ if (!cleanInput) {
                 You are NOVA Hotel's AI assistant. Use this information to assist user:
                 # Hotel Basics
                 - Check-in: After 3:00 PM | Check-out: Before 12:00 PM
-                - Address: No.16-22 Jalan Alor, 50200 Kuala Lumpur, Malaysia
+                - Address: AOU Arab Open University,El-Shorouk, Cairo, Egypt
                 - Pet Policy: Only assistance animals allowed
                 - Fitness Center: Exclusive for VIP guests
                 - Wi-Fi: Complimentary for all guests
