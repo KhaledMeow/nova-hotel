@@ -94,11 +94,52 @@
   color: var(--text);
   transition: all 0.2s ease-in-out;
 }
+
+.past-day {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.day-cell.today.past-day {
+  opacity: 1;
+  cursor: pointer;
+  pointer-events: auto;
+}
 .day-cell:hover:not(.unavailable):not(.past-day) {
   transform: scale(1.05);
 
 }
+.view-rooms-button {
+  background-color: var(--primary);
+  color: var(--background);
+  border: none;
+  border-radius: 2.5rem;
+  padding: 0.625rem 1.25rem;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
 
+
+.view-rooms-button:hover {
+  background-color: #f98b0d;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(252, 165, 58, 0.3);
+}
+.booking-action {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  justify-content: center;
+}
+
+.booking-action button {
+  padding: 0.625rem 1.25rem;
+}
 
 .unavailable {
   background-color: rgba(255, 0, 0, 0.1);
@@ -146,7 +187,7 @@
 }
 
 
-button {
+.calendar-header button {
   font-size: 3rem;
   padding: 3rem 2rem;
   margin-top: 1rem;
@@ -157,7 +198,7 @@ button {
   transition: all 0.3s ease-in-out;
 }
 
-button:hover {
+.calendar-header button:hover {
   font-size: 5rem;
   padding: 1.7rem 2rem;
 }

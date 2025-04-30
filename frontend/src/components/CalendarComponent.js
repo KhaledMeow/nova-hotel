@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "E:/React/nova-hotel/frontend/src/styles/Calendar.css";
+import "../styles/Calendar.css";
 
 const CalendarComponent = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -34,7 +34,6 @@ const CalendarComponent = () => {
         
         const response = await axios.get("/api/v1/rooms/availability", {
           params: {
-            month: currentMonth.getMonth() + 1,
             year: currentMonth.getFullYear()
           },
           cancelToken: source.token
@@ -133,11 +132,12 @@ const CalendarComponent = () => {
             ${isSelectedStart ? "selected-start" : ""}
             ${isSelectedEnd ? "selected-end" : ""}
             ${isInRange ? "selected-range" : ""}
-            ${!available ? "unavailable" : ""}`}
+            ${!available ? "unavailable" : ""}
+            ${date < today ? "past-day" : ""}`}
           onClick={() => available && handleDateClick(day)}
         >
           <div className="day-number">{day}</div>
-          {available && (
+          {(available && (date >= today || isToday)) && (
             <div className={`availability ${count < 3 ? "low-availability" : ""}`}>
               {count} left
             </div>
@@ -197,8 +197,9 @@ const CalendarComponent = () => {
       </div>
 
       {startDate && endDate && (
-        <div className="booking-actions">
+        <div className="booking-action">
           <button
+            className="view-rooms-button"
             onClick={() => {
               const toLocalYYYYMMDD = (date) => {
                 const year = date.getFullYear();

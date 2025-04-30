@@ -11,11 +11,43 @@ exports.getAllRooms = async (req, res) => {
 
 exports.getRoomAvailability = async (req, res) => {
   try {
-    const { month, year } = req.query;
-    
+    const { year } = req.query;
 
-    const startDate = new Date(year, month - 1, 1);
-    const endDate = new Date(year, month, 0);
+    if (req.query.month) {
+      const { month } = req.query;
+      const startDate = new Date(year, month - 1, 1);
+      const endDate = new Date(year, month, 0);
+      
+      const rooms = await Room.find().lean();
+
+      const availability = {};
+      const currentDate = new Date(startDate);
+      
+      while (currentDate <= endDate) {
+        const dateStr = currentDate.toISOString().split('T')[0];
+        
+        const availableRooms = rooms.filter(room => 
+          !room.booked_dates.some(booking => {
+            const bookingStart = new Date(booking.startDate);
+            const bookingEnd = new Date(booking.endDate);
+            return currentDate >= bookingStart && currentDate <= bookingEnd;
+          })
+        );
+        
+        availability[dateStr] = {
+          available: availableRooms.length > 0,
+          count: availableRooms.length
+        };
+
+        currentDate.setDate(currentDate.getDate() + 1);
+      }
+
+      res.json(availability);
+      return;
+    }
+
+    const startDate = new Date(year, 0, 1); 
+    const endDate = new Date(year, 11, 31); 
 
     const rooms = await Room.find().lean();
 
