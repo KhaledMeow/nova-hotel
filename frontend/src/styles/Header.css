@@ -9,7 +9,7 @@
     left: 0;
     right: 0;
     z-index: 99;
-    transition: background-color 0.4s ease;
+    transition: background-color 0.4s ease-in-out;
   }
   
   .header-nav.scrolled {
@@ -25,7 +25,7 @@
     color: rgb(0, 0, 0);
     padding: 20px 40px;
     border-radius: 50px;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease-in-out;
   }
   
   .availability-button:hover {
@@ -59,7 +59,7 @@
     right: 0;
     bottom: 0;
     transform: translateX(100%);
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease-in-out;
     z-index: 99;
     align-items: center;
     justify-content: center;
@@ -82,7 +82,7 @@
     color: white;
     padding: 20px 40px;
     border-radius: 10px;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease-in-out;
     font-size: 24px;
     border: none;
     cursor: pointer;
@@ -106,7 +106,7 @@
     border-radius: 10px;
     z-index: 100;
     transform: translateY(-12px);
-    transition: all 0.5s ease;
+    transition: all 0.5s ease-in-out;
   }
   
   .menu-toggle:hover {

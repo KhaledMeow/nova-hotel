@@ -40,7 +40,7 @@ textarea {
     font-size: 1rem;
     color: var(--text);
     background-color: #1d1307;
-    transition: all 0.3s ease;
+    transition: all 0.3s ease-in-out;
 }
 
 input:focus,
@@ -64,7 +64,7 @@ textarea {
     cursor: pointer;
     font-size: 1.1rem;
     font-weight: 600;
-    transition: all 0.3s ease;
+    transition: all 0.3s ease-in-out;
     border: none;
     width: 100%;
     margin-top: 1rem;
@@ -118,7 +118,7 @@ textarea {
     font-size: 1rem;
     color: var(--text);
     background-color: #1d1307;
-    transition: all 0.3s ease;
+    transition: all 0.3s ease-in-out;
 }
 
 .date-input:focus {
@@ -129,24 +129,4 @@ textarea {
 
 .date-input:invalid {
     border-color: #ff4444;
-}
-
-@media (max-width: 768px) {
-    .booking-container {
-        padding: 1rem;
-    }
-    
-    .booking-form {
-        padding: 1.5rem;
-    }
-    
-    .booking-dates {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-    }
-    
-    .submit-button {
-        padding: 0.8rem 1.5rem;
-    }
-
 }

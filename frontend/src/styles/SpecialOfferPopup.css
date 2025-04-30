@@ -40,7 +40,7 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  transition: all 0.3s ease;
+  transition: all 0.3s ease-in-out;
 }
 
 .close-button:hover {
@@ -115,7 +115,7 @@ h2 {
   padding: 0.625rem 1.25rem; 
   font-size: 1.1rem;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s ease-in-out;
   text-transform: uppercase;
   font-weight: bold;
   letter-spacing: 1px;

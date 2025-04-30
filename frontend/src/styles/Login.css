@@ -45,7 +45,7 @@
     background: rgba(255, 255, 255, 0.1);
     color: #fff;
     font-size: 1rem;
-    transition: all 0.3s ease;
+    transition: all 0.3s ease-in-out;
   }
   
   .login-input:focus {
@@ -86,7 +86,7 @@
     font-weight: bold;
     text-transform: uppercase;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s ease-in-out;
     margin-top: 1rem;
   }
   
@@ -109,7 +109,7 @@
     color: #fca53a;
     text-decoration: none;
     font-weight: bold;
-    transition: color 0.3s ease;
+    transition: color 0.3s ease-in-out;
   }
   
   .login-register-link:hover {

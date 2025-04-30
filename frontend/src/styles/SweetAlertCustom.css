@@ -27,7 +27,7 @@
     padding: 0.625rem 1.25rem;
     font-weight: bold;
     box-shadow: 0 0.3125rem 0.625rem rgba(0, 0, 0, 0.3);
-    transition: background-color 0.3s ease, transform 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.3s ease-in-out;
 }
 
 .swal2-cancel {
@@ -38,7 +38,7 @@
     border-radius: 2.5rem;
     padding: 0.625rem 1.25rem;
     font-weight: bold;
-    transition: background-color 0.3s ease, transform 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.3s ease-in-out;
 }
 
 .swal2-confirm:hover {

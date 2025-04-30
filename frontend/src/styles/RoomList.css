@@ -26,7 +26,7 @@
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
     padding: 1.5rem;
     background: #2a1d0f;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease-in-out;
     overflow: hidden;
     color: #fff;
 }
@@ -48,7 +48,7 @@
     height: 100%;
     object-fit: cover;
     border-radius: 12px;
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease-in-out;
 }
 
 .room-card:hover .room-image img {
@@ -148,7 +148,7 @@
     font-size: 1.1rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.2s ease-in-out;
     width: fit-content;
     text-transform: uppercase;
     letter-spacing: 0.5px;
