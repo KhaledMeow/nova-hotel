@@ -66,7 +66,7 @@ exports.validateBooking = [
       if (date <= req.body.check_in_date) {
         throw new Error('Check-out date must be after check-in date');
       }
-      if ((date - req.body.check_in_date) > 30 * 86400000) { // 30 days
+      if ((date - req.body.check_in_date) > 30 * 86400000) { 
         throw new Error('Maximum booking duration is 30 days');
       }
       return true;

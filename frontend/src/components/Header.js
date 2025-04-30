@@ -43,7 +43,6 @@ const Header = () => {
         setUserData(data);
       } catch (error) {
         console.error('User data fetch error:', error);
-        // Auto-logout if invalid token
         if (error.message.includes('401')) {
           handleLogout();
         }
@@ -60,7 +59,6 @@ const Header = () => {
     }
   }, [isLoggedIn]);
 
-  // Check login status on mount
   useEffect(() => {
     const token = localStorage.getItem('token');
     setIsLoggedIn(!!token);

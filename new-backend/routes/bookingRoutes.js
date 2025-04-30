@@ -55,9 +55,7 @@ router.post('/', [
   body('room').isMongoId()
 ], auth, validateBooking, bookingController.createBooking);
 
-// Admin/Staff: get all bookings (filtered by user if not admin/staff)
 router.get('/', auth, adminCheck, bookingController.getUserBookings);
-// Guest: get only their own bookings
 router.get('/my', auth, bookingController.getUserBookings);
 router.patch('/:id/', auth, adminCheck, bookingController.cancelBooking);
 router.delete('/:id', auth, adminCheck, bookingController.deleteBooking);

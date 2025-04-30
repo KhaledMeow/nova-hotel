@@ -144,7 +144,6 @@ const RoomList = ({ isModal, onRoomSelect }) => {
     onRoomSelect(room);
     return;
   }
-  // Get check-in/out dates from navigation state
   const locationState = window.history.state && window.history.state.usr ? window.history.state.usr : {};
   const checkInDate = locationState.checkInDate;
   const checkOutDate = locationState.checkOutDate;
@@ -158,7 +157,6 @@ const RoomList = ({ isModal, onRoomSelect }) => {
     return navigate('/login');
   }
   try {
-    // You may want to collect guest info here or in the next step
     const response = await fetch('/api/v1/bookings', {
       method: 'POST',
       headers: {
@@ -169,7 +167,7 @@ const RoomList = ({ isModal, onRoomSelect }) => {
         room: room._id,
         check_in_date: checkInDate,
         check_out_date: checkOutDate,
-        num_guests: 1 // default, can be changed later
+        num_guests: 1 
       })
     });
     if (!response.ok) {

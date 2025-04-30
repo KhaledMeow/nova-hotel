@@ -21,7 +21,6 @@ router.delete('/:id', auth, adminCheck, deletePayment);
 router.get('/:id', auth, getPaymentDetails);
 router.patch('/:id/complete', auth, adminCheck, completePayment);
 router.patch('/:id/refund', auth, adminCheck, refundPayment);
-// Admin/Staff: get all payments
 router.get('/', auth, adminCheck, getAllPayments);
 
 module.exports = router;

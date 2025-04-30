@@ -364,7 +364,7 @@ const Dashboard = () => {
           </button>
           <button
             className="delete-button"
-            style={{marginLeft: 'auto'}} // ensure right alignment
+            style={{marginLeft: 'auto'}}
             onClick={() => deleteBooking(booking._id)}
           >
             Delete

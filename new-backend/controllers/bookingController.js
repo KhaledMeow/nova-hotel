@@ -61,10 +61,9 @@ exports.createBooking = async (req, res) => {
 };
 
 exports.getUserBookings = async (req, res) => {
-  // Guests: see only their own bookings; admin/staff: see all
   const filter = (req.user.roleName === 'admin' || req.user.roleName === 'staff')
-    ? {} // admin/staff see all
-    : { user: req.user._id }; // guest sees only their own
+    ? {} 
+    : { user: req.user._id }; 
   try {
     const bookings = await Booking.find(filter)
       .populate('room', 'name type price')
@@ -143,7 +142,6 @@ exports.deleteBooking = async (req, res) => {
     const booking = await Booking.findOne({ _id: req.params.id, ...filter });
     if (!booking) return res.status(404).json({ error: 'Booking not found' });
 
-    // Remove booked_dates from room
     await Room.findByIdAndUpdate(
       booking.room,
       { $pull: {

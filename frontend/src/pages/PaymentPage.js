@@ -168,7 +168,6 @@ useEffect(() => {
     }
   };
   const paymentGatewaySimulation = () => {
-  // Always succeed for development/testing
   return { success: true, message: 'Payment Successful' };
 };
   if (paymentSuccess) {
