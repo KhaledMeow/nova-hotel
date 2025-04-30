@@ -13,7 +13,7 @@
     padding: 1rem;
     border-radius: 12px;
     box-shadow: 0 8px 20px rgb(0, 0, 0);
-    max-width: 300px;
+    max-width: 500px;
     width: 90%;
     text-align: left;
     animation: fadeIn 0.5s ease-out;
@@ -51,7 +51,7 @@
     position: absolute;
     right: 0;
     top: 50%;
-    transform: translateY(-50%);
+    transform: translateY(-80%);
     background: none;
     border: none;
     padding: 0;

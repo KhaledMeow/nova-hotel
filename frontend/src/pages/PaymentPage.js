@@ -242,6 +242,7 @@ useEffect(() => {
   }
 
   return (
+    <div className="payment-form">
     <form onSubmit={handleSubmit} >
       {paymentSuccess && (
         <PaymentSuccessPopup
@@ -252,7 +253,7 @@ useEffect(() => {
         />
       )}
       <h2>Payment for {room.type} Room</h2>
-      <p>{calculateNights()} Night(s) at {room.price}/night</p>
+      <p>{calculateNights()} Night(s) at ${room.price}/night</p>
       
       <div className="form-row">
         <label>
@@ -311,6 +312,7 @@ useEffect(() => {
         </label>
       </div>
       
+      
       {error && <div className="error-message">{error}</div>}
       
       <button 
@@ -321,6 +323,7 @@ useEffect(() => {
         {processing ? 'Processing...' : `Pay $${Math.floor(room.price.toString().replace(/\$/g, '')*nights)}`}
       </button>
     </form>
+    </div>
   );
 };
 
