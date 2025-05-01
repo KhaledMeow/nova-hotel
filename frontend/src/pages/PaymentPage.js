@@ -174,7 +174,7 @@ useEffect(() => {
     return (
       <div className="payment-success">
         <div className="confirmation-header">
-          <h2>Booking Confirmation</h2>
+          <h1>Booking Confirmation</h1>
           <p className="confirmation-number">Confirmation #: {Math.random().toString(36).substr(2, 9).toUpperCase()}</p>
         </div>
         

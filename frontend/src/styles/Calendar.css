@@ -233,3 +233,93 @@
   height: 2.5rem;
   animation: spin 1s linear infinite;
 }
+
+@media (max-width: 768px) {
+  .calendar-container {
+    margin: 1rem auto !important;
+    padding: 1rem !important;
+    border-radius: 0.25rem !important;
+  }
+
+  .calendar-header {
+    flex-wrap: wrap !important;
+    padding: 0.5rem !important;
+    gap: 0.5rem !important;
+  }
+
+  .current-month {
+    font-size: 1.1rem !important;
+    order: -1 !important;
+    width: 100% !important;
+  }
+
+  .calendar-grid {
+    gap: 0.25rem !important;
+  }
+
+  .day-header {
+    padding: 0.5rem !important;
+    font-size: 0.8rem !important;
+  }
+
+  .day-cell {
+    min-height: 3.5rem !important;
+    font-size: 0.8rem !important;
+  }
+
+  .availability {
+    font-size: 0.6rem !important;
+    bottom: 0.1rem !important;
+    right: 0.1rem !important;
+  }
+
+  .nav-button {
+    font-size: 1.2rem !important;
+    width: 1.8rem !important;
+    height: 1.8rem !important;
+  }
+
+  .view-rooms-button {
+    font-size: 1rem !important;
+    padding: 0.5rem 1rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .calendar-container {
+    margin: 0.5rem !important;
+    padding: 0.5rem !important;
+  }
+
+  .day-cell {
+    min-height: 2.8rem !important;
+    padding: 0.25rem !important;
+  }
+
+  .booking-action {
+    flex-direction: column !important;
+    gap: 0.5rem !important;
+    margin-top: 1rem !important;
+  }
+
+  .booking-action button {
+    width: 100% !important;
+    padding: 0.8rem !important;
+  }
+
+  .calendar-header button {
+    font-size: 2rem !important;
+    padding: 1rem !important;
+    margin-top: 0.5rem !important;
+  }
+
+  .calendar-header button:hover {
+    font-size: 2rem !important;
+    padding: 1rem !important;
+  }
+}
+
+/* Prevent grid overflow */
+.calendar-grid {
+  max-width: 100% !important;
+}

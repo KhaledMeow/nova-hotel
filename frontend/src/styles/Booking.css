@@ -130,3 +130,67 @@ textarea {
 .date-input:invalid {
     border-color: #ff4444;
 }
+
+@media (max-width: 768px) {
+    .booking-container {
+        padding: 1.5rem !important;
+    }
+    
+    .booking-form {
+        padding: 1.5rem !important;
+        border-radius: 12px !important;
+    }
+    
+    .booking-dates {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+        padding: 1rem !important;
+    }
+    
+    .form-group label {
+        font-size: 0.9rem !important;
+    }
+    
+    input,
+    select,
+    textarea {
+        padding: 0.7rem !important;
+        font-size: 0.9rem !important;
+    }
+    
+    .submit-button {
+        padding: 0.8rem 1.5rem !important;
+        font-size: 1rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .booking-container {
+        margin: 5rem !important;
+        padding: 1rem !important;
+    }
+    
+    .booking-form {
+        padding: 1rem !important;
+        border-radius: 8px !important;
+    }
+    
+    .booking-date-item h3 {
+        font-size: 1rem !important;
+    }
+    
+    .submit-button {
+        margin-top: 0.5rem !important;
+    }
+    
+    .booking-dates {
+        margin-bottom: 1.5rem !important;
+    }
+}
+
+/* Ensure form elements stay contained */
+input,
+select,
+textarea {
+    max-width: 100% !important;
+}

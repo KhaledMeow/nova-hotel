@@ -51,3 +51,78 @@
 .home-btn:hover {
   background: #155fa0;
 }
+
+
+@media (max-width: 768px) {
+  .payment-success-content {
+      padding: 2.5rem !important;
+      min-width: 280px !important;
+      border-radius: 12px !important;
+  }
+  
+  .payment-success-content h2 {
+      font-size: 1.4rem !important;
+      margin-bottom: 0.8rem !important;
+  }
+  
+  .success-description {
+      font-size: 0.95rem !important;
+      margin: 1rem 0 1.5rem 0 !important;
+  }
+  
+  .close-button {
+      top: 12px !important;
+      right: 12px !important;
+      font-size: 1.4rem !important;
+  }
+  
+  .home-btn {
+      padding: 0.6rem 1.8rem !important;
+      font-size: 0.9rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .payment-success-content {
+      padding: 2.5rem !important;
+      min-width: 250px !important;
+      max-width: 95vw !important;
+  }
+  
+  .payment-success-content h2 {
+      font-size: 1.2rem !important;
+  }
+  
+  .success-description {
+      font-size: 0.85rem !important;
+      margin: 0.8rem 0 1.2rem 0 !important;
+  }
+  
+  .close-button {
+      top: 8px !important;
+      right: 8px !important;
+      font-size: 1.2rem !important;
+  }
+  
+  .home-btn {
+      padding: 0.5rem 1.5rem !important;
+      font-size: 0.85rem !important;
+      border-radius: 4px !important;
+  }
+}
+
+@media (hover: none) {
+  .home-btn:hover {
+      background: var(--primary) !important;
+  }
+  
+  .close-button:hover {
+      color: #888 !important;
+  }
+}
+
+.close-button,
+.home-btn {
+  min-height: 44px !important;
+  min-width: 44px !important;
+}

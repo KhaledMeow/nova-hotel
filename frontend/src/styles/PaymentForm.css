@@ -242,3 +242,104 @@
   transform: translateY(-2px);
   box-shadow: 0 10px 20px rgba(252, 165, 58, 0.2);
 }
+
+
+@media (max-width: 1024px) {
+  .payment-form {
+      padding: 3rem 15rem !important;
+  }
+  
+  .payment-success {
+      margin: 2rem 1.5rem !important;
+  }
+  
+  .details-grid {
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .payment-form {
+      padding: 2rem 5rem !important;
+  }
+  
+  .confirmation-header h2 {
+      font-size: 1.8rem !important;
+  }
+  
+  .details-grid {
+      grid-template-columns: 1fr !important;
+  }
+  
+  .home-btn {
+      padding: 1rem 2rem !important;
+      font-size: 1rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .payment-form {
+      padding: 2rem 1rem !important;
+  }
+  
+  .payment-form h2 {
+      font-size: 1.5rem !important;
+  }
+  
+  .confirmation-header {
+      padding: 1.5rem !important;
+  }
+  
+  .confirmation-content {
+      padding: 1.5rem !important;
+  }
+  
+  .form-row input {
+      font-size: 14px !important;
+      padding: 12px !important;
+  }
+  
+  .payment-button {
+      padding: 15px !important;
+      font-size: 14px !important;
+  }
+  
+  .home-btn {
+      width: 100% !important;
+      padding: 1rem !important;
+  }
+}
+
+@media (max-width: 360px) {
+  .payment-form {
+      padding: 1.5rem 0.5rem !important;
+  }
+  
+  .confirmation-section {
+      padding: 1rem !important;
+  }
+  
+  .detail-value {
+      font-size: 1rem !important;
+  }
+  
+  .thank-you {
+      font-size: 1rem !important;
+  }
+}
+
+/* Touch device adjustments */
+@media (hover: none) {
+  .payment-button:hover:not(:disabled),
+  .home-btn:hover {
+      transform: none !important;
+      box-shadow: none !important;
+  }
+}
+
+/* Ensure touch targets */
+.form-row input,
+.payment-button,
+.home-btn {
+  min-height: 44px !important;
+}

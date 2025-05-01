@@ -34,3 +34,54 @@
 .about-page section {
     margin-bottom: 2rem;
 }
+@media (max-width: 768px) {
+    .about-page {
+        padding: 4rem 2rem !important;
+    }
+    
+    .about-page h1 {
+        font-size: 3rem !important;
+    }
+    
+    .about-page h2 {
+        font-size: 2rem !important;
+        margin: 1.5rem 0 !important;
+        box-shadow: 0 0 8px 8px var(--primary) !important;
+    }
+    
+    .about-page p,
+    .about-page ul {
+        font-size: 1.25rem !important;
+        line-height: 1.6 !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .about-page {
+        
+        padding: 2rem 1.5rem !important;
+    }
+    
+    .about-page h1 {
+        font-size: 2.5rem !important;
+    }
+    
+    .about-page h2 {
+        font-size: 1.75rem !important;
+        border-radius: 75px !important;
+    }
+    
+    .about-values ul {
+        margin-left: 1rem !important;
+    }
+    
+    .about-page section {
+        margin: 1rem !important;
+        margin-bottom: 1.5rem !important;
+    }
+}
+
+.about-page img {
+    max-width: 100% !important;
+    height: auto !important;
+}
