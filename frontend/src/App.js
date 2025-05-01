@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import backgroundImage from "./assets/images/background-home1.jpg";
 import CalendarComponent from "./components/CalendarComponent";
 import RoomList from "./components/RoomList";
 import ConfirmDetailsPage from "./pages/ConfirmDetailsPage";
@@ -27,10 +26,7 @@ const App = () => {
 
   return (
     <Router>
-      <div
-        className="App"
-        style={{ backgroundImage: `url(${backgroundImage})` }}
-      >
+      <div className="App">
         <Header />
         <Routes>
           <Route path="/" element={<HAC />} />
