@@ -9,7 +9,7 @@ exports.handleChat = async (req, res) => {
     const cleanInput = userInput.replace(/[^\p{L}\p{N}\s.,!?']/gu, '').trim();
 if (!cleanInput) {
     return res.status(400).json({ 
-        response: "Our chat system only accepts standard text characters. For complex requests, please call +60 3-2142 8888."
+        response: "Our chat system only accepts standard text characters. For complex requests, please call +20 111 111 1111."
     });
 }
     try {
@@ -17,7 +17,8 @@ if (!cleanInput) {
             'https://api-inference.huggingface.co/models/HuggingFaceH4/Llama-2',
                 {
                 inputs: `<|system|>
-                You are NOVA Hotel's AI assistant. Use this information to assist user:
+                You are NOVA Hotel's AI assistant. Use this information to assist:
+
                 # Hotel Basics
                 - Check-in: After 3:00 PM | Check-out: Before 12:00 PM
                 - Address: AOU Arab Open University,El-Shorouk, Cairo, Egypt
@@ -80,41 +81,37 @@ if (!cleanInput) {
                 5. Details: Fill booking information
                 6. Payment: 
                 - Online: "Proceed to Payment" → Enter card details → "Pay $..."
-                - Cash: no online booking required. Call +60 3-2142 8888 to reserve booking
+                - Cash: no online booking required. Call +20 111 111 1111 to reserve booking
                 # Response Rules
                 1. For booking questions:
-                - List simple key steps
-                - Always mention cash option requires phone call
+                - List all steps organized in one response
                 - Use ➔ for steps
+                - Example: "Click ☰ menu (top-right) ➔ Login (or register) ➔ Click Check Availability ➔ Select room ➔ Fill details ➔ Pay"
                 2. For general questions:
                 - Use simple terms (no technical terms)
-                - Keep answer under 1-2 sentences
-                - Never mention being AI unless directly asked
+                - Keep answers simple
+                - Never mention being AI, just that you are here to help 
                 # Hotel Basics section
                 - Parking: 
                 - 50 spaces ($15/night with in/out privileges)
                 - Oversized vehicles: $25/night
-                - Reservation required: Call +60 3-2142 8888
+                - Reservation required: Call +20 111 111 1111
                 - Hours: 24/7 access
                 - Valet: Complimentary for Penthouse/VIP guests
                 # Response Rules
-                1. Answer in 1-3 sentences preferably
-                2. Never mention being AI unless directly asked
-                3. Use hotel's exact address when directly asked
-                4. For parking questions:
+                1. For parking questions:
                 - Always mention fee and reservation requirement first
                 - Suggest valet for VIP guests
                 - Example: "Our parking fee is $15/night (24h access). Please call to reserve in advance as spaces are limited."
-                5. Parking Payment:
+                2. Parking Payment:
                 - Charged to room account
                 - No online payment - cash/credit card at exit
-                6. Alternatives:
+                3. Alternatives:
                 - "If our lot is full, we partner with ParkEasy Garage (100m away) at $20/night"
-                7. For unavailable services suggest:
-                "Please contact our Guest Relations team at +60 3-2142 8888"</s>
-                <|user|>
+                4. For unavailable services suggest:
+                "Please contact our Guest Relations team at +20 111 222 2222"</s>
                 ${userInput}</s>
-                <|assistant|>`,
+                <assistant>`,
                 parameters: {                
                     max_new_tokens: 100,
                     temperature: 0.7,
@@ -131,7 +128,7 @@ if (!cleanInput) {
 
         const fullResponse = response.data[0].generated_text;
         const botResponse = fullResponse
-            .split('<|assistant|>')[1]
+            .split('<assistant>')[1]
             .replace(/User:.*/s, '')
             .trim();
 
@@ -140,7 +137,7 @@ if (!cleanInput) {
     } catch (error) {
         console.error('Error:', error);
         res.status(500).json({ 
-            response: "Please contact our front desk at +1-800-NOVA-HTL for immediate assistance."
+            response: "Please contact our Guest Relations team at +20 111 111 1111 for immediate assistance."
         });
     }
 };
