@@ -56,7 +56,7 @@ const ChatBotComponent = () => {
             bot: true,
             isError: true 
         }, {
-            text: "Call: +60 3-2142 8888\nEmail: support@novahotel.com",
+            text: "Call: +20 111 111 1111\nEmail: support@novahotel.com",
             bot: true,
             isError: true
         }]);
@@ -101,5 +101,5 @@ const ChatBotComponent = () => {
     </div>
   );
 };
-
+ 
 export default ChatBotComponent;
