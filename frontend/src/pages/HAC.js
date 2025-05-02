@@ -110,7 +110,7 @@ const About = () => {
 
   const handleVIPOffersClick = () => {
     setCurrentOffer({
-      title: "VIP Offers",
+      title: "VIP Offer",
       description: "Unlock VIP rates and exclusive discounts when you book directly. Enjoy premium benefits!"
     });
   };
@@ -150,7 +150,7 @@ const About = () => {
       <h2>
         <strong>
           <button className="vip-link" onClick={handleVIPOffersClick}>
-            VIP Offers
+            VIP Offer
           </button>
         </strong>
       </h2>

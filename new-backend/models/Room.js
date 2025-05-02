@@ -24,7 +24,7 @@ const roomSchema = new mongoose.Schema({
       'Deluxe Suite',
       'Family Room',
       'Penthouse Suite',
-      'VIP Offers',
+      'VIP Offer',
       'Weekend Getaway Package',
       'Romantic Escape'
     ]

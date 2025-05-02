@@ -3,8 +3,8 @@ import '../styles/SpecialOfferPopup.css';
 
 const SpecialOfferPopup = ({ offer, onClose }) => {
   const offerDetails = {
-    'VIP Offers': {
-      title: 'VIP Offers',
+    'VIP Offer': {
+      title: 'VIP Offer',
       description: 'Experience luxury at its finest with our exclusive VIP package.',
       benefits: [
         'Priority Check-in and Check-out',
