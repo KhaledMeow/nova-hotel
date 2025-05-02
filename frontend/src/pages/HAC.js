@@ -320,9 +320,9 @@ const ContactUs = () => {
         <h2>Address</h2>
         <p>AOU Arab Open University,El-Shorouk, Cairo, Egypt</p>
         <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d110266.64695849992!2d31.624997!3d30.149238!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzDCsDA4JzU3LjMiTiAzMcKwMzcnMzAuMCJF!5e0!3m2!1sen!2seg!4v1621234567890"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3449.8663816178505!2d31.610317375180426!3d30.155235974868!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14581d6eeab6cac3%3A0x2fa97430a420e840!2sArab%20Open%20University!5e0!3m2!1sen!2seg!4v1746143941828!5m2!1sen!2seg"
           title="map"
-          width="100%"
+          width="90%"
           height="300rem"
           style={{ border: 0 }}
           allowFullScreen=""

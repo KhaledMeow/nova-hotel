@@ -175,9 +175,8 @@ useEffect(() => {
       <div className="payment-success">
         <div className="confirmation-header">
           <h1>Booking Confirmation</h1>
-          <p className="confirmation-number">Confirmation #: {Math.random().toString(36).substr(2, 9).toUpperCase()}</p>
+          <p className="confirmation-number">Confirmation ID: {Math.random().toString(36).substr(2, 9).toUpperCase()}</p>
         </div>
-        
         <div className="confirmation-content">
           <div className="confirmation-section">
             <h3>Stay Details</h3>
@@ -264,7 +263,7 @@ useEffect(() => {
             onChange={(e) => setCardholderName(e.target.value)}
             placeholder="John Doe"
             required
-            minLength="3"
+            minLength="5"
           />
         </label>
       </div>
@@ -279,7 +278,7 @@ useEffect(() => {
             placeholder="1111 1111 1111 1111"
             required
             pattern="[0-9\s]+"
-            maxLength="19"
+            maxLength="16"
           />
         </label>
       </div>
@@ -293,7 +292,7 @@ useEffect(() => {
             onChange={(e) => setExpiryDate(e.target.value)}
             placeholder="MM/YY"
             required
-            pattern="(0[1-9]|1[0-2])\/[0-9]{2}"
+            pattern="(0[1-9]|1[0-2])\/2[6-9]" //minimum date is 01/26
             maxLength="5"
           />
         </label>
