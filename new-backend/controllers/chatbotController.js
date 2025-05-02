@@ -37,7 +37,7 @@ if (!cleanInput) {
                 - 50" premium TV
                 - Separate living area
                 - Complimentary mini-bar
-                3. Family Suite ($799/night):
+                3. Family Room ($639/night):
                 - Queen + 2 single beds
                 - Child-friendly setup
                 - Bathroom with tub
@@ -48,12 +48,12 @@ if (!cleanInput) {
                 - Full kitchen
                 - Executive lounge access
                 5. VIP Offers
-                - Weekend Getaway ($399/night):
+                - VIP Room ($499/night):
                 - 2 nights Deluxe Room
                 - Breakfast + Sunday brunch
                 - Pool/fitness access
                 - 20% spa discount
-                6. Weekend Package
+                6. Weekend Package ($399/night):
                 - 2 Nights Stay in Deluxe Room
                 - Breakfast for Two
                 - Welcome Drink on Arrival
