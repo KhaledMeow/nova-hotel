@@ -62,8 +62,8 @@ exports.handleChat = async (req, res) => {
                 ${userInput}</s>
                 <assistant>`,
                 parameters: {                
-                    max_new_tokens: 150,  // Increased for better responses
-                    temperature: 0.6,     // More focused answers
+                    max_new_tokens: 150, 
+                    temperature: 0.5,   
                     stop: ["</s>", "User:", "user:", "\n\n"]
                 }
             },
@@ -72,24 +72,20 @@ exports.handleChat = async (req, res) => {
                     'Authorization': `Bearer ${process.env.HUGGINGFACE_API_KEY}`,
                     'Content-Type': 'application/json'
                 },
-                timeout: 10000  // Added timeout
+                timeout: 10000 
             }
         );
 
-        // Enhanced response parsing
         const fullResponse = response.data[0]?.generated_text || '';
         let botResponse = fullResponse
             .split('<assistant>')[1]
-            ?.replace(/<\/?s>/g, '')  // Remove any remaining tags
+            ?.replace(/<\/?s>/g, '') 
             ?.replace(/User:.*/s, '')
             ?.trim();
 
-        // Fallback response
         if (!botResponse || botResponse.length < 2) {
             botResponse = "For immediate assistance, please contact our team at +20 111 111 1111";
         }
-
-        // Ensure valid response length
         botResponse = botResponse.substring(0, 500);
 
         await Chat.create({ 
@@ -110,7 +106,6 @@ exports.handleChat = async (req, res) => {
             ? "Our chat is currently busy. Please try again in 2 minutes." 
             : "Please contact Guest Relations: +20 111 111 1111";
 
-        // Save error response to DB
         await Chat.create({
             userInput: cleanInput,
             botResponse: errorMessage
