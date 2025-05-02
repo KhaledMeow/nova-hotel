@@ -180,10 +180,14 @@ const Dashboard = () => {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
-      if (!response.ok) throw new Error('Booking already confirmed');
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to confirm booking');
+      }
       
+      const updatedBooking = await response.json();
       setBookings(prev => prev.map(b => 
-        b._id === bookingId ? { ...b, status: 'confirmed' } : b
+        b._id === bookingId ? updatedBooking : b
       ));
     } catch (error) {
       alert(error.message);
