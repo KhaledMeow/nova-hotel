@@ -14,7 +14,7 @@ if (!cleanInput) {
 }
     try {
         const response = await axios.post(
-            'https://api-inference.huggingface.co/models/HuggingFaceH4/Llama-2',
+            'https://api-inference.huggingface.co/models/meta-llama/Llama-3.3-70B-Instruct',
                 {
                 inputs: `<|system|>
                 You are NOVA Hotel's AI assistant. Use this information to assist:
