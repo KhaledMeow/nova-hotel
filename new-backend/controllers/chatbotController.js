@@ -6,115 +6,64 @@ exports.handleChat = async (req, res) => {
     if (!userInput || typeof userInput !== 'string' || userInput.trim().length === 0) {
         return res.status(400).json({ response: "Please enter a valid question." });
     }
+    
     const cleanInput = userInput.replace(/[^\p{L}\p{N}\s.,!?']/gu, '').trim();
-if (!cleanInput) {
-    return res.status(400).json({ 
-        response: "Our chat system only accepts standard text characters. For complex requests, please call +20 111 111 1111."
-    });
-}
+    if (!cleanInput) {
+        return res.status(400).json({ 
+            response: "Our chat system only accepts standard text characters. For complex requests, please call +20 111 111 1111."
+        });
+    }
+
     try {
         const response = await axios.post(
             'https://api-inference.huggingface.co/models/meta-llama/Llama-3.3-70B-Instruct',
-                {
+            {
                 inputs: `<|system|>
                 You are NOVA Hotel's AI assistant. Use this information to assist:
 
-                # Hotel Basics
+                ## Hotel Basics
                 - Check-in: After 3:00 PM | Check-out: Before 12:00 PM
                 - Address: AOU Arab Open University,El-Shorouk, Cairo, Egypt
-                - Pet Policy: Only assistance animals allowed
-                - Fitness Center: Exclusive for VIP guests
                 - Wi-Fi: Complimentary for all guests
                 - Room Service: Available 24/7
-                # Room Features & Pricing
-                1. One Bedded Room ($249/night):
-                - Standing shower bathroom
-                - Smart lighting/blind controls
-                - Nespresso machine
-                - Welcome snacks/water
-                2. Deluxe Suite ($349/night):
-                - Private balcony with city view
-                - 50" premium TV
-                - Separate living area
-                - Complimentary mini-bar
-                3. Family Room ($639/night):
-                - Queen + 2 single beds
-                - Child-friendly setup
-                - Bathroom with tub
-                - In-room entertainment
-                4. Penthouse Suite ($1199/night):
-                - Rooftop terrace & jacuzzi
-                - Butler service
-                - Full kitchen
-                - Executive lounge access
-                5. VIP Offers
-                - VIP Room ($499/night):
-                - 2 nights Deluxe Room
-                - Breakfast + Sunday brunch
-                - Pool/fitness access
-                - 20% spa discount
-                6. Weekend Package ($399/night):
-                - 2 Nights Stay in Deluxe Room
-                - Breakfast for Two
-                - Welcome Drink on Arrival
-                - Access to Pool and Fitness Center
-                - Sunday Brunch Included
-                - 20% Off on Spa Treatments
-                7. Romantic Escape ($449/night):
-                - Ocean view room
-                - Champagne + strawberries
-                - Candlelit dinner
-                - Couples spa treatment
-                # Hotel Identity
-                - Motto: "Where luxury meets comfort"
-                - Values: Excellence, Quality, Sustainability
-                - Team Highlight: Chef John Smith (local ingredients)
-                - Event Space: Hosts cultural festivals/movie nights
 
-                #for Booking Process through website (online) (if asked for "booking")
-                1. Start: Click ☰ menu (top-right)
-                2. Account: 
-                - Existing users: Login with email/password
-                - New users: "Register Now" then login
-                3. Search: Click "Check Availability" (header button)
-                4. Select: Choose room from cards
-                5. Details: Fill booking information
-                6. Payment: 
-                - Online: "Proceed to Payment" → Enter card details → "Pay $..."
-                - Cash: no online booking required. Call +20 111 111 1111 to reserve booking
-                # Response Rules
-                1. For booking questions:
-                - List all steps organized in one response
-                - Use ➔ for steps
-                - Example: "Click ☰ menu (top-right) ➔ Login (or register) ➔ Click Check Availability ➔ Select room ➔ Fill details ➔ Pay"
-                2. For general questions:
-                - Use simple terms (no technical terms)
-                - Keep answers simple
-                - Never mention being AI, just that you are here to help 
-                # Hotel Basics section
-                - Parking: 
+                ## Parking
                 - 50 spaces ($15/night with in/out privileges)
-                - Oversized vehicles: $25/night
                 - Reservation required: Call +20 111 111 1111
                 - Hours: 24/7 access
-                - Valet: Complimentary for Penthouse/VIP guests
-                # Response Rules
-                1. For parking questions:
-                - Always mention fee and reservation requirement first
-                - Suggest valet for VIP guests
-                - Example: "Our parking fee is $15/night (24h access). Please call to reserve in advance as spaces are limited."
-                2. Parking Payment:
-                - Charged to room account
                 - No online payment - cash/credit card at exit
-                3. Alternatives:
-                - "If our lot is full, we partner with ParkEasy Garage (100m away) at $20/night"
-                4. For unavailable services suggest:
+
+                ## Room Pricing
+                1. One Bedded Room ($249/night):
+                2. Deluxe Suite ($349/night):
+                3. Family Room ($639/night):
+                4. Penthouse Suite ($1199/night):
+                5. VIP Offer ($499/night):
+                6. Weekend Package ($399/night):
+                7. Romantic Escape ($449/night):
+
+                ## Booking Process
+                Start: Click ☰ menu (top-right)
+                Account: (Login or Register)
+                Search: Click "Check Availability" (header button)
+                Select: Choose room from cards
+                Details: Fill booking information
+                Payment: (Online or Cash)
+                - Online: "Proceed to Payment" → Enter card details → "Pay $..."
+                - Cash: Call +20 111 111 1111 to reserve booking
+
+                ## Response Rules
+                1. For general questions:
+                - Use simple terms (no technical terms)
+                - Keep answers simple if necessary
+                - Never mention being AI, just that you are here to help
+                2. For unavailable services suggest:
                 "Please contact our Guest Relations team at +20 111 222 2222"</s>
                 ${userInput}</s>
                 <assistant>`,
                 parameters: {                
-                    max_new_tokens: 100,
-                    temperature: 0.7,
+                    max_new_tokens: 150,  // Increased for better responses
+                    temperature: 0.6,     // More focused answers
                     stop: ["</s>", "User:", "user:", "\n\n"]
                 }
             },
@@ -122,22 +71,51 @@ if (!cleanInput) {
                 headers: {
                     'Authorization': `Bearer ${process.env.HUGGINGFACE_API_KEY}`,
                     'Content-Type': 'application/json'
-                }
+                },
+                timeout: 10000  // Added timeout
             }
         );
 
-        const fullResponse = response.data[0].generated_text;
-        const botResponse = fullResponse
+        // Enhanced response parsing
+        const fullResponse = response.data[0]?.generated_text || '';
+        let botResponse = fullResponse
             .split('<assistant>')[1]
-            .replace(/User:.*/s, '')
-            .trim();
+            ?.replace(/<\/?s>/g, '')  // Remove any remaining tags
+            ?.replace(/User:.*/s, '')
+            ?.trim();
 
-        await Chat.create({ userInput, botResponse });
-        res.json({ response: botResponse });
-    } catch (error) {
-        console.error('Error:', error);
-        res.status(500).json({ 
-            response: "Please contact our Guest Relations team at +20 111 111 1111 for immediate assistance."
+        // Fallback response
+        if (!botResponse || botResponse.length < 2) {
+            botResponse = "For immediate assistance, please contact our team at +20 111 111 1111";
+        }
+
+        // Ensure valid response length
+        botResponse = botResponse.substring(0, 500);
+
+        await Chat.create({ 
+            userInput: cleanInput, 
+            botResponse 
         });
+        
+        res.json({ response: botResponse });
+
+    } catch (error) {
+        console.error('Chat Error:', {
+            error: error.response?.data || error.message,
+            input: cleanInput
+        });
+
+        const statusCode = error.response?.status || 500;
+        const errorMessage = statusCode === 429 
+            ? "Our chat is currently busy. Please try again in 2 minutes." 
+            : "Please contact Guest Relations: +20 111 111 1111";
+
+        // Save error response to DB
+        await Chat.create({
+            userInput: cleanInput,
+            botResponse: errorMessage
+        });
+
+        res.status(statusCode).json({ response: errorMessage });
     }
 };
