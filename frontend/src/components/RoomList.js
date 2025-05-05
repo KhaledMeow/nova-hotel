@@ -53,7 +53,7 @@ const RoomList = ({ isModal, onRoomSelect }) => {
         room: room._id,
         check_in_date: checkInDate,
         check_out_date: checkOutDate,
-        num_guests: 1 
+        num_of_people: 5
       })
     });
     if (!response.ok) {

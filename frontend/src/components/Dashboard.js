@@ -341,7 +341,7 @@ const Dashboard = () => {
       <div className="booking-details">
         <p>Name: {booking.user.name}</p>
         <p>Email: {booking.user.email}</p>
-        <p>Guests: {booking.num_guests}</p>
+        <p>Guests: {booking.num_of_people}</p>
         <p>Total Price: ${booking.room.price * Math.ceil((new Date(booking.check_out_date) - new Date(booking.check_in_date)) / (1000 * 3600 * 24))}</p>
       </div>
       <div className="booking-actions">

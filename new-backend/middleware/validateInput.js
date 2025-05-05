@@ -72,7 +72,7 @@ exports.validateBooking = [
       return true;
     }),
 
-  body('num_guests')
+  body('num_of_people')
     .isInt({ min: 1, max: 6 }).withMessage('Number of guests must be between 1-6'),
 
   (req, res, next) => {

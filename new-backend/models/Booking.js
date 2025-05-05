@@ -15,7 +15,7 @@ const bookingSchema = new mongoose.Schema({
   },
   check_in_date: Date,
   check_out_date: Date,
-  num_guests: Number,
+  num_of_people: Number,
   special_requests: String,
   status: {
     type: String,

@@ -12,7 +12,7 @@ exports.createBooking = async (req, res) => {
     const checkIn = new Date(req.body.check_in_date);
     const checkOut = new Date(req.body.check_out_date);
     
-    const { num_guests } = req.body;
+    const { num_of_people } = req.body;
 
     if (!(checkIn instanceof Date && !isNaN(checkIn)) || 
         !(checkOut instanceof Date && !isNaN(checkOut))) {
@@ -36,7 +36,7 @@ exports.createBooking = async (req, res) => {
       room: room._id,
       check_in_date: checkIn,
       check_out_date: checkOut,
-      num_guests,
+      num_of_people,
       status: 'pending'
     });
     if (!/^\d{4}-\d{2}-\d{2}$/.test(req.body.check_in_date)) {

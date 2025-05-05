@@ -132,7 +132,7 @@ const [formData, setFormData] = useState({
       room: room._id,
       check_in_date: formData.check_in_date,
       check_out_date: formData.check_out_date,
-      num_guests: parseInt(formData.num_of_people),
+      num_of_people: parseInt(formData.num_of_people),
       special_requests: formData.special_requests
 
     };
