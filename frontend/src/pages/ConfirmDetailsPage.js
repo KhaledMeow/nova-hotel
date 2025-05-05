@@ -69,7 +69,7 @@ const [formData, setFormData] = useState({
   room_type: room.type,
   check_in_date: checkInDate ? checkInDate.slice(0, 10) : '',
   check_out_date: checkOutDate ? checkOutDate.slice(0, 10) : '',
-  num_of_people: "",
+  num_of_people: ""
 });
   useEffect(() => {  
     if (!isModal && !location.state?.room?._id) {  
