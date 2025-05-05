@@ -356,7 +356,7 @@ const Dashboard = () => {
               ? 'Confirmed'
               : confirmingId === booking._id
                 ? 'Confirming...'
-                : 'Mark as Confirmed'}
+                : 'Confirm'}
           </button>
           <button
             className="cancel-button"
@@ -367,7 +367,7 @@ const Dashboard = () => {
               ? 'Cancelled'
               : cancellingId === booking._id
                 ? 'Cancelling...'
-                : 'Cancel Booking'}
+                : 'Cancel'}
           </button>
           <button
             className="delete-button"
@@ -417,14 +417,14 @@ const Dashboard = () => {
               disabled={payment.status === 'completed'}
               onClick={() => completePayment(payment._id)}
             >
-              {payment.status === 'completed' ? 'Completed' : 'Mark as Completed'}
+              {payment.status === 'completed' ? 'Completed' : 'Complete'}
             </button>
             <button
               className="solved-button"
               disabled={payment.status === 'refunded'}
               onClick={() => refundPayment(payment._id)}
             >
-              {payment.status === 'refunded' ? 'Refunded' : 'Mark as Refunded'}
+              {payment.status === 'refunded' ? 'Refunded' : 'Refund'}
             </button>
             <button
               className="delete-button"
@@ -499,7 +499,7 @@ const Dashboard = () => {
               disabled={complaint.status === 'solved'}
               onClick={() => solveComplaint(complaint._id)}
             >
-              {complaint.status === 'solved' ? 'Solved' : 'Mark as Solved'}
+              {complaint.status === 'solved' ? 'Solved' : 'Solve'}
             </button>
             <button
               className="solved-button"
@@ -510,7 +510,7 @@ const Dashboard = () => {
                 ? 'In Progress'
                 : inProgressId === complaint._id
                   ? 'Processing...'
-                  : 'Mark as In Progress'}
+                  : 'In Progress'}
             </button>
             <button
               className="delete-button"
