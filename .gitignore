@@ -1,22 +1,10 @@
 node_modules/
 
-Ignore logs
 *.log
-
-Ignore system files
 .DS_Store
 Thumbs.db
-
-Ignore environment files
 .env
-
-Ignore build output
 /dist
 /build
-
-Ignore editor files
-.idea
-.vscode
-
-Ignore .gitignore file
-.gitignore
+package-lock.json
+package.json
