@@ -90,7 +90,7 @@ const ChatBotComponent = () => {
               value={userInput}
               onChange={(e) => setUserInput(e.target.value)}
               className="chatbot-input"
-              placeholder="location, transport, help, about, etc..."
+              placeholder="How do I book a room?..."
             />
             <button type="submit" className="chatbot-send-button">
               <strong>Send</strong>
