@@ -7,11 +7,12 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const http = require('http');
+const https = require('https');
+const fs = require('fs');
 const socketIo = require('socket.io');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const errorHandler = require('./middleware/errorHandler');
-
 const chatbotRoutes = require('./routes/chatbotRoutes');
 const authRoutes = require('./routes/authRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
@@ -28,14 +29,23 @@ app.use(cors({
   origin: process.env.CLIENT_URL,
   credentials: true
 }));
-const server = http.createServer(app);
-
 const chatLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 50,
   message: "Too many chat requests from this IP, please try again later"
 });
 app.use('/api/v1/chatbot', chatLimiter);
+
+let server;
+try {
+  const key = fs.readFileSync('./cert/key.pem');
+  const cert = fs.readFileSync('./cert/cert.pem');
+  server = https.createServer({ key, cert }, app);
+  console.log('🔒 HTTPS enabled');
+} catch (err) {
+  server = http.createServer(app);
+  console.warn('⚠️  HTTPS certificates not found, falling back to HTTP.');
+}
 
 const io = socketIo(server, {
   cors: {
