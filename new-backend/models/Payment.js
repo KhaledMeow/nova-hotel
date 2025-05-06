@@ -18,11 +18,6 @@ const paymentSchema = new mongoose.Schema({
     required: [true, 'Payment amount is required'],
     min: [0.01, 'Amount must be at least 0.01']
   },
-  method: {
-    type: String,
-    enum: ['credit_card'],
-    required: [true, 'Payment method is required']
-  },
   status: {
     type: String,
     enum: ['pending', 'completed', 'refunded'],

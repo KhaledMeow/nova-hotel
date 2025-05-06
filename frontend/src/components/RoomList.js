@@ -22,45 +22,36 @@ const RoomList = ({ isModal, onRoomSelect }) => {
       }
     };
     fetchRooms();
+    // Listen for the custom event to refresh rooms
+    const handleRoomsUpdated = () => {
+      setLoading(true);
+      fetchRooms();
+    };
+    window.addEventListener('roomsUpdated', handleRoomsUpdated);
+    return () => {
+      window.removeEventListener('roomsUpdated', handleRoomsUpdated);
+    };
   }, []);
   
 
-  const handleBookNowClick = async (room) => {
-  if (isModal) {
-    onRoomSelect(room);
-    return;
-  }
-  const locationState = window.history.state && window.history.state.usr ? window.history.state.usr : {};
-  const checkInDate = locationState.checkInDate;
-  const checkOutDate = locationState.checkOutDate;
-  if (!checkInDate || !checkOutDate) {
-    alert('Please select check-in and check-out dates first.');
-    return;
-  }
-  const token = localStorage.getItem('token');
-  if (!token) {
-    alert('Please login first');
-    return navigate('/login');
-  }
-  try {
-    const response = await fetch('/api/v1/bookings', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        room: room._id,
-        check_in_date: checkInDate,
-        check_out_date: checkOutDate,
-        num_of_people: 5
-      })
-    });
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error || 'Booking failed');
+  const handleBookNowClick = (room) => {
+    if (isModal) {
+      onRoomSelect(room);
+      return;
     }
-    const bookingData = await response.json();
+    const locationState = window.history.state && window.history.state.usr ? window.history.state.usr : {};
+    const checkInDate = locationState.checkInDate;
+    const checkOutDate = locationState.checkOutDate;
+    if (!checkInDate || !checkOutDate) {
+      alert('Please select check-in and check-out dates first.');
+      return;
+    }
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('Please login first');
+      return navigate('/login');
+    }
+    // Just navigate to Confirm-details, do not create booking yet
     navigate('/Confirm-details', {
       state: {
         room: {
@@ -69,15 +60,10 @@ const RoomList = ({ isModal, onRoomSelect }) => {
           price: room.price
         },
         checkInDate,
-        checkOutDate,
-        bookingData
+        checkOutDate
       }
     });
-  } catch (error) {
-    alert(error.message);
-    console.error('Booking Error:', error);
-  }
-};
+  };
 
   if (loading) return <div className="loader"></div>;
   if (error) return <div>{error}</div>;

@@ -189,6 +189,8 @@ const Dashboard = () => {
       setBookings(prev => prev.map(b => 
         b._id === bookingId ? updatedBooking : b
       ));
+      // Dispatch a custom event to notify room list to refresh
+      window.dispatchEvent(new Event('roomsUpdated'));
     } catch (error) {
       alert(error.message);
     } finally {
@@ -406,7 +408,6 @@ const Dashboard = () => {
         <p>Name: {payment.user.name}</p>
         <p>Email: {payment.user.email}</p>
         <p>Amount: ${payment.amount}</p>
-        <p>Method: {payment.method}</p>
         <p>Date: {new Date(payment.createdAt).toLocaleDateString()}</p>
       </div>
       <div className="booking-actions">

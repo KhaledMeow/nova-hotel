@@ -11,16 +11,16 @@ const PaymentPage = () => {
   const navigate = useNavigate();
 
   const state = location.state || {};
-  const { room, checkInDate, checkOutDate, bookingData } = state;
+  const { room, checkInDate, checkOutDate } = state;
 
   useEffect(() => {
-    if (!room || !checkInDate || !checkOutDate || !bookingData) {
+    if (!room || !checkInDate || !checkOutDate || !formData || !formData.num_of_people) {
       alert('Missing booking/payment details. Please start your booking again.');
       navigate('/room-list', { replace: true });
     }
-  }, [room, checkInDate, checkOutDate, bookingData, navigate]);
+  }, [room, checkInDate, checkOutDate, formData, navigate]);
 
-  if (!room || !checkInDate || !checkOutDate || !bookingData) {
+  if (!room || !checkInDate || !checkOutDate || !formData || !formData.num_of_people) {
     return null;
   }
 
@@ -29,9 +29,7 @@ const PaymentPage = () => {
       room={room}
       checkInDate={checkInDate}
       checkOutDate={checkOutDate}
-      bookingData={bookingData}
       formData={formData}
-
     />
   );
 };
@@ -40,13 +38,11 @@ const PaymentForm = ({
   room, 
   checkInDate, 
   checkOutDate, 
-  bookingData,
   formData,
   onSuccess = () => {}, 
   onError = () => {} 
 }) => {
   const navigate = useNavigate();
-
 
   const calculateNights = () => {
     if (!checkInDate || !checkOutDate) return 1; 
@@ -59,7 +55,7 @@ const PaymentForm = ({
     return nights;
   };
 
-    const nights = calculateNights();
+  const nights = calculateNights();
   const totalPrice =Number((room.price * nights).toFixed(2));
 
   useEffect(() => {
@@ -70,12 +66,12 @@ const PaymentForm = ({
     console.log('Total Price:', totalPrice);
   }, [room, nights]);
 
-useEffect(() => {
-  if (!room || typeof room.price !== 'number' || room.price <= 0) {
-    console.error('Invalid room data:', room);
-    navigate('/error', { state: { message: 'Invalid room configuration' } });
-  }
-}, [room, navigate]);
+  useEffect(() => {
+    if (!room || typeof room.price !== 'number' || room.price <= 0) {
+      console.error('Invalid room data:', room);
+      navigate('/error', { state: { message: 'Invalid room configuration' } });
+    }
+  }, [room, navigate]);
 
   useEffect(() => {
     if (isNaN(totalPrice)) {
@@ -103,7 +99,6 @@ useEffect(() => {
     return testCardNumbers.includes(number.replace(/\s/g, ''));
   };
 
-
   const validateCVV = (cvv) => {
     return /^\d{3,4}$/.test(cvv);
   };
@@ -113,7 +108,6 @@ useEffect(() => {
     setProcessing(true);
 
     const isCardNumberValid = validateCardNumber(cardNumber);
-
     const isCVVValid = validateCVV(cvv);
 
     if (!isCardNumberValid) {
@@ -121,9 +115,6 @@ useEffect(() => {
       setProcessing(false);
       return;
     }
-
- 
-
     if (!isCVVValid) {
       alert('Please use a 3 or 4 digit test CVV');
       setProcessing(false);
@@ -131,22 +122,41 @@ useEffect(() => {
     }
 
     try {
-
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
       const paymentResult = paymentGatewaySimulation();
-  
       if (paymentResult.success) {
+        const token = localStorage.getItem('token');
+        const bookingResponse = await fetch('/api/v1/bookings', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            room: room._id,
+            check_in_date: checkInDate,
+            check_out_date: checkOutDate,
+            num_of_people: parseInt(formData.num_of_people, 10),
+            special_requests: formData.special_requests || '',
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone
+          })
+        });
+        if (!bookingResponse.ok) {
+          const errorData = await bookingResponse.json();
+          throw new Error(errorData.error || 'Booking creation failed');
+        }
+        const bookingData = await bookingResponse.json();
         const response = await fetch('/api/v1/payments', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
+            'Authorization': `Bearer ${token}`
           },
           body: JSON.stringify({
             bookingId: bookingData._id,
-            amount: totalPrice,
-            method: 'credit_card'
+            amount: totalPrice
+
           })
         });
         if (!response.ok) {
@@ -155,6 +165,7 @@ useEffect(() => {
         }
         const paymentData = await response.json();
         setPaymentSuccess(true);
+        window.dispatchEvent(new Event('roomsUpdated'));
         onSuccess(paymentData);
       } else {
         alert(paymentResult.message);
@@ -336,7 +347,6 @@ PaymentForm.propTypes = {
   }).isRequired,
   checkInDate: PropTypes.string.isRequired,
   checkOutDate: PropTypes.string.isRequired,
-  bookingData: PropTypes.object.isRequired,
   onSuccess: PropTypes.func,
   onError: PropTypes.func
 };

@@ -181,6 +181,23 @@ exports.confirmBooking = async (req, res) => {
       { new: true }
     );
 
+    // Add a single booked_dates entry for the full range (first night after check-in up to and including check-out)
+    const checkIn = new Date(booking.check_in_date);
+    const checkOut = new Date(booking.check_out_date);
+    const startNight = new Date(checkIn);
+    const endNight = new Date(checkOut);
+    endNight.setDate(endNight.getDate() - 1);
+    startNight.setDate(startNight.getDate() - 2);
+    // Normalize to UTC midnight
+    startNight.setUTCHours(0,0,0,0);
+    endNight.setUTCHours(0,0,0,0);
+    if (startNight <= endNight) {
+      await Room.findByIdAndUpdate(
+        booking.room,
+        { $push: { booked_dates: { startDate: startNight, endDate: endNight } } }
+      );
+    }
+
     res.json(updatedBooking);
   } catch (error) {
     res.status(400).json({

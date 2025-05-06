@@ -43,19 +43,18 @@ const Booking = ({ isModal }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const bookingData = location.state?.bookingData;
   const checkInDate = location.state?.checkInDate;
   const checkOutDate = location.state?.checkOutDate;
   const room = location.state?.room || {};
 
   React.useEffect(() => {
-    if (!bookingData || !checkInDate || !checkOutDate || !room._id) {
+    if (!checkInDate || !checkOutDate || !room._id) {
       alert('Missing booking details. Please start your booking again.');
       navigate('/');
     }
-  }, [bookingData, checkInDate, checkOutDate, room, navigate]);
+  }, [checkInDate, checkOutDate, room, navigate]);
 
-  if (!bookingData || !checkInDate || !checkOutDate || !room._id) return null;
+  if (!checkInDate || !checkOutDate || !room._id) return null;
 
 
   const [errors, setErrors] = useState({
@@ -122,7 +121,6 @@ const [formData, setFormData] = useState({
       room,
       checkInDate: formData.check_in_date,
       checkOutDate: formData.check_out_date,
-      bookingData,
       formData
     }
   });
