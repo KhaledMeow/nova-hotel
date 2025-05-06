@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
 import CalendarComponent from "./components/CalendarComponent";
 import RoomList from "./components/RoomList";
 import ConfirmDetailsPage from "./pages/ConfirmDetailsPage";
@@ -16,6 +16,9 @@ import Dashboard from "./components/Dashboard";
 const App = () => {
   const [showDealsMessage, setShowDealsMessage] = useState(false);
 
+  // Get current location
+  const location = useLocation();
+
   useEffect(() => {
     const dealsTimer = setTimeout(() => {
       setShowDealsMessage(true);
@@ -25,25 +28,33 @@ const App = () => {
   }, []);
 
   return (
-    <Router>
-      <div className="App">
-        <Header />
-        <Routes>
-          <Route path="/" element={<HAC />} />
-          <Route path="/About" element={<AboutPage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/calendar" element={<CalendarComponent />} />
-          <Route path="/Room-List" element={<RoomList />} />
-          <Route path="/confirm-details" element={<ConfirmDetailsPage />} />
-          <Route path="/payment" element={<PaymentPage />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-        </Routes>
-        <ChatBotComponent />
-        {showDealsMessage && <DealsPopup onClose={() => setShowDealsMessage(false)} />}
-      </div>
-    </Router>
+    <div className="App">
+      <Header />
+      <Routes>
+        <Route path="/" element={<HAC />} />
+        <Route path="/About" element={<AboutPage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/calendar" element={<CalendarComponent />} />
+        <Route path="/Room-List" element={<RoomList />} />
+        <Route path="/confirm-details" element={<ConfirmDetailsPage />} />
+        <Route path="/payment" element={<PaymentPage />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
+      <ChatBotComponent />
+      {/* deals popup only in HAC page */}
+      {location.pathname === "/" && showDealsMessage && (
+        <DealsPopup onClose={() => setShowDealsMessage(false)} />
+      )}
+    </div>
   );
 };
 
-export default App;
+// Wrap App with Router
+const AppWithRouter = () => (
+  <Router>
+    <App />
+  </Router>
+);
+
+export default AppWithRouter;
