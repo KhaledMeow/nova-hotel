@@ -24,7 +24,14 @@ const ForgotPassword = () => {
       const data = await response.json();
       if (response.ok) {
         setMessage(data.message || 'Password reset instructions sent to your email.');
-        setTimeout(() => navigate('/login'), 3000); // Optional: Redirect after 3s
+        // Show reset link in UI for development/testing
+        if (data.token) {
+          setMessage(
+            (data.message || 'Password reset instructions sent to your email.') +
+            `\n\nReset Link (dev only): ${window.location.origin}/reset-password?token=${data.token}`
+          );
+        }
+        // setTimeout(() => navigate('/login'), 3000); // Optionally auto-redirect
       } else {
         setError(data.error || 'Failed to send reset instructions.');
       }
@@ -53,7 +60,25 @@ const ForgotPassword = () => {
           <button type="submit" className="forgot-password-submit-button" disabled={loading}>
             {loading ? 'Sending...' : 'Send Reset Link'}
           </button>
-          {message && <div className="forgot-password-success">{message}</div>}
+          {message && (
+            <div className="forgot-password-success" style={{ whiteSpace: 'pre-line', wordBreak: 'break-all' }}>
+              {message}
+              {/* If message contains a reset link, also render it as a clickable link for convenience */}
+              {message.includes('/reset-password?token=') && (
+                <>
+                  <br />
+                  <a
+                    href={message.match(/(https?:\/\/[^\s]+)/)?.[0]}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: '#fca53a', fontWeight: 'bold', display: 'block', marginTop: '1rem' }}
+                  >
+                    Open Reset Link
+                  </a>
+                </>
+              )}
+            </div>
+          )}
           {error && <div className="forgot-password-error">{error}</div>}
         </form>
         <div className="forgot-password-footer">
