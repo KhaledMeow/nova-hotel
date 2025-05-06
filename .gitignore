@@ -13,3 +13,10 @@ Ignore environment files
 Ignore build output
 /dist
 /build
+
+Ignore editor files
+.idea
+.vscode
+
+Ignore .gitignore file
+.gitignore
