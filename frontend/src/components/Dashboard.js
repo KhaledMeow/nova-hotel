@@ -84,66 +84,32 @@ const Dashboard = () => {
     fetchData();
   }, []);
 
-  const deleteBooking = async (bookingId) => {
-    if (!window.confirm('Are you sure you want to delete this booking?')) return;
-    if (!window.confirm('After this action, the booking will be permanently deleted.')) return;
+//bookings
+  const confirmBooking = async (bookingId) => {
+    if (!window.confirm('Confirm this booking?')) return;
     try {
+      setConfirmingId(bookingId);
       const token = localStorage.getItem('token');
-      const response = await fetch(`/api/v1/bookings/${bookingId}`, {
-        method: 'DELETE',
+      const response = await fetch(`/api/v1/bookings/${bookingId}/confirm`, {
+        method: 'PATCH',
         headers: { 'Authorization': `Bearer ${token}` }
       });
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to delete booking');
-      }
-      setBookings(prev => prev.filter(b => b._id !== bookingId));
-      window.location.reload();
-    } catch (error) {
-      alert(error.message);
-      console.error('Delete Booking Error:', error);
-    }
-  };
 
-  const deletePayment = async (paymentId) => {
-    if (!window.confirm('Are you sure you want to delete this payment?')) return;
-    if (!window.confirm('After this action, the payment will be permanently deleted.')) return;
-    try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`/api/v1/payments/${paymentId}`, {
-        method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to delete payment');
+        throw new Error(errorData.error || 'Failed to confirm booking');
       }
-      setPayments(prev => prev.filter(p => p._id !== paymentId));
+      
+      const updatedBooking = await response.json();
+      setBookings(prev => prev.map(b => 
+        b._id === bookingId ? updatedBooking : b
+      ));
+      window.dispatchEvent(new Event('roomsUpdated'));
       window.location.reload();
     } catch (error) {
       alert(error.message);
-      console.error('Delete Payment Error:', error);
-    }
-  };
-
-  const deleteComplaint = async (complaintId) => {
-    if (!window.confirm('Are you sure you want to delete this complaint?')) return;
-    if (!window.confirm('After this action, the complaint will be permanently deleted.')) return;
-    try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`/api/v1/complaints/${complaintId}`, {
-        method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to delete complaint');
-      }
-      setComplaints(prev => prev.filter(c => c._id !== complaintId));
-      window.location.reload();
-    } catch (error) {
-      alert(error.message);
-      console.error('Delete Complaint Error:', error);
+    } finally {
+      setConfirmingId(null);
     }
   };
 
@@ -173,84 +139,28 @@ const Dashboard = () => {
     }
   };
 
-  const confirmBooking = async (bookingId) => {
-    if (!window.confirm('Confirm this booking?')) return;
+  const deleteBooking = async (bookingId) => {
+    if (!window.confirm('Are you sure you want to delete this booking?')) return;
+    if (!window.confirm('After this action, the booking will be permanently deleted.')) return;
     try {
-      setConfirmingId(bookingId);
       const token = localStorage.getItem('token');
-      const response = await fetch(`/api/v1/bookings/${bookingId}/confirm`, {
-        method: 'PATCH',
+      const response = await fetch(`/api/v1/bookings/${bookingId}`, {
+        method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
-
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to confirm booking');
+        throw new Error(errorData.error || 'Failed to delete booking');
       }
-      
-      const updatedBooking = await response.json();
-      setBookings(prev => prev.map(b => 
-        b._id === bookingId ? updatedBooking : b
-      ));
-      window.dispatchEvent(new Event('roomsUpdated'));
+      setBookings(prev => prev.filter(b => b._id !== bookingId));
       window.location.reload();
     } catch (error) {
       alert(error.message);
-    } finally {
-      setConfirmingId(null);
+      console.error('Delete Booking Error:', error);
     }
   };
-  const solveComplaint = async (complaintId) => {
-    if (!window.confirm('Mark this complaint as solved?')) return;
-    try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`/api/v1/complaints/${complaintId}/solve`, {
-        method: 'PATCH',
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-  
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to solve complaint');
-      }
-  
 
-      setComplaints(prev => prev.map(c => 
-        c._id === complaintId ? { ...c, status: 'solved' } : c
-      ));
-      window.location.reload();
-    } catch (error) {
-      alert(error.message);
-      console.error('Solve Complaint Error:', error);
-    }
-  };
-  const inProgressComplaint = async (complaintId) => {
-    if (!window.confirm('Mark this complaint as in progress?')) return;
-    try {
-      setInProgressId(complaintId);
-      const token = localStorage.getItem('token');
-      const response = await fetch(`/api/v1/complaints/${complaintId}/in-progress`, {
-        method: 'PATCH',
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-  
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to mark complaint as in progress');
-      }
-  
-
-      setComplaints(prev => prev.map(c => 
-        c._id === complaintId ? { ...c, status: 'in_progress' } : c
-      ));
-      window.location.reload();
-    } catch (error) {
-      alert(error.message);
-      console.error('In Progress Complaint Error:', error);
-    } finally {
-      setInProgressId(null);
-    }
-  };
+//payments
   const completePayment = async (paymentId) => {
     if (!window.confirm('Mark this payment as completed?')) return;
     try {
@@ -275,6 +185,7 @@ const Dashboard = () => {
       console.error('Complete Payment Error:', error);
     }
   };
+
   const refundPayment = async (paymentId) => {
     if (!window.confirm('Mark this payment as refunded?')) return;
     try {
@@ -299,6 +210,98 @@ const Dashboard = () => {
     }
   };
 
+  const deletePayment = async (paymentId) => {
+    if (!window.confirm('Are you sure you want to delete this payment?')) return;
+    if (!window.confirm('After this action, the payment will be permanently deleted.')) return;
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`/api/v1/payments/${paymentId}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to delete payment');
+      }
+      setPayments(prev => prev.filter(p => p._id !== paymentId));
+      window.location.reload();
+    } catch (error) {
+      alert(error.message);
+      console.error('Delete Payment Error:', error);
+    }
+  };
+
+//complaints
+  const solveComplaint = async (complaintId) => {
+    if (!window.confirm('Mark this complaint as solved?')) return;
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`/api/v1/complaints/${complaintId}/solve`, {
+        method: 'PATCH',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to solve complaint');
+      }
+  
+
+      setComplaints(prev => prev.map(c => 
+        c._id === complaintId ? { ...c, status: 'solved' } : c
+      ));
+    } catch (error) {
+      alert(error.message);
+      console.error('Solve Complaint Error:', error);
+    }
+  };
+
+  const inProgressComplaint = async (complaintId) => {
+    if (!window.confirm('Mark this complaint as in progress?')) return;
+    try {
+      setInProgressId(complaintId);
+      const token = localStorage.getItem('token');
+      const response = await fetch(`/api/v1/complaints/${complaintId}/in-progress`, {
+        method: 'PATCH',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to mark complaint as in progress');
+      }
+  
+
+      setComplaints(prev => prev.map(c => 
+        c._id === complaintId ? { ...c, status: 'in_progress' } : c
+      ));
+    } catch (error) {
+      alert(error.message);
+      console.error('In Progress Complaint Error:', error);
+    } finally {
+      setInProgressId(null);
+    }
+  };
+
+  const deleteComplaint = async (complaintId) => {
+    if (!window.confirm('Are you sure you want to delete this complaint?')) return;
+    if (!window.confirm('After this action, the complaint will be permanently deleted.')) return;
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`/api/v1/complaints/${complaintId}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to delete complaint');
+      }
+      setComplaints(prev => prev.filter(c => c._id !== complaintId));
+    } catch (error) {
+      alert(error.message);
+      console.error('Delete Complaint Error:', error);
+    }
+  };
 
   useEffect(() => {
     console.log('Bookings:', bookings);
