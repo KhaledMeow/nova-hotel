@@ -106,6 +106,13 @@
     color: #fff;
   }
   
+  .login-forgot-password-link {
+    color: #fca53a;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease-in-out;
+  }
+  
   .login-register-link {
     color: #fca53a;
     text-decoration: none;
@@ -114,20 +121,23 @@
   }
   
   .login-register-link:hover {
-    color: #f98b0d;
+    color: #806aff;
     text-decoration: none;
     font-weight: bold;
     transition: color 0.3s ease-in-out;
   }
   .login-forgot-password-link:hover {
-    color: #fca53a;
+    color: #806aff;
     text-decoration: none;
     font-weight: bold;
     transition: color 0.3s ease-in-out;
   }
   
   .login-forgot-password-link:hover {
-    color: #f98b0d;
+    color: #806aff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease-in-out;
 }
   
   @media (max-width: 480px) {
