@@ -94,6 +94,12 @@ const Login = () => {
         </button>
 
         <div className="login-footer">
+          <span>Forgot Password? </span>
+          <Link to="/forgot-password" className="login-forgot-password-link">
+            Forgot Password
+          </Link>
+          <br />
+          <br />
           <span>Don't have an account? </span>
           <Link to="/register" className="login-register-link">
             Register here

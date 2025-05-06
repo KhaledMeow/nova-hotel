@@ -60,6 +60,21 @@ exports.getUserComplaints = async (req, res) => {
   }
 };
 
+exports.getAllComplaints = async (req, res) => {
+  const filter = (req.user.roleName === 'admin' || req.user.roleName === 'staff') 
+  ? {} 
+  : { user: req.user._id };
+  try {
+    const complaints = await Complaint.find(filter)
+      .sort({ createdAt: -1 })
+      .populate('user', 'name email');
+      
+    res.json(complaints);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 exports.solveComplaint = async (req, res) => {
   const filter = (req.user.roleName === 'admin' || req.user.roleName === 'staff')
   ? {}
@@ -107,6 +122,7 @@ exports.inProgressComplaint = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
 exports.deleteComplaint = async (req, res) => {
   const filter = (req.user.roleName === 'admin' || req.user.roleName === 'staff')
     ? {}
@@ -121,17 +137,3 @@ exports.deleteComplaint = async (req, res) => {
   }
 };
 
-exports.getAllComplaints = async (req, res) => {
-  const filter = (req.user.roleName === 'admin' || req.user.roleName === 'staff') 
-  ? {} 
-  : { user: req.user._id };
-  try {
-    const complaints = await Complaint.find(filter)
-      .sort({ createdAt: -1 })
-      .populate('user', 'name email');
-      
-    res.json(complaints);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};

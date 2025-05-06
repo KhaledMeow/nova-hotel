@@ -80,6 +80,7 @@ exports.getAllBookings = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 // for cancel booking and delete booking
 function getNormalizedBookingDates(checkInRaw, checkOutRaw) {
   const checkIn = new Date(checkInRaw);
@@ -92,77 +93,6 @@ function getNormalizedBookingDates(checkInRaw, checkOutRaw) {
   endNight.setUTCHours(0,0,0,0);
   return { startNight, endNight };
 }
-
-exports.cancelBooking = async (req, res) => {
-  const filter = (req.user.roleName === 'admin' || req.user.roleName === 'staff')
-  ? {}
-  : {user: req.user._id};
-  try {
-    const booking = await Booking.findOne({ _id: req.params.id, ...filter });
-    if (!booking) throw new Error('Booking not found');
-
-    if (booking.status === 'cancelled')
-      return res.status(400).json({
-        success: false,
-        error: 'Booking already cancelled'
-      });
-
-    const { startNight, endNight } = getNormalizedBookingDates(booking.check_in_date, booking.check_out_date);
-    const roomUpdate = await Room.findByIdAndUpdate(
-      booking.room,
-      { $pull: { 
-        booked_dates: { 
-          startDate: startNight,
-          endDate: endNight
-        }
-      }},
-      { new: true }
-    );
-
-    if (!roomUpdate) throw new Error('Failed to update room availability');
-
-
-    const updatedBooking = await Booking.findByIdAndUpdate(
-      req.params.id,
-      { status: 'cancelled' },
-      { new: true }
-    );
-
-    res.json({
-      ...updatedBooking.toObject(),
-      room: roomUpdate
-    });
-  } catch (error) {
-    res.status(400).json({
-      success: false,
-      error: error.message
-    });
-  }
-};
-exports.deleteBooking = async (req, res) => {
-  const filter = (req.user.roleName === 'admin' || req.user.roleName === 'staff')
-    ? {}
-    : { user: req.user._id };
-  try {
-    const booking = await Booking.findOne({ _id: req.params.id, ...filter });
-    if (!booking) return res.status(404).json({ error: 'Booking not found' });
-
-    const { startNight, endNight } = getNormalizedBookingDates(booking.check_in_date, booking.check_out_date);
-    await Room.findByIdAndUpdate(
-      booking.room,
-      { $pull: {
-        booked_dates: {
-          startDate: startNight,
-          endDate: endNight
-        }
-      } }
-    );
-    await Booking.findByIdAndDelete(req.params.id);
-    res.json({ message: 'Booking deleted successfully' });
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-};
 
 exports.confirmBooking = async (req, res) => {
   const filter = (req.user.roleName === 'admin' || req.user.roleName === 'staff')
@@ -216,5 +146,77 @@ exports.confirmBooking = async (req, res) => {
       success: false,
       error: error.message
     });
+  }
+};
+
+exports.cancelBooking = async (req, res) => {
+  const filter = (req.user.roleName === 'admin' || req.user.roleName === 'staff')
+  ? {}
+  : {user: req.user._id};
+  try {
+    const booking = await Booking.findOne({ _id: req.params.id, ...filter });
+    if (!booking) throw new Error('Booking not found');
+
+    if (booking.status === 'cancelled')
+      return res.status(400).json({
+        success: false,
+        error: 'Booking already cancelled'
+      });
+
+    const { startNight, endNight } = getNormalizedBookingDates(booking.check_in_date, booking.check_out_date);
+    const roomUpdate = await Room.findByIdAndUpdate(
+      booking.room,
+      { $pull: { 
+        booked_dates: { 
+          startDate: startNight,
+          endDate: endNight
+        }
+      }},
+      { new: true }
+    );
+
+    if (!roomUpdate) throw new Error('Failed to update room availability');
+
+
+    const updatedBooking = await Booking.findByIdAndUpdate(
+      req.params.id,
+      { status: 'cancelled' },
+      { new: true }
+    );
+
+    res.json({
+      ...updatedBooking.toObject(),
+      room: roomUpdate
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message
+    });
+  }
+};
+
+exports.deleteBooking = async (req, res) => {
+  const filter = (req.user.roleName === 'admin' || req.user.roleName === 'staff')
+    ? {}
+    : { user: req.user._id };
+  try {
+    const booking = await Booking.findOne({ _id: req.params.id, ...filter });
+    if (!booking) return res.status(404).json({ error: 'Booking not found' });
+
+    const { startNight, endNight } = getNormalizedBookingDates(booking.check_in_date, booking.check_out_date);
+    await Room.findByIdAndUpdate(
+      booking.room,
+      { $pull: {
+        booked_dates: {
+          startDate: startNight,
+          endDate: endNight
+        }
+      } }
+    );
+    await Booking.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Booking deleted successfully' });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
   }
 };

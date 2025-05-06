@@ -114,7 +114,20 @@
   
   .login-register-link:hover {
     color: #f98b0d;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease-in-out;
   }
+  .login-forgot-password-link:hover {
+    color: #fca53a;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease-in-out;
+  }
+  
+  .login-forgot-password-link:hover {
+    color: #f98b0d;
+}
   
   @media (max-width: 480px) {
     .login-form {
@@ -199,7 +212,6 @@
   
 }
 
-/* Touch device adjustments */
 @media (hover: none) {
   .login-submit-button:hover {
       transform: none !important;
@@ -208,7 +220,16 @@
   
   .login-register-link:hover {
       color: #fca53a !important;
+      text-decoration: none !important;
+      font-weight: bold !important;
+      transition: color 0.3s ease-in-out !important;
   }
+  .login-forgot-password-link:hover {
+    color: #fca53a !important;
+    text-decoration: none !important;
+    font-weight: bold !important;
+    transition: color 0.3s ease-in-out !important;
+}
 }
 
 /* Ensure form elements are touch-friendly */

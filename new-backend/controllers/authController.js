@@ -50,6 +50,35 @@ const token = jwt.sign({ userId: user._id, roleName: userRole ? userRole.name : 
   }
 };
 
+exports.forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) throw new Error('User not found');
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    if (!Array.isArray(user.tokens)) user.tokens = [];
+    user.tokens.push(token);
+    await user.save();
+    res.json({ token });
+  } catch (error) {
+    res.status(401).json({ error: error.message });
+  }
+};
+
+exports.resetPassword = async (req, res) => {
+  try {
+    const { token, password } = req.body;
+    const user = await User.findOne({ tokens: token });
+    if (!user) throw new Error('Invalid token');
+    user.password = password;
+    user.tokens = [];
+    await user.save();
+    res.json({ message: 'Password reset successfully' });
+  } catch (error) {
+    res.status(401).json({ error: error.message });
+  }
+};
+
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -78,18 +107,6 @@ const token = jwt.sign({ userId: user._id, roleName: userRole ? userRole.name : 
   }
 };
 
-exports.logout = async (req, res) => {
-  try {
-
-    const user = await User.findById(req.user.id);
-    user.tokens = user.tokens.filter(t => t !== req.token);
-    await user.save();
-    
-    res.json({ message: 'Logged out successfully' });
-  } catch (error) {
-    res.status(500).json({ error: 'Logout failed' });
-  }
-};
 exports.getCurrentUser = async (req, res) => {
   try {
 
@@ -104,5 +121,18 @@ exports.getCurrentUser = async (req, res) => {
     
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch user data' });
+  }
+};
+
+exports.logout = async (req, res) => {
+  try {
+
+    const user = await User.findById(req.user.id);
+    user.tokens = user.tokens.filter(t => t !== req.token);
+    await user.save();
+    
+    res.json({ message: 'Logged out successfully' });
+  } catch (error) {
+    res.status(500).json({ error: 'Logout failed' });
   }
 };

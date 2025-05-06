@@ -10,19 +10,6 @@ exports.getUserProfile = async (req, res) => {
   }
 };
 
-exports.updateProfile = async (req, res) => {
-  try {
-    const user = await User.findByIdAndUpdate(
-      req.user._id,
-      req.body,
-      { new: true, runValidators: true }
-    ).select('-password');
-    res.json(user);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-};
-
 exports.getAllUsers = async (req, res) => {
   try {
     const users = await User.find().select('-password');

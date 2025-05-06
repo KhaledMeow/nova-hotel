@@ -30,6 +30,7 @@ exports.createPayment = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
 exports.getUserPayments = async (req, res) => {
   const filter = (req.user.roleName === 'admin' || req.user.roleName === 'staff')
     ? {} 
@@ -38,6 +39,36 @@ exports.getUserPayments = async (req, res) => {
     const payments = await Payment.find(filter)
       .populate('booking', 'check_in_date check_out_date')
       .populate('user', 'name email');
+    res.json(payments);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+exports.getPaymentDetails = async (req, res) => {
+  const filter = (req.user.roleName === 'admin' || req.user.roleName === 'staff')
+  ? {}
+  : {user: req.user._id};
+  try {
+    const payment = await Payment.findById(req.params.id)
+      .populate('booking', 'check_in_date check_out_date')
+      .populate('user', 'name');
+      
+    res.json(payment);
+  } catch (error) {
+    res.status(404).json({ error: 'Payment not found' });
+  }
+};
+
+exports.getAllPayments = async (req, res) => {
+  const filter = (req.user.roleName === 'admin' || req.user.roleName === 'staff') 
+  ? {} 
+  : { user: req.user._id };
+  try {
+    const payments = await Payment.find(filter)
+      .populate('booking', 'check_in_date check_out_date')
+      .populate('user', 'name email');
+      
     res.json(payments);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -71,21 +102,6 @@ exports.completePayment = async (req, res) => {
   }
 };
 
-exports.getPaymentDetails = async (req, res) => {
-  const filter = (req.user.roleName === 'admin' || req.user.roleName === 'staff')
-  ? {}
-  : {user: req.user._id};
-  try {
-    const payment = await Payment.findById(req.params.id)
-      .populate('booking', 'check_in_date check_out_date')
-      .populate('user', 'name');
-      
-    res.json(payment);
-  } catch (error) {
-    res.status(404).json({ error: 'Payment not found' });
-  }
-};
-
 exports.refundPayment = async (req, res) => {
   const filter = (req.user.roleName === 'admin' || req.user.roleName === 'staff')
   ? {}
@@ -115,6 +131,7 @@ exports.refundPayment = async (req, res) => {
     });
   }
 };
+
 exports.deletePayment = async (req, res) => {
   const filter = (req.user.roleName === 'admin' || req.user.roleName === 'staff')
     ? {}
@@ -126,20 +143,5 @@ exports.deletePayment = async (req, res) => {
     res.json({ message: 'Payment deleted successfully' });
   } catch (error) {
     res.status(400).json({ error: error.message });
-  }
-};
-
-exports.getAllPayments = async (req, res) => {
-  const filter = (req.user.roleName === 'admin' || req.user.roleName === 'staff') 
-  ? {} 
-  : { user: req.user._id };
-  try {
-    const payments = await Payment.find(filter)
-      .populate('booking', 'check_in_date check_out_date')
-      .populate('user', 'name email');
-      
-    res.json(payments);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
   }
 };

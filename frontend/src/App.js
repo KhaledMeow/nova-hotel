@@ -13,6 +13,8 @@ import "./assets/styles/main.css";
 import ChatBotComponent from "./components/ChatBotComponent";
 import DealsPopup from "./components/DealsPopup";
 import Dashboard from "./components/Dashboard";
+import ForgotPassword from "./components/ForgotPassword";
+import ResetPassword from "./components/ResetPassword";
 const App = () => {
   const [showDealsMessage, setShowDealsMessage] = useState(false);
 
@@ -33,6 +35,8 @@ const App = () => {
         <Route path="/" element={<HAC />} />
         <Route path="/About" element={<AboutPage />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/register" element={<Register />} />
         <Route path="/calendar" element={<CalendarComponent />} />
         <Route path="/Room-List" element={<RoomList />} />
