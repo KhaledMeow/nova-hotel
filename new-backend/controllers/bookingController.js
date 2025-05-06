@@ -80,6 +80,18 @@ exports.getAllBookings = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+// for cancel booking and delete booking
+function getNormalizedBookingDates(checkInRaw, checkOutRaw) {
+  const checkIn = new Date(checkInRaw);
+  const checkOut = new Date(checkOutRaw);
+  const startNight = new Date(checkIn);
+  const endNight = new Date(checkOut);
+  endNight.setDate(endNight.getDate() - 1);
+  startNight.setDate(startNight.getDate() - 2);
+  startNight.setUTCHours(0,0,0,0);
+  endNight.setUTCHours(0,0,0,0);
+  return { startNight, endNight };
+}
 
 exports.cancelBooking = async (req, res) => {
   const filter = (req.user.roleName === 'admin' || req.user.roleName === 'staff')
@@ -95,12 +107,13 @@ exports.cancelBooking = async (req, res) => {
         error: 'Booking already cancelled'
       });
 
+    const { startNight, endNight } = getNormalizedBookingDates(booking.check_in_date, booking.check_out_date);
     const roomUpdate = await Room.findByIdAndUpdate(
       booking.room,
       { $pull: { 
         booked_dates: { 
-          startDate: new Date(booking.check_in_date),
-          endDate: new Date(booking.check_out_date)
+          startDate: startNight,
+          endDate: endNight
         }
       }},
       { new: true }
@@ -134,12 +147,13 @@ exports.deleteBooking = async (req, res) => {
     const booking = await Booking.findOne({ _id: req.params.id, ...filter });
     if (!booking) return res.status(404).json({ error: 'Booking not found' });
 
+    const { startNight, endNight } = getNormalizedBookingDates(booking.check_in_date, booking.check_out_date);
     await Room.findByIdAndUpdate(
       booking.room,
       { $pull: {
         booked_dates: {
-          startDate: new Date(booking.check_in_date),
-          endDate: new Date(booking.check_out_date)
+          startDate: startNight,
+          endDate: endNight
         }
       } }
     );
@@ -181,14 +195,12 @@ exports.confirmBooking = async (req, res) => {
       { new: true }
     );
 
-    // Add a single booked_dates entry for the full range (first night after check-in up to and including check-out)
     const checkIn = new Date(booking.check_in_date);
     const checkOut = new Date(booking.check_out_date);
     const startNight = new Date(checkIn);
     const endNight = new Date(checkOut);
     endNight.setDate(endNight.getDate() - 1);
     startNight.setDate(startNight.getDate() - 2);
-    // Normalize to UTC midnight
     startNight.setUTCHours(0,0,0,0);
     endNight.setUTCHours(0,0,0,0);
     if (startNight <= endNight) {

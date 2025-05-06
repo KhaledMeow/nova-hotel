@@ -189,8 +189,8 @@ const Dashboard = () => {
       setBookings(prev => prev.map(b => 
         b._id === bookingId ? updatedBooking : b
       ));
-      // Dispatch a custom event to notify room list to refresh
       window.dispatchEvent(new Event('roomsUpdated'));
+      window.location.reload();
     } catch (error) {
       alert(error.message);
     } finally {
