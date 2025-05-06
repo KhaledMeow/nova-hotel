@@ -16,7 +16,6 @@ import Dashboard from "./components/Dashboard";
 const App = () => {
   const [showDealsMessage, setShowDealsMessage] = useState(false);
 
-  // Get current location
   const location = useLocation();
 
   useEffect(() => {
@@ -42,7 +41,6 @@ const App = () => {
         <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
       <ChatBotComponent />
-      {/* deals popup only in HAC page */}
       {location.pathname === "/" && showDealsMessage && (
         <DealsPopup onClose={() => setShowDealsMessage(false)} />
       )}
@@ -50,7 +48,6 @@ const App = () => {
   );
 };
 
-// Wrap App with Router
 const AppWithRouter = () => (
   <Router>
     <App />
