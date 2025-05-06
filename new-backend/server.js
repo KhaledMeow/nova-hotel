@@ -25,7 +25,7 @@ const app = express();
 app.set('trust proxy', 1);
 
 app.use(cors({
-  origin: process.env.CLIENT_URL,
+  origin: ['http://localhost:3000', 'https://localhost:3000'],
   credentials: true
 }));
 const server = http.createServer(app);
@@ -39,7 +39,7 @@ app.use('/api/v1/chatbot', chatLimiter);
 
 const io = socketIo(server, {
   cors: {
-    origin: process.env.CLIENT_URL,
+    origin: ['http://localhost:3000', 'https://localhost:3000'],
     methods: ['GET', 'POST', 'PATCH', 'DELETE']
   }
 });
@@ -76,7 +76,7 @@ mongoose.connection.on('disconnected', () => {
 });
 app.use(helmet());
 app.use(cors({
-  origin: process.env.CLIENT_URL,
+  origin: ['http://localhost:3000', 'https://localhost:3000'],
   credentials: true,
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
@@ -119,5 +119,5 @@ const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
   console.log(`🚀 Server running in ${process.env.NODE_ENV || 'development'} mode`);
   console.log(`📡 Listening on port ${PORT}`);
-  console.log(`🌐 Client URL: ${process.env.CLIENT_URL}`);
+  console.log(`🌐 Client URL: https://localhost:3000 or http://localhost:3000`);
 });
