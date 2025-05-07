@@ -61,14 +61,14 @@ const Home = () => {
         <div className="photo-row">
           {galleryImages.slice(0, 3).map((image, index) => (
             <div key={index} className="photo">
-              <img src={image} alt="Hotel Highlights" />
+              <img src={image} alt="Hotel Highlights" loading="lazy" style={{width: '100%', height: 'auto'}} />
             </div>
           ))}
         </div>
         <div className="photo-row">
           {galleryImages.slice(3, 6).map((image, index) => (
             <div key={index + 3} className="photo">
-              <img src={image} alt="Hotel Highlights" />
+              <img src={image} alt="Hotel Highlights" loading="lazy" style={{width: '100%', height: 'auto'}} />
             </div>
           ))}
         </div>
@@ -100,9 +100,9 @@ const featuresData = [
 ];
 
 const galleryImages = [
-  require("../assets/images/photo1.jpg"),
-  require("../assets/images/photo2.jpg"),
-  require("../assets/images/photo3.jpg"),
+  require("../assets/images/photo1.webp"),
+  require("../assets/images/photo2.webp"),
+  require("../assets/images/photo3.webp"),
 ];
 
 const About = () => {

@@ -63,37 +63,29 @@
 }
 
 .photo-gallery {
-    text-align: center;
-    margin-bottom: 100px;
+    margin-top: 100px;
 }
-
 .photo-row {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     margin: 10px 0;
 }
 
 .photo {
-    flex: 2;
+    flex: 1;
     margin: 40px 30px;
-    overflow:visible;
-    margin-bottom: 30px;
-    border-radius: 25px;
+    overflow: hidden;
+    border-radius: 50px;
     box-shadow: 0px 0px 25px var(--primary);
 }
 
 .photo img {
-    width: 100%;
-    height: 100%;
-    border-radius: 25px;
+    border-radius: 50px;
     transition: transform 0.5s ease-in-out;
-    margin-bottom: 50px;
 }
 
 .photo img:hover {
     transform: scale(1.1);
-    box-shadow: 0px 0px 25px var(--primary);
-    transition: transform 0.5s ease-in-out;
 }
 
 .menu {
@@ -123,7 +115,7 @@ body {
     font-size: 1.25rem;
     transition: 0.9s ease-in-out;
     background-color: transparent;
-    border-radius: 25px;
+    border-radius: 50px;
     margin-top: 50px;
     transform: scale(2.0);
 }
@@ -136,7 +128,7 @@ body {
 
 .text-background {
     background: rgba(0, 0, 0, 0.7);
-    border-radius: 40px;
+    border-radius: 50px;
     max-width: auto;
     margin: auto;
     margin-top: 50px;
@@ -379,7 +371,7 @@ img {
     }
     
     .features {
-        margin-top: 600px !important;
+        margin-top: 606px !important;
     }
     
     .feature {
@@ -387,14 +379,18 @@ img {
         margin: 10px 0 !important;
         box-shadow: 0px 0px 4px 4px var(--primary) !important;
     }
-    
+    .photo-gallery {
+        margin-top: 0px !important;
+    }
     .photo {
-        border-radius: 30px !important;
-        margin: 0px 0 !important;
+        border-radius: 50px !important;
+        margin: 50px 0 !important;
     }
     
     .photo img {
-        margin-bottom: 40px !important;
+        margin-bottom: 0px !important;
+        margin-top: 0px !important;
+        padding: auto;
     }
     
     .vip-link {
@@ -404,7 +400,7 @@ img {
     }
     
     .text-background {
-        margin-top: -50px !important;
+        margin-top: 0px !important;
         padding: 15px !important;
         box-shadow: 0 0 20px 20px rgba(0, 0, 0, 0.5) !important;
     }
@@ -429,7 +425,7 @@ img {
     }
     
     .photo {
-        border-radius: 30px !important;
+        border-radius: 50px !important;
         margin: 0px 0 !important;
     }
     

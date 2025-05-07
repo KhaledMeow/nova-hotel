@@ -115,7 +115,7 @@ const Header = () => {
       variants={navVariants}
       transition={{ duration: 0.5 }}
     >
-      <img src={logo} alt="Hotel Logo" className="header-logo" />
+      <img src={logo} alt="Hotel Logo" className="header-logo" loading="eager" width="80" height="80" />
 
       <Link to="/calendar" className="availability-button">
         Check Availability
@@ -128,7 +128,7 @@ const Header = () => {
       <ul className={`header-links ${isOpen ? "open" : ""}`}>
         {isOpen && (
           <>
-            <img src={logo} alt="Hotel Logo" className="menu-logo" />
+            <img src={logo} alt="Hotel Logo" className="menu-logo" loading="lazy" width="60" height="60" />
             {isLoggedIn && userData && (
               <div className="user-greeting-menu">
                 Welcome back, {userData.name}
