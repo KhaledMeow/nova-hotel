@@ -73,13 +73,14 @@ mongoose.connection.on('error', (err) => {
 mongoose.connection.on('disconnected', () => {
   console.log('❌ MongoDB connection disconnected');
 });
+
 app.use(helmet());
 app.use(cors({
   origin: ['https://localhost:3000'],
   credentials: true,
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
-app.use(express.json());
+
 app.use(express.urlencoded({ extended: true }));
 
 const limiter = rateLimit({
@@ -88,6 +89,7 @@ const limiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false
 });
+
 app.use(limiter);
 
 io.on('connection', (socket) => {
@@ -101,6 +103,8 @@ io.on('connection', (socket) => {
     console.log('❌ Client disconnected');
   });
 });
+
+app.use(express.json());
 
 app.use('/api/v1/chatbot', chatbotRoutes);
 app.use('/api/v1/auth', authRoutes);
