@@ -1,5 +1,5 @@
 require('dotenv').config();
-console.log('✅ Current Directory:', process.cwd());
+console.log('Current Directory:', process.cwd());
 console.log('✅ .env Path:', require('path').join(process.cwd(), '.env'));
 console.log('✅ MONGODB_URI:', process.env.MONGODB_URI);
 console.log('✅ PORT:', process.env.PORT);
@@ -25,7 +25,7 @@ const app = express();
 app.set('trust proxy', 1);
 
 app.use(cors({
-  origin: ['https://localhost:3000'],
+  origin: ['http://localhost:3000', 'https://localhost:3000'],
   credentials: true
 }));
 const server = http.createServer(app);
@@ -39,12 +39,12 @@ app.use('/api/v1/chatbot', chatLimiter);
 
 const io = socketIo(server, {
   cors: {
-    origin: ['https://localhost:3000'],
+    origin: ['http://localhost:3000', 'https://localhost:3000'],
     methods: ['GET', 'POST', 'PATCH', 'DELETE']
   }
 });
 
-console.log('✅ ENV URI:', process.env.MONGODB_URI); 
+console.log('ENV URI:', process.env.MONGODB_URI); 
 
 if (!process.env.MONGODB_URI) {
   console.error('❌ MONGODB_URI is not defined in environment variables');
@@ -57,26 +57,30 @@ const mongooseOptions = {
 };
 
 mongoose.connect(process.env.MONGODB_URI, mongooseOptions)
+  .then(() => console.log('✅ Successfully connected to MongoDB'))
   .catch(err => {
     console.error('❌ MongoDB connection error:', err.message);
     process.exit(1); 
   });
 
+mongoose.connection.on('connected', () => {
+  console.log(`📚 Connected to MongoDB database: ${mongoose.connection.name}`);
+});
+
 mongoose.connection.on('error', (err) => {
-  console.error('❌ MongoDB runtime error:', err.message);
+  console.error('💥 MongoDB runtime error:', err.message);
 });
 
 mongoose.connection.on('disconnected', () => {
-  console.log('❌ MongoDB connection disconnected');
+  console.log('⚠️  MongoDB connection disconnected');
 });
-
 app.use(helmet());
 app.use(cors({
-  origin: ['https://localhost:3000'],
+  origin: ['http://localhost:3000', 'https://localhost:3000'],
   credentials: true,
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
-
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const limiter = rateLimit({
@@ -85,7 +89,6 @@ const limiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false
 });
-
 app.use(limiter);
 
 io.on('connection', (socket) => {
@@ -99,8 +102,6 @@ io.on('connection', (socket) => {
     console.log('❌ Client disconnected');
   });
 });
-
-app.use(express.json());
 
 app.use('/api/v1/chatbot', chatbotRoutes);
 app.use('/api/v1/auth', authRoutes);
@@ -116,8 +117,7 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
-  console.log('✅ Server running in ${process.env.NODE_ENV || development} mode');
-  console.log('✅ Listening on port ${PORT}');
-  console.log('✅ Client URL: https://localhost:3000');
-  console.log('✅ Server URL: http://localhost:5000');
+  console.log(`🚀 Server running in ${process.env.NODE_ENV || 'development'} mode`);
+  console.log(`📡 Listening on port ${PORT}`);
+  console.log(`🌐 Client URL: https://localhost:3000 or http://localhost:3000`);
 });
