@@ -62,10 +62,6 @@ mongoose.connect(process.env.MONGODB_URI, mongooseOptions)
     process.exit(1); 
   });
 
-mongoose.connection.on('connected', () => {
-  console.log('📚 Connected to MongoDB database: ${mongoose.connection.name}');
-});
-
 mongoose.connection.on('error', (err) => {
   console.error('❌ MongoDB runtime error:', err.message);
 });
