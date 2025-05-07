@@ -57,12 +57,12 @@ nav a {
 }
 
 .App-header h1 {
-    font-size: 60px;
+    font-size: 35px;
 }
 
 .App-header p {
-    font-size: 40px;
-    margin: 0px 0;
+    font-size: 25px;
+    margin-bottom: 55px;
 }
 
 .main-content {
@@ -135,11 +135,11 @@ textarea:focus {
 
     .App-header h1 {
 
-        font-size: 40px;
+        font-size: 15px;
     }
 
     .App-header p {
-        font-size: 32px;
+        font-size: 12px;
     }
 
     .main-content {
@@ -186,13 +186,13 @@ textarea:focus {
 
     .App-header h1 {
         margin-left: 0;
-        font-size: 18px;
+        font-size: 14px;
         text-align: center;
     }
 
     .App-header p {
         margin-left: 150px;
-        font-size: 14px;
+        font-size: 12px;
         text-align: center;
     }
 
