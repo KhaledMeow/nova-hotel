@@ -2,7 +2,7 @@ const Booking = require('../models/Booking');
 const User = require('../models/User');
 const Payment = require('../models/Payment');
 
-exports.getDashboardStats = async (req, res) => {
+exports.getDashboardStats = async (res) => {
   try {
     const [users, bookings, payments] = await Promise.all([
       User.countDocuments(),
