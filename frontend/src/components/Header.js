@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
-import logo from "../assets/images/logo.jpeg";
+import logo from "../assets/images/logo.jpg";
 import "../styles/Header.css";
 import SpecialOfferPopup from "./SpecialOfferPopup";
 
