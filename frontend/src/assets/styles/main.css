@@ -11,7 +11,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-image: url('../images/background-home1.jpg');
+    background-image: url('../images/background-home1.jpeg');
     background-size: cover;
     background-color: transparent;
     color: white;
@@ -48,16 +48,13 @@ nav a {
 }
 
 .App-header {
-    text-align: center;
-    margin-top: -110px;
-    color: var(--text);
-    background-color: var(--background)26;
-    padding: 20px;
-    border-radius: 80px;
+    background-color: #ffffff00;
+    margin-top: -20px;
+    
 }
 
 .App-header h1 {
-    font-size: 35px;
+    font-size: 40px;
 }
 
 .App-header p {
@@ -127,19 +124,18 @@ textarea:focus {
 
 @media (max-width: 1024px) {
     .App {
-        background-image: url('../images/background-tablet1.jpg');
+        background-image: url('../images/background-tablet1.jpeg');
     }
     nav ul {
         gap: 10px;
+    }
+    .App-header{
+        margin-top: -80px;
     }
 
     .App-header h1 {
 
         font-size: 15px;
-    }
-
-    .App-header p {
-        font-size: 12px;
     }
 
     .main-content {
@@ -151,7 +147,7 @@ textarea:focus {
 
 @media (max-width: 412px) {
     .App {
-        background-image: url('../images/background-mobile1.jpg');
+        background-image: url('../images/background-mobile1.jpeg');
     }
     nav {
         display: flex;
@@ -185,14 +181,12 @@ textarea:focus {
     }
 
     .App-header h1 {
-        margin-left: 0;
-        font-size: 14px;
+
         text-align: center;
     }
 
     .App-header p {
-        margin-left: 150px;
-        font-size: 12px;
+
         text-align: center;
     }
 

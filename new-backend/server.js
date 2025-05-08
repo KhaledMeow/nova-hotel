@@ -7,7 +7,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const http = require('http');
-const socketIo = require('socket.io');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const errorHandler = require('./middleware/errorHandler');
@@ -25,7 +24,7 @@ const app = express();
 app.set('trust proxy', 1);
 
 app.use(cors({
-  origin: ['http://localhost:3000', 'https://localhost:3000'],
+  origin: ['https://localhost:3000'],
   credentials: true
 }));
 const server = http.createServer(app);
@@ -36,13 +35,6 @@ const chatLimiter = rateLimit({
   message: "Too many chat requests from this IP, please try again later"
 });
 app.use('/api/v1/chatbot', chatLimiter);
-
-const io = socketIo(server, {
-  cors: {
-    origin: ['http://localhost:3000', 'https://localhost:3000'],
-    methods: ['GET', 'POST', 'PATCH', 'DELETE']
-  }
-});
 
 console.log('ENV URI:', process.env.MONGODB_URI); 
 
@@ -76,7 +68,7 @@ mongoose.connection.on('disconnected', () => {
 });
 app.use(helmet());
 app.use(cors({
-  origin: ['http://localhost:3000', 'https://localhost:3000'],
+  origin: ['https://localhost:3000'],
   credentials: true,
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
@@ -90,18 +82,6 @@ const limiter = rateLimit({
   legacyHeaders: false
 });
 app.use(limiter);
-
-io.on('connection', (socket) => {
-  console.log('🔌 New client connected');
-  
-  socket.on('bookingUpdate', (booking) => {
-    io.emit('bookingChanged', booking);
-  });
-
-  socket.on('disconnect', () => {
-    console.log('❌ Client disconnected');
-  });
-});
 
 app.use('/api/v1/chatbot', chatbotRoutes);
 app.use('/api/v1/auth', authRoutes);
@@ -119,5 +99,5 @@ const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
   console.log(`🚀 Server running in ${process.env.NODE_ENV || 'development'} mode`);
   console.log(`📡 Listening on port ${PORT}`);
-  console.log(`🌐 Client URL: https://localhost:3000 or http://localhost:3000`);
+  console.log(`🌐 Client URL: https://localhost:3000`);
 });
