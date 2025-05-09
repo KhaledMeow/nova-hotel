@@ -10,6 +10,7 @@ const Register = () => {
     phone: ''
   });
   const [errors, setErrors] = useState({});
+  const [isRegistering, setIsRegistering] = useState(false);
   const navigate = useNavigate();
 
   const validateForm = () => {
@@ -30,6 +31,7 @@ const Register = () => {
       return;
     }
 
+    setIsRegistering(true);
     try {
       const response = await fetch('http://localhost:5000/api/v1/auth/register', {
         method: 'POST',
@@ -41,6 +43,7 @@ const Register = () => {
 
       if (!response.ok) {
         setErrors(data.errors || { general: 'Registration failed' });
+        setIsRegistering(false);
         return;
       }
 
@@ -49,7 +52,9 @@ const Register = () => {
       
     } catch (error) {
       setErrors({ general: 'Registration error. Please try again.' });
+      setIsRegistering(false);
     }
+    setIsRegistering(false);
   };
 
   return (
@@ -108,8 +113,8 @@ const Register = () => {
           {errors.phone && <span className="error-message">{errors.phone}</span>}
         </div>
 
-        <button type="submit" className="register-button">
-          Create Account
+        <button type="submit" className="register-button" disabled={isRegistering}>
+          {isRegistering ? 'Registering...' : 'Create Account'}
         </button>
       </form>
     </div>

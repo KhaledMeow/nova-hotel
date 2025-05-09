@@ -80,13 +80,10 @@
     }
   }
 
-  /* ================== */
-/* RESPONSIVE REGISTER */
-/* ================== */
 @media (max-width: 768px) {
   .register-container {
       padding: 1.5rem !important;
-      padding-top: 80px !important; /* Space for fixed header */
+      padding-top: 80px !important;
   }
   
   .register-form {
@@ -114,7 +111,7 @@
   .register-form {
       padding: 1.5rem !important;
       border-radius: 12px !important;
-      border-width: 45px !important;
+      border-width: 15px !important;
   }
   
   .register-title {

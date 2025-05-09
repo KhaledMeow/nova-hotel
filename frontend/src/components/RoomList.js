@@ -72,7 +72,7 @@ const RoomList = ({ isModal, onRoomSelect }) => {
     <div className={`room-list-page ${isModal ? 'modal-version' : ''}`}>
       <div className="room-list-container">
         {rooms.map((room) => (
-          <div key={room.id} className="room-card">
+          <div key={room._id || room.id} className="room-card">
             <div className="room-image">
               <img src={room.image} alt={room.name} />
             </div>
@@ -82,8 +82,8 @@ const RoomList = ({ isModal, onRoomSelect }) => {
                 <strong>{room.type}</strong>
               </p>
               <ul>
-                {room.amenities.map((amenity, idx) => (
-                  <li key={idx}>{amenity}</li>
+                {room.amenities.map((amenity) => (
+                  <li key={amenity}>{amenity}</li>
                 ))}
               </ul>
               <div className="room-price">

@@ -40,10 +40,6 @@ const complaintSchema = new mongoose.Schema({
     type: String,
     enum: ['service', 'facility', 'billing', 'other'],
     default: 'other'
-  },
-  solvedAt: {
-    type: Date,
-    default: null
   }
 }, { 
   timestamps: true,
@@ -57,15 +53,8 @@ complaintSchema.index({ status: 1 });
 
 complaintSchema.virtual('duration').get(function() {
   if (!this.createdAt) return null;
-  const endDate = this.solvedAt || new Date();
+  const endDate = new Date();
   return Math.ceil((endDate - this.createdAt) / (1000 * 60 * 60 * 24));
-});
-
-complaintSchema.pre('save', function(next) {
-  if (this.isModified('status') && this.status === 'solved' && !this.solvedAt) {
-    this.solvedAt = new Date();
-  }
-  next();
 });
 
 module.exports = mongoose.model('Complaint', complaintSchema);

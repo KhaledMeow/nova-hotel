@@ -130,7 +130,6 @@ const Dashboard = () => {
       setBookings(prev => prev.map(b => 
         b._id === bookingId ? { ...b, status: 'cancelled' } : b
       ));
-      window.location.reload();
     } catch (error) {
       alert(error.message);
       console.error('Cancellation Error:', error);
@@ -153,7 +152,6 @@ const Dashboard = () => {
         throw new Error(errorData.error || 'Failed to delete booking');
       }
       setBookings(prev => prev.filter(b => b._id !== bookingId));
-      window.location.reload();
     } catch (error) {
       alert(error.message);
       console.error('Delete Booking Error:', error);
@@ -179,7 +177,6 @@ const Dashboard = () => {
       setPayments(prev => prev.map(p => 
         p._id === paymentId ? { ...p, status: 'completed' } : p
       ));
-      window.location.reload();
     } catch (error) {
       alert(error.message);
       console.error('Complete Payment Error:', error);
@@ -203,7 +200,6 @@ const Dashboard = () => {
       setPayments(prev => prev.map(p => 
         p._id === paymentId ? { ...p, status: 'refunded' } : p
       ));
-      window.location.reload();
     } catch (error) {
       alert(error.message);
       console.error('Refund Payment Error:', error);
@@ -224,7 +220,6 @@ const Dashboard = () => {
         throw new Error(errorData.error || 'Failed to delete payment');
       }
       setPayments(prev => prev.filter(p => p._id !== paymentId));
-      window.location.reload();
     } catch (error) {
       alert(error.message);
       console.error('Delete Payment Error:', error);
