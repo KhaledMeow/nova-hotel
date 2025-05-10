@@ -322,12 +322,12 @@ const [users, setUsers] = useState([]);
   // Modal state and handlers
   const [showUserModal, setShowUserModal] = useState(false);
   const [editingUser, setEditingUser] = useState(null);
-  const [userForm, setUserForm] = useState({ name: '', email: '', password: '', role: '67b796f382f9002a043ad2ac' });
+  const [userForm, setUserForm] = useState({ name: '', email: '', password: '', phone: '', role: '67b796f382f9002a043ad2ac' });
   const [userActionLoading, setUserActionLoading] = useState(false);
 
   const openAddUserModal = () => {
     setEditingUser(null);
-    setUserForm({ name: '', email: '', password: '', role: '67b796f382f9002a043ad2ac' });
+    setUserForm({ name: '', email: '', password: '', phone: '', role: '67b796f382f9002a043ad2ac' });
     setShowUserModal(true);
   };
   const openEditUserModal = (user) => {
@@ -336,6 +336,7 @@ const [users, setUsers] = useState([]);
       name: user.name || '',
       email: user.email || '',
       password: '', // Don't show password
+      phone: user.phone || '',
       role: user.role || '67b796f382f9002a043ad2ac'
     });
     setShowUserModal(true);
@@ -364,6 +365,7 @@ const [users, setUsers] = useState([]);
           body: JSON.stringify({
             name: userForm.name,
             email: userForm.email,
+            phone: userForm.phone,
             role: userForm.role
           })
         });
@@ -440,6 +442,7 @@ const [users, setUsers] = useState([]);
               </div>
               <div className="user-details">
                 <p>Email: {user.email}</p>
+                <p>Phone: {user.phone || 'N/A'}</p>
                 <p>ID: {user._id}</p>
               </div>
               <div className="user-registered">
@@ -473,6 +476,9 @@ const [users, setUsers] = useState([]);
                 </label>
                 <label>Email
                   <input name="email" type="email" value={userForm.email} onChange={handleUserFormChange} required />
+                </label>
+                <label>Phone
+                  <input name="phone" type="tel" value={userForm.phone} onChange={handleUserFormChange} placeholder="e.g. +123456789" />
                 </label>
                 {!editingUser && (
                   <label>Password
