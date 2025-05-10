@@ -323,7 +323,7 @@ const [users, setUsers] = useState([]);
   const [showUserModal, setShowUserModal] = useState(false);
   const [editingUser, setEditingUser] = useState(null);
   const [userForm, setUserForm] = useState({ name: '', email: '', password: '', phone: '', role: '67b796f382f9002a043ad2ac' });
-  const [userActionLoading, setUserActionLoading] = useState(false)
+  const [userActionLoading, setUserActionLoading] = useState(false);
 
   const openAddUserModal = () => {
     setEditingUser(null);
