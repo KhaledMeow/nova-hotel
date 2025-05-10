@@ -60,6 +60,8 @@
 }
 
 .user-card .user-details p {
+justify-content: center;
+align-items: center;
   margin: 0.5rem 0;
   color: #ccc;
 }

@@ -423,10 +423,12 @@ const [users, setUsers] = useState([]);
     }
   };
 
+  // Users Dashboard visibility control
+  const [showUsersSection, setShowUsersSection] = useState(false);
+
   // Users Cards for Admin/Staff
-  const usersCards = (roleName === 'admin' || roleName === 'staff') ? (
+  const usersCards = (roleName === 'admin' || roleName === 'staff') && showUsersSection ? (
     <div className="users-section">
-      <h1 className="dashboard-title">Users</h1>
       <button className="add-user-button" style={{marginBottom: '1.5rem'}} onClick={openAddUserModal}>Add User</button>
       <div className="users-grid">
         {users.map(user => {
@@ -443,7 +445,6 @@ const [users, setUsers] = useState([]);
               <div className="user-details">
                 <p>Email: {user.email}</p>
                 <p>Phone: {user.phone || 'N/A'}</p>
-                <p>ID: {user._id}</p>
               </div>
               <div className="user-registered">
                 Registered: {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}
@@ -718,6 +719,17 @@ const [users, setUsers] = useState([]);
 })}
           </div>
         )}
+      {/* Toggle Users Dashboard button for Admin/Staff */}
+      <h1>Users</h1>
+      {(roleName === 'admin' || roleName === 'staff') && (
+        <button
+          className="add-user-button"
+          style={{marginBottom: '1.5rem',alignItems: 'center'}}
+          onClick={() => setShowUsersSection(v => !v)}
+        >
+          <span>{showUsersSection ? 'Hide Users Dashboard' : 'Show Users Dashboard'}</span>
+        </button>
+      )}
       {usersCards}
       </div>
     </div>
