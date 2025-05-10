@@ -57,6 +57,7 @@ const Home = () => {
       </section>
 
       <section className="photo-gallery">
+      <h1></h1>
         <h1>Over View</h1>
 
         <div className="photo-row">
@@ -133,6 +134,7 @@ const About = () => {
   return (
     <div className="text-background">
       <h1>News & Events</h1>
+      <h1></h1>
       <div className="event-item">
         <h2>
           <strong>Cultural Heritage Festival</strong>

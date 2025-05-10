@@ -17,11 +17,11 @@
     font-size: 1.3rem;
     text-align: center; 
     margin: 2rem 0;
-    padding: 1rem;
+    padding: 1.5rem;
   }
 
 .features {
-    margin-top: 430px;
+    margin-top: 450px;
     background-color: rgba(255, 6, 6, 0);
     padding: 10px;
 }
@@ -63,7 +63,8 @@
 }
 
 .photo-gallery {
-    margin-top: 100px;
+    margin-top: 50px;
+    margin-bottom: 50px;
 }
 .photo-row {
     display: flex;
@@ -127,12 +128,12 @@ body {
 }
 
 .text-background {
-    background: rgba(0, 0, 0, 0.7);
+    background: var(--background-secondary);
     border-radius: 50px;
     max-width: auto;
     margin: auto;
-    margin-top: 50px;
-    box-shadow: 0 0 50px 50px rgba(0, 0, 0, 0.5);
+    margin-top: 100px;
+    box-shadow: 0 0 50px 50px var(--primary);
 
 }
 
