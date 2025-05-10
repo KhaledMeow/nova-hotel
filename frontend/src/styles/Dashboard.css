@@ -10,7 +10,171 @@
     margin: 0 auto;
     color: #fff;
   }
-  
+
+/* Users Grid */
+.users-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.user-card {
+  background: #2b1b0f;
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.user-card .user-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.user-card .user-role {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  background: #e0e0e0;
+  color: #333;
+}
+
+.user-card .user-role.admin {
+  background: #d4edda;
+  color: #155724;
+}
+.user-card .user-role.staff {
+  background: #d1ecf1;
+  color: #0c5460;
+}
+.user-card .user-role.guest {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.user-card .user-details p {
+  margin: 0.5rem 0;
+  color: #ccc;
+}
+
+.user-card .user-registered {
+  font-size: 0.95rem;
+  color: #aaa;
+  margin-top: 1rem;
+}
+
+.add-user-button {
+  background: #155724;
+  color: #fff;
+  padding: 0.7rem 1.8rem;
+  border: none;
+  border-radius: 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
+  transition: background 0.3s, color 0.3s, box-shadow 0.3s;
+  box-shadow: 0 2px 8px rgba(21, 87, 36, 0.08);
+}
+.add-user-button:hover {
+  background: #fff;
+  color: #155724;
+  border: 1px solid #155724;
+  box-shadow: 0 4px 16px rgba(21, 87, 36, 0.15);
+}
+
+.edit-user-button {
+  background: #2d7a4d;
+  color: #fff;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: background 0.3s, color 0.3s;
+}
+.edit-user-button:hover {
+  background: #fff;
+  color: #2d7a4d;
+  border: 1px solid #2d7a4d;
+}
+
+.delete-user-button {
+  background: #c0392b;
+  color: #fff;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: background 0.3s, color 0.3s;
+}
+.delete-user-button:hover {
+  background: #fff;
+  color: #c0392b;
+  border: 1px solid #c0392b;
+}
+
+
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.modal-content {
+  background: #2b1b0f;
+  padding: 2rem 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 32px rgba(0,0,0,0.4);
+  min-width: 320px;
+  max-width: 95vw;
+  color: #fff;
+  position: relative;
+}
+.user-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+.user-form label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 500;
+  color: #fff;
+  margin-bottom: 0.2rem;
+}
+.user-form input,
+.user-form select {
+  margin-top: 0.4rem;
+  padding: 0.65rem 1rem;
+  border-radius: 8px;
+  border: none;
+  background: #1d1307;
+  color: #fff;
+  font-size: 1rem;
+  outline: none;
+  transition: background 0.2s, color 0.2s;
+}
+.user-form input:focus,
+.user-form select:focus {
+  background: #3c2a15;
+}
+
+
+
+
   .bookings-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
