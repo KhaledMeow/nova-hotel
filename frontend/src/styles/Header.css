@@ -175,9 +175,6 @@
     75% { transform: translateX(-5px); }
   }
 
-  /* ================== */
-/* RESPONSIVE HEADER */
-/* ================== */
 @media (max-width: 768px) {
   .header-nav {
       padding: 10px 15px !important;
@@ -190,8 +187,8 @@
   
   .availability-button {
       padding: 12px 25px !important;
-      font-size: 16px !important;
-      margin-left: 10px !important;
+      font-size: 14px !important;
+      margin-left: 70px !important;
   }
   
   .menu-toggle {
@@ -208,23 +205,13 @@
 
 @media (max-width: 480px) {
   .header-logo {
-      height: 60px !important;
-      transform: scale(0.5) !important;
+    transform: scale(1) !important;
   }
-  
-  .header-links.open {
-      padding-top: 80px !important;
+  .availability-button{
+    padding: 10px 20px !important;
+    font-size: 12px !important;
   }
-  
-  .header-links li {
-      margin: 15px 0 !important;
-  }
-  
 
-  .menu-toggle {
-      font-size: 35px !important;
-      transform: translateY(-6px) !important;
-  }
   
   .menu-logo {
       width: 70px !important;
@@ -244,7 +231,7 @@
   
   .availability-button {
       padding: 10px 20px !important;
-      font-size: 14px !important;
+      font-size: 12px !important;
   }
   
   .menu-toggle {
@@ -255,7 +242,7 @@
 
 @media (hover: none) {
   .header-logo:hover {
-      transform: scale(0.6) !important;
+      transform: scale(1.1) !important;
       box-shadow: 0px 0px 10px var(--primary) !important;
   }
   
