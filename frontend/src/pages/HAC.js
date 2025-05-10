@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../styles/HAC.css";
 import "../styles/SweetAlertCustom.css";
 import SpecialOfferPopup from '../components/SpecialOfferPopup';
+import ComplaintPopup from '../components/ComplaintPopup';
 
 
 const Home = () => {
@@ -212,6 +213,8 @@ const ContactUs = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submissionError, setSubmissionError] = useState("");
+  const [showComplaintPopup, setShowComplaintPopup] = useState(false);
+
   const validateForm = (name, value) => {
     switch (name) {
       case "name":
@@ -297,7 +300,7 @@ const ContactUs = () => {
         throw new Error(data.error || "Submission failed");
       }
   
-      alert("Complaint submitted successfully!");
+      setShowComplaintPopup(true);
       setFormData({ name: "", email: "", message: "", category: '' });
       setErrors({});
   
@@ -313,6 +316,9 @@ const ContactUs = () => {
 
   return (
     <section className="contact-section">
+      {showComplaintPopup && (
+        <ComplaintPopup onClose={() => setShowComplaintPopup(false)} />
+      )}
       <div className="header">
         <h1>Contact Us</h1>
       </div>
