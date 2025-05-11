@@ -719,9 +719,9 @@ const [users, setUsers] = useState([]);
 })}
           </div>
         )}
-      {/* Toggle Users Dashboard button for Admin/Staff */}
-      <h1>Users</h1>
       {(roleName === 'admin' || roleName === 'staff') && (
+        <>
+        <h1>Users</h1>
         <button
           className="add-user-button"
           style={{marginBottom: '1.5rem',alignItems: 'center'}}
@@ -729,7 +729,9 @@ const [users, setUsers] = useState([]);
         >
           <span>{showUsersSection ? 'Hide Users Dashboard' : 'Show Users Dashboard'}</span>
         </button>
+        </>
       )}
+
       {usersCards}
       </div>
     </div>
