@@ -29,7 +29,6 @@ const ForgotPassword = () => {
             `\n\nReset Link (dev only): ${window.location.origin}/reset-password?token=${data.token}`
           );
         }
-        // setTimeout(() => navigate('/login'), 3000); // Optionally auto-redirect
       } else {
         setError(data.error || 'Failed to send reset instructions.');
       }
