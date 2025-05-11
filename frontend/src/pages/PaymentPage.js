@@ -224,7 +224,7 @@ const PaymentForm = ({
             <h3>Price Summary</h3>
             <div className="price-details">
               <div className="price-row">
-                <span>Room Rate ({calculateNights()} Night(s))</span>
+                <span>Room Rate {calculateNights()} Night(s)</span>
                 <span>${room.price} × {calculateNights()}</span>
               </div>
               <div className="price-row total">
