@@ -32,7 +32,7 @@
   }
   
   .header-logo {
-    height: 135px;
+    height: 100px;
     width: auto;
     transform: scale(0.75);
     box-shadow: 0px 0px 10px var(--primary);
