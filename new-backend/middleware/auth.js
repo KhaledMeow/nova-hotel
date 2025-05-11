@@ -33,7 +33,7 @@ module.exports = async (req, res, next) => {
     next();
   } catch (error) {
     res.status(401).json({
-      error: 'not authenticated',
+      error: 'Need to login first',
       systemMessage: process.env.NODE_ENV === 'development' ? error.message : null
     });
   }
