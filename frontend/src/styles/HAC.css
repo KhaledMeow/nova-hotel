@@ -21,7 +21,7 @@
   }
 
 .features {
-    margin-top: 450px;
+    margin-top: 480px;
     background-color: rgba(255, 6, 6, 0);
     padding: 10px;
 }
@@ -281,12 +281,12 @@ img {
     }
     
     h1 {
-        font-size: 2.2rem !important;
+        font-size: 2rem !important;
         margin-bottom: 0.5rem !important;
     }
     
     h2 {
-        font-size: 1.7rem !important;
+        font-size: 1.5rem !important;
     }
     
     .features {
@@ -312,7 +312,6 @@ img {
     .main-content {
         padding-top: 60px !important;
     }
-    
     h1 {
         font-size: 2rem !important;
     }
@@ -356,35 +355,47 @@ img {
     .main-content {
         padding-top: 50px !important;
     }
-    
+    .App-header h1{
+        font-size: 1.3rem !important;
+        margin-bottom: 1rem !important;
+    }
     h1 {
         font-size: 1.8rem !important;
         padding: 0 10px !important;
+        border-bottom: 0rem solid transparent !important;
     }
     
     h2 {
-        font-size: 1.3rem !important;
+        font-size: 0.75rem !important;
     }
     
     p {
-        font-size: 1rem !important;
+        font-size: 0.75rem !important;
         margin: 0.5rem 0 !important;
     }
     
     .features {
-        margin-top: 606px !important;
+        border: 6px solid var(--primary) !important;
+        margin-top: 720px !important;
+        border-radius: 0px;
     }
     
     .feature {
+        width: 100%;
         padding: 20px !important;
         margin: 10px 0 !important;
         box-shadow: 0px 0px 4px 4px var(--primary) !important;
+        margin-bottom: 50px !important;  
+        border-radius: 0px;
     }
     .photo-gallery {
+        border: 6px solid var(--primary) !important;
+
         margin-top: 0px !important;
+        border-radius: 0px;
     }
     .photo {
-        border-radius: 50px !important;
+        border-radius: 0px !important;
         margin: 50px 0 !important;
     }
     
@@ -401,6 +412,7 @@ img {
     }
     
     .text-background {
+        
         margin-top: 0px !important;
         padding: 15px !important;
         box-shadow: 0 0 20px 20px rgba(0, 0, 0, 0.5) !important;
@@ -411,13 +423,17 @@ img {
     .main-content {
         padding-top: 40px !important;
     }
-    
+    .App-header h1{
+        font-size: 0.5rem !important;
+        border-bottom: 4rem solid transparent !important;
+    }    
     h1 {
-        font-size: 1.6rem !important;
+        font-size: 0.5rem !important;
+        border-bottom: 4rem solid transparent !important;
     }
     
     h2 {
-        font-size: 1.2rem !important;
+        font-size: 0.5rem !important;
     }
     
     .feature {
@@ -426,10 +442,15 @@ img {
     }
     
     .photo {
-        border-radius: 50px !important;
+        border-radius: 0px !important;
         margin: 0px 0 !important;
     }
-    
+    .photo img {
+        border-radius: 0px;
+        margin-bottom: 0px !important;
+        margin-top: 0px !important;
+        padding: auto;
+    }
     .message-form button {
         padding: 0.5rem 0.8rem !important;
         font-size: 0.9rem !important;

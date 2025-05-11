@@ -13,7 +13,6 @@
     align-items: center;
     background-image: url('../images/background-home1.jpeg');
     background-size: cover;
-    background-color: transparent;
     color: white;
     margin: 0;
     padding: 0;
@@ -93,21 +92,17 @@ label {
 input,
 textarea {
     padding: 10px;
-    border: 1px solid var(--background);
-    border-radius: 5px;
-    width: 100%;
     box-sizing: border-box;
 }
 
 input:focus,
 textarea:focus {
-    border-color: var(--primary);
     outline: none;
 }
 
 .submit-button {
     padding: 10px 20px;
-    background-color: var(--primary);
+    background-color: #fca53a;
     color: black;
     border: none;
     border-radius: 5px;
@@ -117,7 +112,7 @@ textarea:focus {
 }
 
 .submit-button:hover {
-    background-color: var(--primary);
+    background-color: #fca53a;
 }
 
 @media (max-width: 1024px) {
@@ -146,6 +141,8 @@ textarea:focus {
 @media (max-width: 412px) {
     .App {
         background-image: url('../images/background-mobile1.jpeg');
+        background-size: cover;
+        background-position: center;
     }
     nav {
         display: flex;
