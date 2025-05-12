@@ -18,53 +18,10 @@ exports.handleChat = async (req, res) => {
         const response = await axios.post(
             'https://api-inference.huggingface.co/models/meta-llama/Llama-3.3-70B-Instruct',
             {
-                inputs: `<|system|>
-                You are NOVA Hotel's AI assistant. Use this information to assist:
-
-                ## Hotel Basics
-                - Check-in: After 3:00 PM | Check-out: Before 12:00 PM
-                - Address: AOU Arab Open University,El-Shorouk, Cairo, Egypt
-                - Wi-Fi: Complimentary for all guests
-                - Room Service: Available 24/7
-
-                ## Parking
-                - 50 spaces ($15/night with in/out privileges)
-                - Reservation required: Call +20 111 111 1111
-                - Hours: 24/7 access
-                - No online payment - cash/credit card at exit
-
-                ## Room Pricing
-                1. One Bedded Room ($249/night):
-                2. Deluxe Suite ($349/night):
-                3. Family Room ($639/night):
-                4. Penthouse Suite ($1199/night):
-                5. VIP Offer ($499/night):
-                6. Weekend Package ($399/night):
-                7. Romantic Escape ($449/night):
-
-                ## Booking Process
-                Start: Click ☰ menu (top-right)
-                Account: (Login or Register)
-                Search: Click "Check Availability" (header button)
-                Select: Choose room from cards
-                Details: Fill booking information
-                Payment: (Online or Cash)
-                - Online: "Proceed to Payment" → Enter card details → "Pay $..."
-                - Cash: Call +20 111 111 1111 to reserve booking
-
-                ## Response Rules
-                1. For general questions:
-                - Use simple terms (no technical terms)
-                - Keep answers simple if necessary
-                - Never mention being AI, just that you are here to help
-                2. For unavailable services suggest:
-                "Please contact our Guest Relations team at +20 111 222 2222"</s>
-                ${userInput}</s>
-                <assistant>`,
+                inputs: `You are NOVA Hotel's assistant. Use the following hotel information to answer the user's question.\n\nHotel Info:\n- Check-in: After 3:00 PM | Check-out: Before 12:00 PM\n- Address: Kuala Lumpur, Malaysia\n- Wi-Fi: Complimentary for all guests\n- Room Service: Available 24/7\n- Parking: 50 spaces ($15/night), reservation required, 24/7 access\n- Room Pricing: One Bedded Room ($249/night), Deluxe Suite ($349/night), Family Room ($639/night), Penthouse Suite ($1199/night), VIP Offer ($499/night), Weekend Package ($399/night), Romantic Escape ($449/night)\n- Booking: Click ☰ menu, login/register, check availability, select room, fill details, pay online or call to reserve\n\nUser Question: ${userInput}\nAnswer:`,
                 parameters: {                
                     max_new_tokens: 150, 
-                    temperature: 0.5,   
-                    stop: ["</s>", "User:", "user:", "\n\n"]
+                    temperature: 0.5
                 }
             },
             {
@@ -76,13 +33,13 @@ exports.handleChat = async (req, res) => {
             }
         );
 
+        console.log('HuggingFace API raw response:', JSON.stringify(response.data, null, 2));
         const fullResponse = response.data[0]?.generated_text || '';
-        let botResponse = fullResponse
-            .split('<assistant>')[1]
-            ?.replace(/<\/?s>/g, '') 
-            ?.replace(/User:.*/s, '')
-            ?.trim();
-
+        console.log('HuggingFace API generated_text:', fullResponse);
+        let botResponse = fullResponse.split('Answer:')[1];
+        if (botResponse) {
+            botResponse = botResponse.trim();
+        }
         if (!botResponse || botResponse.length < 2) {
             botResponse = "For immediate assistance, please contact our team at +20 111 111 1111";
         }
