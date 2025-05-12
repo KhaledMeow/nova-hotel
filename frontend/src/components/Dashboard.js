@@ -719,7 +719,7 @@ const [users, setUsers] = useState([]);
 })}
           </div>
         )}
-      {(roleName === 'admin' || roleName === 'staff') && (
+      {(roleName === 'admin') && (
         <>
         <h1>Users</h1>
         <button
