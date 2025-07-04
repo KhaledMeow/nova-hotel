@@ -9,22 +9,28 @@
   text-align: center;
   color: var(--text);
   margin-bottom: 15px;
+  font-family: var(--heading-font);
+  font-size: 36px;
+  font-weight: 600;
 }
 
 .payment-form p {
   text-align: center;
   font-size: 18px;
   color: var(--text);
-  margin-bottom: 20px;
+  margin-bottom: 1.5rem;
+  font-family: var(--body-font);
 }
 
 .form-row {
-  background-color: var(--background-secondary);
+  background: var(--background-secondary);
   border-radius: 12px;
   padding: 1rem;
   display: flex;
   flex-direction: column;
-  margin-bottom: 15px;
+  margin-bottom: 1rem;
+  border: 1px solid var(--accent);
+  box-shadow: 0 0 10px rgba(0,0,0,0.07);
 }
 
 .form-row label {
@@ -42,6 +48,11 @@
 }
 
 .form-row input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 8px 2px rgba(212, 175, 55, 0.25);
+    background: #181d2b;
+    color: var(--primary);
+
   outline: none;
   border-color: var(--primary);
   box-shadow: 0 0 5px rgba(252, 165, 58, 0.3);
@@ -52,6 +63,18 @@
 }
 
 .error-message {
+    color: #e94444;
+    background: #2a1d0f;
+    border: 1.5px solid #d4af37;
+    border-radius: 10px;
+    padding: 0.8rem 1.2rem;
+    margin-bottom: 1.2rem;
+    text-align: center;
+    font-size: 1.05rem;
+    font-family: var(--body-font);
+    animation: fadeInError 0.5s;
+    box-shadow: 0 2px 8px rgba(233, 68, 68, 0.08);
+
   color: red;
   margin-bottom: 15px;
   text-align: center;
@@ -70,7 +93,11 @@
 }
 
 .payment-button:hover:not(:disabled) {
-  background-color: #f98b0d;
+  background: linear-gradient(90deg, #bfa046 0%, #d4af37 100%);
+  color: #fffbe6;
+  box-shadow: 0 8px 32px 0 rgba(212, 175, 55, 0.18);
+  transform: translateY(-2px) scale(1.03);
+  filter: brightness(1.08);
 }
 
 .payment-button:disabled {
@@ -122,12 +149,14 @@
 }
 
 .confirmation-section h3 {
-  color: var(--primary);
-  font-size: 1.3rem;
-  margin-bottom: 1.5rem;
-  font-weight: 500;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
+    color: var(--primary);
+    font-family: var(--heading-font);
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-shadow: 0 1px 6px rgba(212, 175, 55, 0.10);
 }
 
 .details-grid {
@@ -210,23 +239,26 @@
 }
 
 .confirmation-footer {
-  background: rgba(29, 19, 7, 0.5);
-  padding: 2rem;
-  text-align: center;
-  border-top: 1px solid rgba(252, 165, 58, 0.2);
+    background: rgba(29, 19, 7, 0.5);
+    padding: 2rem;
+    text-align: center;
+    border-top: 2px solid var(--primary);
+    position: relative;
+}
+
+.confirmation-footer::before {
+    content: '';
+    display: block;
+    height: 3px;
+    margin: 0 auto 1.5rem auto;
+    width: 80px;
+    background: var(--divider);
+    border-radius: 2px;
 }
 
 .thank-you {
-  color: rgba(255, 255, 255, 0.9);
+  color: #4c3ec4;
   font-size: 1.2rem;
-  margin-bottom: 1.5rem;
-  font-style: italic;
-}
-
-.home-btn {
-  background: linear-gradient(135deg, var(--primary) 0%, #ff8a00 100%);
-  color: #1d1307;
-  padding: 1rem 3rem;
   border: none;
   border-radius: 50px;
   font-size: 1.1rem;
@@ -342,4 +374,5 @@
 .payment-button,
 .home-btn {
   min-height: 44px !important;
+  font-family: var(--body-font);
 }
