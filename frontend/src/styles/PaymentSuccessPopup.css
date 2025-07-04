@@ -1,3 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500&display=swap');
+
+:root {
+  --primary: #d4af37;
+  --primary-gradient: linear-gradient(90deg, #d4af37 0%, #bfa046 100%);
+  --accent: #2a1d0f;
+  --background: #131a26;
+  --background-secondary: #1d2230;
+  --text: #f5f5f5;
+  --heading-font: 'Playfair Display', serif;
+  --body-font: 'Inter', 'Segoe UI', Arial, sans-serif;
+  --divider: linear-gradient(90deg, #d4af37 0%, #fffbe6 50%, #d4af37 100%);
+  --shadow: 0 8px 32px rgba(212, 175, 55, 0.10), 0 1.5px 6px rgba(0,0,0,0.15);
+}
+
 .payment-success-overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -53,6 +68,7 @@
 }
 
 
+/* Responsive Design */
 @media (max-width: 768px) {
   .payment-success-content {
       padding: 2.5rem !important;
@@ -114,12 +130,19 @@
 @media (hover: none) {
   .home-btn:hover {
       background: var(--primary) !important;
+      color: var(--accent) !important;
+  }
+  .close-button:hover {
+      color: var(--primary) !important;
+      background: transparent !important;
+  }
+}  .home-btn:hover {
+      background: var(--primary) !important;
   }
   
-  .close-button:hover {
+.close-button:hover {
       color: #888 !important;
   }
-}
 
 .close-button,
 .home-btn {
